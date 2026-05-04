@@ -1,0 +1,2589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>CSC Tablet Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SHARED BASE
+============================================================ */
+:root {
+  --navy:      #2c3e50;
+  --navy-mid:  #34495e;
+  --navy-dark: #0d1f35;
+  --navy-deep: #1a3a5c;
+  --blue:      #2980b9;
+  --blue-light:#3498db;
+  --blue-form: #1e6fa8;
+  --accent:    #5dade2;
+  --accent-gold: #f0a500;
+  --white:     #ecf0f1;
+  --muted:     #7f8c8d;
+  --success:   #66bb6a;
+  --red:       #d63c3c;
+  --orange:    #e07b2a;
+  --green:     #2e9e6b;
+  --surface:   #f4f7fb;
+  --card:      #ffffff;
+  --border-light: #d0dae7;
+  --text-dark: #1a2a3a;
+  --muted-form:#6b7f94;
+  --border:    rgba(93,173,226,0.2);
+  --shadow:    0 4px 20px rgba(13,31,53,.10);
+  --radius:    14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--navy);
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── View system ── */
+.view { display: none; min-height: 100vh; flex-direction: column; }
+.view.active { display: flex; }
+
+/* ============================================================
+   DASHBOARD VIEW
+============================================================ */
+#dashboardView {
+  background-color: var(--navy);
+  position: relative;
+  overflow-x: hidden;
+}
+
+#dashboardView::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(93,173,226,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(93,173,226,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dash-header {
+  width: 100%;
+  background: var(--navy-mid);
+  border-bottom: 2px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.dash-header h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.dash-header h1 span { color: var(--accent); }
+
+.dash-body {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 4px;
+}
+.logo-wrap svg {
+  width: 220px;
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
+}
+
+.eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+}
+
+.divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-light), var(--accent));
+  border-radius: 2px;
+  margin-top: -16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  width: 100%;
+}
+
+.dash-btn {
+  background: linear-gradient(145deg, #3d5166 0%, #354657 100%);
+  color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 160px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.dash-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(93,173,226,0.12), rgba(93,173,226,0.05));
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  border-radius: inherit;
+}
+.dash-btn:active::before { opacity: 1; }
+.dash-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  border-color: var(--accent);
+}
+.dash-btn .icon-wrap {
+  width: 56px; height: 56px;
+  background: rgba(93,173,226,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(93,173,226,0.3);
+  transition: background 0.15s ease;
+}
+.dash-btn:active .icon-wrap { background: rgba(93,173,226,0.35); }
+.dash-btn svg { width: 26px; height: 26px; fill: var(--accent); }
+
+.dash-btn.production  { border-top: 3px solid #3498db; }
+.dash-btn.service     { border-top: 3px solid #5dade2; }
+.dash-btn.machine     { border-top: 3px solid #5dade2; }
+.dash-btn.placeholder {
+  border-top: 3px solid var(--muted);
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+.dash-btn.placeholder .icon-wrap {
+  background: rgba(127,140,141,0.15);
+  border-color: rgba(127,140,141,0.2);
+}
+.dash-btn.placeholder svg { fill: var(--muted); }
+
+.dash-footer {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(127,140,141,0.6);
+  padding-bottom: 20px;
+}
+
+/* ============================================================
+   PRODUCTION DEPT SELECT VIEW
+============================================================ */
+#prodSelectView {
+  background-color: var(--navy);
+  position: relative;
+  overflow-x: hidden;
+}
+
+#prodSelectView::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(93,173,226,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(93,173,226,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.prodselect-header {
+  width: 100%;
+  background: var(--navy-mid);
+  border-bottom: 2px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+.prodselect-header h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  flex: 1;
+  text-align: center;
+}
+.prodselect-header h1 span { color: var(--accent); }
+
+.prodselect-back {
+  position: absolute; left: 20px;
+  display: flex; align-items: center; gap: 7px;
+  background: none; border: none; cursor: pointer; padding: 6px 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .95rem; font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: .3px;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .15s;
+}
+.prodselect-back:active { color: var(--accent); }
+.prodselect-back svg { width: 18px; height: 18px; fill: currentColor; }
+
+.prodselect-body {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.prodselect-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+}
+
+.prodselect-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-align: center;
+  line-height: 1.15;
+  margin-top: -10px;
+}
+
+.prodselect-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-light), var(--accent));
+  border-radius: 2px;
+  margin-top: -10px;
+}
+
+.dept-select-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.dept-select-btn {
+  background: linear-gradient(145deg, #3d5166 0%, #354657 100%);
+  color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 40px 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: 200px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  -webkit-tap-highlight-color: transparent;
+}
+.dept-select-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  border-radius: inherit;
+}
+.dept-select-btn.metals { border-top: 4px solid #3498db; }
+.dept-select-btn.metals::before { background: linear-gradient(145deg, rgba(52,152,219,0.15), rgba(52,152,219,0.05)); }
+.dept-select-btn.plastics { border-top: 4px solid #f0a500; }
+.dept-select-btn.plastics::before { background: linear-gradient(145deg, rgba(240,165,0,0.15), rgba(240,165,0,0.05)); }
+.dept-select-btn:active::before { opacity: 1; }
+.dept-select-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+.dept-select-btn.metals:active  { border-color: #3498db; }
+.dept-select-btn.plastics:active { border-color: var(--accent-gold); }
+
+.dept-select-icon {
+  width: 68px; height: 68px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+.dept-select-btn.metals   .dept-select-icon { background: rgba(52,152,219,0.2); }
+.dept-select-btn.plastics .dept-select-icon { background: rgba(240,165,0,0.2); }
+.dept-select-btn.metals   .dept-select-icon svg { fill: #3498db; }
+.dept-select-btn.plastics .dept-select-icon svg { fill: var(--accent-gold); }
+.dept-select-icon svg { width: 32px; height: 32px; }
+
+.dept-select-btn .dept-sub {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  opacity: 0.5;
+  text-transform: uppercase;
+  margin-top: -10px;
+}
+
+/* ============================================================
+   SHARED FORM STYLES
+============================================================ */
+.form-view {
+  background: var(--surface);
+  color: var(--text-dark);
+  flex-direction: column;
+}
+
+.form-header {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-deep) 100%);
+  padding: 20px 20px 24px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,.25);
+}
+.form-header-inner {
+  max-width: 600px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 10px;
+  position: relative;
+}
+.form-header-center {
+  display: flex; align-items: center; gap: 14px;
+  position: absolute; left: 50%; transform: translateX(-50%);
+}
+.form-header-icon {
+  width: 46px; height: 46px;
+  background: var(--accent-gold);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.form-header-icon svg { width: 26px; height: 26px; fill: var(--navy-dark); }
+.form-header-text h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.25rem; font-weight: 700;
+  color: #fff; letter-spacing: .5px; line-height: 1.1;
+}
+.form-header-text p { font-size: .78rem; color: rgba(255,255,255,.55); margin-top: 2px; }
+.form-header-datetime { display: flex; align-items: center; margin-top: 3px; }
+.hd-date, .hd-time { font-size: .7rem; color: rgba(255,255,255,.45); letter-spacing: .2px; }
+.hd-sep { font-size: .7rem; color: rgba(255,255,255,.25); margin: 0 3px; }
+
+.id-badge {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 8px; padding: 6px 10px;
+  text-align: right; flex-shrink: 0;
+}
+.id-badge .label { font-size: .65rem; color: rgba(255,255,255,.45); letter-spacing: .5px; text-transform: uppercase; }
+.id-badge .value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .95rem; font-weight: 600; color: var(--accent-gold);
+}
+
+.back-to-dash-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--accent-gold); border: none;
+  border-radius: 9px; padding: 9px 13px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .95rem; font-weight: 700;
+  color: var(--navy-dark); letter-spacing: .4px;
+  white-space: nowrap; flex-shrink: 0; cursor: pointer;
+  transition: background .18s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.back-to-dash-btn:active { transform: scale(.96); background: #d99200; }
+.back-to-dash-btn svg { width: 16px; height: 16px; fill: var(--navy-dark); }
+
+/* Back-to-dept-select button — blue variant used inside form headers */
+.back-to-dept-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 9px; padding: 9px 13px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .95rem; font-weight: 700;
+  color: #fff; letter-spacing: .4px;
+  white-space: nowrap; flex-shrink: 0; cursor: pointer;
+  transition: background .18s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.back-to-dept-btn:active { transform: scale(.96); background: rgba(255,255,255,0.2); }
+.back-to-dept-btn svg { width: 16px; height: 16px; fill: #fff; }
+
+.form-main { max-width: 600px; margin: 0 auto; padding: 20px 16px 0; width: 100%; }
+
+.section {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+  border: 1px solid var(--border-light);
+}
+.section-header {
+  background: linear-gradient(90deg, var(--navy-dark) 0%, var(--navy-deep) 100%);
+  padding: 11px 18px;
+  display: flex; align-items: center; gap: 10px;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.section-header .step {
+  width: 24px; height: 24px;
+  background: var(--accent-gold); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .8rem; font-weight: 700; color: var(--navy-dark);
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 600;
+  color: #fff; letter-spacing: .4px; text-transform: uppercase;
+}
+.section-body { padding: 18px; }
+
+label {
+  display: block; font-size: .8rem; font-weight: 600;
+  color: var(--muted-form); text-transform: uppercase;
+  letter-spacing: .5px; margin-bottom: 7px;
+}
+.required-star { color: var(--red); margin-left: 2px; }
+
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+  width: 100%; background: var(--surface);
+  border: 2px solid var(--border-light); border-radius: 10px;
+  padding: 13px 14px;
+  font-family: 'Barlow', sans-serif; font-size: 1rem; color: var(--text-dark);
+  appearance: none; -webkit-appearance: none;
+  transition: border-color .2s, box-shadow .2s; outline: none;
+}
+input[type="text"]:focus, input[type="number"]:focus,
+input[type="date"]:focus, select:focus, textarea:focus {
+  border-color: var(--blue-form);
+  box-shadow: 0 0 0 3px rgba(30,111,168,.15);
+  background: #fff;
+}
+input[type="number"] { -moz-appearance: textfield; }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+
+.combo-wrap { position: relative; }
+.combo-wrap input { padding-right: 42px; }
+.combo-wrap::after {
+  content: "▾"; position: absolute; right: 14px; top: 50%;
+  transform: translateY(-50%); color: var(--muted-form); pointer-events: none;
+}
+
+.select-wrap { position: relative; }
+.select-wrap select { padding-right: 42px; cursor: pointer; }
+.select-wrap::after {
+  content: "▾"; position: absolute; right: 14px; top: 50%;
+  transform: translateY(-50%); color: var(--muted-form); pointer-events: none; font-size: 1rem;
+}
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field + .field { margin-top: 16px; }
+.mt12 { margin-top: 12px; }
+
+/* Dynamic selection buttons */
+.sel-btn-grid {
+  display: grid;
+  gap: 8px;
+}
+.sel-btn-grid.cols-1 { grid-template-columns: 1fr; }
+.sel-btn-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.sel-btn-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.sel-btn-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.sel-btn-grid.cols-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+
+.sel-btn {
+  background: var(--surface); border: 2px solid var(--border-light);
+  border-radius: 10px; padding: 14px 12px; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700;
+  color: var(--muted-form); text-align: center; letter-spacing: .4px; line-height: 1.2;
+  transition: all .18s; -webkit-tap-highlight-color: transparent;
+  word-break: break-word;
+}
+.sel-btn:active, .sel-btn.active {
+  border-color: var(--blue-form); background: var(--blue-form);
+  color: #fff; box-shadow: 0 3px 12px rgba(30,111,168,.3);
+}
+
+/* Loading state */
+.config-loading {
+  text-align: center; padding: 28px 16px;
+  color: var(--muted-form); font-size: .9rem;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.config-loading svg {
+  width: 20px; height: 20px; fill: var(--muted-form);
+  animation: spin 1s linear infinite;
+}
+.config-error {
+  text-align: center; padding: 20px 16px;
+  color: var(--red); font-size: .88rem; line-height: 1.5;
+}
+
+/* Step pending state */
+.step-pending {
+  text-align: center; padding: 20px 16px;
+  color: var(--muted-form); font-size: .88rem;
+  font-style: italic;
+}
+
+/* Resolved code badge */
+.code-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--navy-dark); border-radius: 8px;
+  padding: 8px 14px; margin-top: 12px;
+}
+.code-badge .code-label { font-size: .7rem; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .5px; }
+.code-badge .code-value { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--accent-gold); }
+
+/* Hours stepper */
+.hours-wrap {
+  display: flex; align-items: center;
+  border: 2px solid var(--border-light); border-radius: 10px;
+  overflow: hidden; background: var(--surface); transition: border-color .2s;
+}
+.hours-wrap:focus-within {
+  border-color: var(--blue-form);
+  box-shadow: 0 0 0 3px rgba(30,111,168,.15); background: #fff;
+}
+.hours-wrap input[type="number"] {
+  border: none; border-radius: 0; background: transparent;
+  text-align: center; font-size: 1.4rem; font-weight: 700;
+  font-family: 'Barlow Condensed', sans-serif;
+  flex: 1; padding: 14px 4px; outline: none; color: var(--text-dark);
+}
+.stepper-btn {
+  background: var(--navy-deep); border: none; padding: 0 20px;
+  cursor: pointer; color: #fff; font-size: 1.5rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 54px; transition: background .15s; flex-shrink: 0;
+}
+.stepper-btn:active { background: var(--blue-form); }
+
+/* Photo buttons */
+.photo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.photo-btn {
+  background: var(--navy-deep); border: none; border-radius: 10px;
+  padding: 13px 10px; color: #fff;
+  font-family: 'Barlow', sans-serif; font-size: .9rem; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 8px;
+  position: relative; overflow: hidden;
+  transition: background .18s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.photo-btn svg { width: 20px; height: 20px; fill: #fff; }
+.photo-btn.camera-btn { background: var(--blue-form); }
+.photo-btn:active { transform: scale(.97); }
+
+.photo-previews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.photo-thumb { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 2px solid var(--border-light); }
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-thumb .remove-btn {
+  position: absolute; top: 4px; right: 4px;
+  background: rgba(214,60,60,.85); border: none; border-radius: 50%;
+  width: 22px; height: 22px; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; color: #fff;
+  font-size: .75rem; font-weight: 700;
+}
+
+/* Est time display */
+.est-time-display {
+  margin-top: 12px; background: var(--navy-dark);
+  border-radius: 10px; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.et-value { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--accent-gold); }
+.et-label { font-size: .8rem; color: rgba(255,255,255,.5); }
+
+/* Combo dropdown (production entry) */
+.combo-container { position: relative; }
+.combo-input { padding-right: 42px; }
+.combo-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted-form); pointer-events: none; font-size: 1rem; }
+.combo-dropdown {
+  display: none; position: fixed;
+  background: var(--card); border: 2px solid var(--blue-form);
+  border-radius: 10px; max-height: 220px; overflow-y: auto;
+  z-index: 9999; box-shadow: 0 8px 24px rgba(13,31,53,.15);
+}
+.combo-dropdown.open { display: block; }
+.combo-option {
+  padding: 12px 14px; font-size: .95rem; cursor: pointer;
+  border-bottom: 1px solid var(--border-light); transition: background .12s; line-height: 1.3;
+}
+.combo-option:last-child { border-bottom: none; }
+.combo-option:hover, .combo-option.highlighted { background: rgba(30,111,168,.08); color: var(--blue-form); }
+.combo-option .item-sub { font-size: .75rem; color: var(--muted-form); margin-top: 2px; }
+.combo-no-results { padding: 14px; font-size: .9rem; color: var(--muted-form); text-align: center; }
+
+/* Department buttons (machine shop) */
+.dept-icon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dept-icon-btn {
+  background: var(--surface); border: 2px solid var(--border-light);
+  border-radius: 10px; padding: 16px 10px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700;
+  color: var(--muted-form); text-align: center; letter-spacing: .3px;
+  transition: all .18s; -webkit-tap-highlight-color: transparent;
+}
+.dept-icon-btn svg { width: 28px; height: 28px; fill: var(--muted-form); transition: fill .18s; }
+.dept-icon-btn:active, .dept-icon-btn.active {
+  border-color: var(--blue-form); background: rgba(30,111,168,.07);
+  color: var(--blue-form); box-shadow: 0 2px 10px rgba(30,111,168,.15);
+}
+.dept-icon-btn.active svg { fill: var(--blue-form); }
+
+/* Timer */
+.timer-display {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, #0a2d4e 100%);
+  border-radius: 12px; padding: 20px; text-align: center; margin-top: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.timer-display .timer-label { font-size: .7rem; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
+.timer-display .timer-clock { font-family: 'Barlow Condensed', sans-serif; font-size: 3rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 2px; line-height: 1; }
+.timer-display .timer-clock.running { color: #4cd98a; }
+.timer-display .timer-sub { font-size: .75rem; color: rgba(255,255,255,.4); margin-top: 6px; }
+.timer-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.timer-btn {
+  border: none; border-radius: 10px; padding: 14px 10px;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700;
+  letter-spacing: .4px; text-transform: uppercase; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity .2s, transform .1s; -webkit-tap-highlight-color: transparent;
+}
+.timer-btn:active { transform: scale(.97); }
+.timer-btn:disabled { opacity: .35; cursor: not-allowed; }
+.timer-btn svg { width: 18px; height: 18px; fill: #fff; }
+.start-btn { background: var(--green); color: #fff; }
+.stop-btn  { background: var(--red);   color: #fff; }
+.time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.time-box { background: var(--navy-dark); border-radius: 10px; padding: 12px 14px; }
+.time-box .t-label { font-size: .65rem; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.time-box .t-value { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: #fff; }
+.time-box .t-value.unset { color: rgba(255,255,255,.3); font-weight: 400; font-size: .9rem; }
+.hours-unit { text-align: center; font-size: .75rem; color: var(--muted-form); font-weight: 600; letter-spacing: .4px; text-transform: uppercase; margin-top: 6px; }
+
+/* Priority/Status buttons */
+.priority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.priority-btn {
+  border: 2px solid var(--border-light); border-radius: 10px; padding: 14px 8px;
+  cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+  text-align: center; transition: all .18s; background: var(--surface);
+  -webkit-tap-highlight-color: transparent;
+}
+.priority-btn .p-icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+.priority-btn .p-label { font-size: .85rem; letter-spacing: .3px; color: var(--muted-form); }
+.p-routine.active  { border-color: var(--green);  background: rgba(46,158,107,.08); }
+.p-urgent.active   { border-color: var(--orange); background: rgba(224,123,42,.08); }
+.p-critical.active { border-color: var(--red);    background: rgba(214,60,60,.08);  }
+.p-routine.active  .p-label { color: var(--green);  }
+.p-urgent.active   .p-label { color: var(--orange); }
+.p-critical.active .p-label { color: var(--red);    }
+
+/* Coating buttons */
+.coating-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.coating-btn {
+  background: var(--surface); border: 2px solid var(--border-light);
+  border-radius: 10px; padding: 14px 10px; cursor: pointer;
+  font-family: 'Barlow', sans-serif; font-size: .88rem; font-weight: 600;
+  color: var(--muted-form); text-align: center; line-height: 1.3;
+  transition: all .18s; -webkit-tap-highlight-color: transparent;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.coating-btn svg { width: 26px; height: 26px; fill: var(--muted-form); transition: fill .18s; }
+.coating-btn:active, .coating-btn.active {
+  border-color: var(--blue-form); background: rgba(30,111,168,.07);
+  color: var(--blue-form); box-shadow: 0 2px 10px rgba(30,111,168,.15);
+}
+.coating-btn.active svg { fill: var(--blue-form); }
+
+/* Submit button */
+.submit-wrap { padding: 0 0 20px; }
+.submit-btn {
+  width: 100%; background: linear-gradient(135deg, var(--blue-form) 0%, var(--navy-deep) 100%);
+  border: none; border-radius: var(--radius); padding: 18px; color: #fff;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700;
+  letter-spacing: .6px; text-transform: uppercase; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  box-shadow: 0 6px 24px rgba(13,31,53,.3); transition: opacity .2s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.submit-btn:active { transform: scale(.98); opacity: .9; }
+.submit-btn svg { width: 22px; height: 22px; fill: #fff; }
+.submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* Success overlay */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(13,31,53,.85); z-index: 999;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.overlay.show { display: flex; }
+.overlay-card {
+  background: var(--card); border-radius: 20px; padding: 32px 28px;
+  text-align: center; max-width: 340px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+  animation: popIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.overlay-card .check {
+  width: 64px; height: 64px; background: rgba(46,158,107,.12);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.overlay-card .check svg { width: 34px; height: 34px; fill: var(--green); }
+.overlay-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+.overlay-card p { font-size: .9rem; color: var(--muted-form); line-height: 1.5; margin-bottom: 6px; }
+.overlay-card .tid { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--blue-form); }
+.overlay-card .hrs { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--green); }
+.overlay-card .new-btn {
+  margin-top: 22px; width: 100%; background: var(--navy-dark);
+  border: none; border-radius: 10px; padding: 14px; color: #fff;
+  font-family: 'Barlow', sans-serif; font-size: .95rem; font-weight: 600; cursor: pointer;
+}
+
+/* Error toast */
+.error-toast {
+  display: none; position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%); background: var(--red); color: #fff;
+  padding: 12px 20px; border-radius: 10px; font-size: .9rem; font-weight: 600;
+  z-index: 9999; max-width: 90vw; text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+}
+.error-toast.show { display: block; animation: slideUp .3s ease; }
+@keyframes slideUp { from { transform: translateX(-50%) translateY(20px); opacity: 0; } }
+@keyframes spin    { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   CAMERA OVERLAY
+============================================================ */
+.camera-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.camera-overlay.open { display: flex; }
+#svc_cameraVideo {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  position: absolute; inset: 0;
+}
+#svc_cameraCanvas { display: none; }
+.camera-overlay-bar {
+  width: 100%; padding: 20px 24px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+  position: absolute; bottom: 0; left: 0; z-index: 1;
+}
+.cam-close-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 12px; padding: 12px 18px; color: #fff;
+  font-family: 'Barlow', sans-serif; font-size: 1rem; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  backdrop-filter: blur(6px); transition: background .15s;
+}
+.cam-close-btn:active { background: rgba(255,255,255,0.28); }
+.cam-close-btn svg { width: 18px; height: 18px; fill: #fff; }
+.cam-capture-btn {
+  width: 76px; height: 76px; border-radius: 50%;
+  background: #fff; border: 5px solid rgba(255,255,255,0.35);
+  cursor: pointer; flex-shrink: 0;
+  transition: transform .1s, background .1s, box-shadow .1s;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.2), 0 4px 20px rgba(0,0,0,0.4);
+}
+.cam-capture-btn:active {
+  transform: scale(0.90); background: #ddd;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.15), 0 2px 10px rgba(0,0,0,0.4);
+}
+.cam-count-badge {
+  background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px; padding: 10px 16px; color: #fff;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1rem;
+  font-weight: 700; letter-spacing: .5px; min-width: 68px;
+  text-align: center; backdrop-filter: blur(6px);
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     DASHBOARD VIEW
+============================================================ -->
+<div class="view active" id="dashboardView">
+  <div class="dash-header">
+    <h1>Tablet <span>Hub</span></h1>
+    <button onclick="svc_softRefresh()" style="
+      position: absolute; right: 20px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.45; transition: opacity .2s;
+      -webkit-tap-highlight-color: transparent;
+    " ontouchstart="this.style.opacity='0.9';this.querySelector('svg').style.transform='rotate(180deg)'"
+       ontouchend="this.style.opacity='0.45'" title="Reload config">
+      <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#ecf0f1;transition:transform .4s;">
+        <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+      </svg>
+    </button>
+  </div>
+  <div class="dash-body">
+    <div class="logo-wrap">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 203.3 54.2" xml:space="preserve">
+        <style type="text/css">.st0{fill:#001F4F;}</style>
+        <path class="st0" d="M95,19.3c-4.6,0-8.3-3.9-8.3-8.7c0-4.8,3.7-8.7,8.3-8.7c3.8,0,6.6,2.3,7.6,5.5h-2.1c-0.9-2.1-2.8-3.6-5.5-3.6c-3.4,0-6.2,3-6.2,6.7c0,3.7,2.8,6.7,6.2,6.7c2.4,0,4.5-1.4,5.5-3.6h2.1C101.5,17.1,98.5,19.3,95,19.3"/>
+        <path class="st0" d="M116.7,12.8c0,3.6-2.7,6.4-6.2,6.4c-3.5,0-6.2-2.9-6.2-6.4c0-3.6,2.7-6.5,6.2-6.5C114,6.3,116.7,9.2,116.7,12.8 M114.7,12.8c0-2.6-1.9-4.7-4.2-4.7c-2.3,0-4.2,2.1-4.2,4.7c0,2.5,1.9,4.6,4.2,4.6C112.8,17.4,114.7,15.3,114.7,12.8"/>
+        <path class="st0" d="M129.7,19h-2v-7.5c0-1.9-1.1-3.3-3-3.3c-1.9,0-3.2,1.4-3.2,3.2V19h-2V6.6h2v1.3c0.8-1,2.1-1.7,3.6-1.7c3,0,4.8,2.2,4.8,5.2V19z"/>
+        <path class="st0" d="M138.1,19c-2.9,0.3-4.9-1.4-4.9-4.5V8.5h-1.7V6.6h1.7V4h2v2.6h2.8v1.9h-2.8v5.9c0,2.2,1.3,2.7,2.9,2.6V19z"/>
+        <path class="st0" d="M148.6,17.5c-0.9,1.1-2.3,1.7-4.3,1.7c-2.5,0-4.8-1.2-4.8-3.8c0-2.5,1.8-3.7,5-3.9c3-0.1,4-0.7,4-1.7s-0.9-1.7-3-1.7c-1.3,0-3,0.4-3.2,2.2h-2.1c0.1-2.5,2.2-4.1,5.4-4.1c3.3,0,5,1.5,5,3.8v6.8c0,0.6,0.2,1.5,0.4,2h-2C148.7,18.6,148.6,18.1,148.6,17.5 M148.6,12.3c-0.8,0.7-2.3,0.9-3.7,1c-2.7,0.2-3.3,1.1-3.3,2.1c0,1.3,1.3,1.9,2.9,1.9c2.1,0,4.1-0.9,4.2-3.1V12.3z"/>
+        <path class="st0" d="M156.1,4.7h-2V2.3h2V4.7z M156.1,19h-2V6.6h2V19z"/>
+        <path class="st0" d="M170,19h-2v-7.5c0-1.9-1.1-3.3-3-3.3c-1.9,0-3.2,1.4-3.2,3.2V19h-2V6.6h2v1.3c0.8-1,2.1-1.7,3.6-1.7c3,0,4.8,2.2,4.8,5.2V19z"/>
+        <path class="st0" d="M184.7,15.1c-0.9,2.6-3,4.1-5.8,4.1c-3.6,0-6.3-2.8-6.3-6.5c0-3.6,2.8-6.5,6.2-6.5c3.2,0,6.3,2.6,6.2,7h-10.4c0.3,2.6,2.2,4.1,4.3,4.1c1.8,0,3-0.8,3.7-2.3H184.7z M182.7,11.5c-0.5-2-2.2-3.4-4-3.4c-1.7,0-3.5,1.2-4,3.4H182.7z"/>
+        <path class="st0" d="M193.5,8.3c-2.1-0.1-4,1-4,3.5V19h-2V6.6h2V8c0.9-1.3,2.6-1.8,4-1.7V8.3z"/>
+        <path class="st0" d="M92.9,42.1c-3.8,0-6.4-2.2-6.4-5.6h2.1c0,2.2,1.7,3.6,4.3,3.6c2.9,0,4.3-1.2,4.3-3.1c0-1.4-0.6-2.4-4.3-3c-3.7-0.6-5.8-1.8-5.8-4.7s2.3-4.7,5.8-4.7c3.7,0,5.9,2,5.9,5.2h-2.1c0-1.9-1.3-3.2-3.8-3.2c-2.6,0-3.8,1.1-3.8,2.7c0,1.4,0.8,2.2,4.2,2.8c3.7,0.7,5.9,1.7,5.9,4.9C99.2,40.3,96.6,42.1,92.9,42.1"/>
+        <path class="st0" d="M112,41.8h-2v-1.3c-0.8,1-2.1,1.6-3.6,1.6c-3,0-4.8-2.2-4.8-5.2v-7.4h2V37c0,2,1.1,3.3,3.1,3.3c1.8,0,3.2-1.4,3.2-3.2v-7.6h2V41.8z"/>
+        <path class="st0" d="M121.5,42.1c-1.8,0-3.3-1-4.2-2.2v7.4h-2V29.4h2v2c0.9-1.2,2.4-2.3,4.3-2.3c3.6,0,6.2,2.9,6.2,6.5C127.7,39.2,125.1,42.1,121.5,42.1 M121.5,31c-2.3,0-4.2,2.1-4.2,4.6c0,2.5,1.9,4.6,4.2,4.6c2.3,0,4.1-2.1,4.1-4.6C125.7,33,123.8,31,121.5,31"/>
+        <path class="st0" d="M136.6,42.1c-1.8,0-3.3-1-4.2-2.2v7.4h-2V29.4h2v2c0.9-1.2,2.4-2.3,4.3-2.3c3.6,0,6.2,2.9,6.2,6.5C142.7,39.2,140.1,42.1,136.6,42.1 M136.6,31c-2.3,0-4.2,2.1-4.2,4.6c0,2.5,1.9,4.6,4.2,4.6c2.3,0,4.1-2.1,4.1-4.6C140.7,33,138.9,31,136.6,31"/>
+        <rect x="145.4" y="23.9" class="st0" width="2" height="17.9"/>
+        <path class="st0" d="M155.5,44.2c-0.9,2.3-2.2,3.2-4.7,3v-1.9c1.6,0.1,2.3-0.4,2.8-1.8l0.6-1.7l-4.7-12.3h2.2l3.6,9.8l3.5-9.8h2.2L155.5,44.2z"/>
+        <path class="st0" d="M177.6,42.1c-4.6,0-8.3-3.9-8.3-8.7c0-4.8,3.7-8.7,8.3-8.7c3.8,0,6.6,2.3,7.6,5.5h-2.1c-0.9-2.1-2.8-3.6-5.5-3.6c-3.4,0-6.2,3-6.2,6.7c0,3.7,2.8,6.7,6.2,6.7c2.4,0,4.5-1.4,5.5-3.6h2.1C184.1,39.9,181.1,42.1,177.6,42.1"/>
+        <path class="st0" d="M199.3,35.6c0,3.6-2.7,6.4-6.2,6.4c-3.5,0-6.2-2.9-6.2-6.4c0-3.6,2.7-6.5,6.2-6.5C196.6,29.1,199.3,32,199.3,35.6 M197.3,35.6c0-2.6-1.9-4.7-4.2-4.7c-2.3,0-4.2,2.1-4.2,4.7c0,2.5,1.9,4.6,4.2,4.6C195.4,40.2,197.3,38.2,197.3,35.6"/>
+        <rect x="200.9" y="39.3" class="st0" width="2.4" height="2.5"/>
+        <path class="st0" d="M46.3,1.6c0,0.9-3.7,1.6-8.3,1.6s-8.3-0.7-8.3-1.6C29.7,0.7,33.4,0,38,0S46.3,0.7,46.3,1.6"/>
+        <path class="st0" d="M36.6,4.7c0,0.9-4.3,1.6-9.5,1.6s-9.5-0.7-9.5-1.6c0-0.9,4.3-1.6,9.5-1.6S36.6,3.8,36.6,4.7"/>
+        <path class="st0" d="M58.4,4.7c0,0.9-4.3,1.6-9.5,1.6s-9.5-0.7-9.5-1.6c0-0.9,4.3-1.6,9.5-1.6S58.4,3.8,58.4,4.7"/>
+        <path class="st0" d="M48.3,8.3c0,0.9-4.6,1.7-10.4,1.7c-5.7,0-10.4-0.8-10.4-1.7c0-0.9,4.6-1.7,10.4-1.7C43.7,6.6,48.3,7.3,48.3,8.3"/>
+        <path class="st0" d="M71.5,8.3c0,0.9-4.6,1.7-10.4,1.7S50.8,9.2,50.8,8.3c0-0.9,4.6-1.7,10.4-1.7S71.5,7.3,71.5,8.3"/>
+        <path class="st0" d="M24.9,8.3c0,0.9-4.6,1.7-10.4,1.7C8.8,10,4.1,9.2,4.1,8.3c0-0.9,4.6-1.7,10.4-1.7C20.2,6.6,24.9,7.3,24.9,8.3"/>
+        <path class="st0" d="M35.9,11.7c0,0.9-4.6,1.7-10.4,1.7c-5.7,0-10.4-0.8-10.4-1.7c0-0.9,4.6-1.7,10.4-1.7C31.3,10,35.9,10.8,35.9,11.7"/>
+        <path class="st0" d="M60.8,11.7c0,0.9-4.6,1.7-10.4,1.7c-5.7,0-10.4-0.8-10.4-1.7c0-0.9,4.6-1.7,10.4-1.7C56.1,10,60.8,10.8,60.8,11.7"/>
+        <path class="st0" d="M50.8,15.9c0,1.2-5.8,2.1-12.9,2.1s-12.9-0.9-12.9-2.1c0-1.2,5.8-2.1,12.9-2.1S50.8,14.8,50.8,15.9"/>
+        <path class="st0" d="M0,22.4l38,31.8l37.6-31.4c0,0-3.5-1.3-3.9-1.5c0,0,0,0,0,0v2.4c0,0-5.5,3.1-11,2.4v3.5c0,0-1.4,3.1-9.7,2.8v4.5c0,0-1,3.5-13.1,3.8c0,0-11.7-0.3-12.8-3.5v-4.5c0,0-7.3,0.7-10.4-3.1v-3.1c0,0-6.9-0.3-10.4-2.8v-2.4L0,22.4z"/>
+      </svg>
+    </div>
+    <div class="eyebrow">Container Supply Company</div>
+    <div class="divider"></div>
+    <div class="grid">
+      <button class="dash-btn production" onclick="showView('prodSelectView')">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div>
+        Production Entry
+      </button>
+      <button class="dash-btn service" onclick="showView('serviceView')">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14zM6 13h5v4H6zm6-6h4v3h-4zM6 7h5v5H6zm6 4h4v6h-4z"/></svg></div>
+        Service Tickets
+      </button>
+      <button class="dash-btn machine" onclick="showView('machineShopView')">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
+        Machine Shop
+      </button>
+      <button class="dash-btn placeholder">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-.5 1.5 1.96 2.5H17V9.5h2.5zM6 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2.22-3c-.55-.61-1.33-1-2.22-1s-1.67.39-2.22 1H3V6h12v9H8.22zM18 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg></div>
+        Pre-Shift Inspection
+      </button>
+    </div>
+    <div class="grid">
+      <button class="dash-btn placeholder">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+        Coming Soon
+      </button>
+      <button class="dash-btn placeholder">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+        Coming Soon
+      </button>
+    </div>
+    <div class="dash-footer">Container Supply Company &mdash; Internal Use Only</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PRODUCTION DEPT SELECT VIEW
+============================================================ -->
+<div class="view" id="prodSelectView">
+  <div class="prodselect-header">
+    <button class="prodselect-back" onclick="showView('dashboardView')">
+      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      Dashboard
+    </button>
+    <h1>Production <span>Entry</span></h1>
+  </div>
+  <div class="prodselect-body">
+    <div class="prodselect-label">Select Department</div>
+    <div class="prodselect-title">Which department<br>are you logging for?</div>
+    <div class="prodselect-divider"></div>
+    <div class="dept-select-grid">
+      <button class="dept-select-btn metals" onclick="showView('productionView')">
+        <div class="dept-select-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        </div>
+        Metal<br>Department
+        <span class="dept-sub">Lines · Press · Slitter</span>
+      </button>
+      <button class="dept-select-btn plastics" onclick="showView('plasticProdView')">
+        <div class="dept-select-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-12a4 4 0 100 8 4 4 0 000-8z"/></svg>
+        </div>
+        Plastic<br>Department
+        <span class="dept-sub">Plastic Production</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SERVICE TICKETS VIEW
+============================================================ -->
+<div class="view form-view" id="serviceView">
+  <header class="form-header">
+    <div class="form-header-inner">
+      <button type="button" class="back-to-dash-btn" onclick="showView('dashboardView')">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        Dashboard
+      </button>
+      <div class="form-header-center">
+        <div class="form-header-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14z"/></svg>
+        </div>
+        <div class="form-header-text">
+          <h1>Container Supply Co.</h1>
+          <p>Machinery Service Ticket</p>
+          <div class="form-header-datetime">
+            <span class="hd-date" id="svc_dtDate">—</span>
+            <span class="hd-sep"> · </span>
+            <span class="hd-time" id="svc_dtTime">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="id-badge">
+        <div class="label">Ticket</div>
+        <div class="value" id="svc_ticketIdDisplay">—</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="form-main" style="padding-bottom:40px;">
+
+    <!-- 1. Mechanic -->
+    <div class="section">
+      <div class="section-header"><div class="step">1</div><h2>Mechanic</h2></div>
+      <div class="section-body">
+        <label for="svc_mechanicInput">Your Name <span class="required-star">*</span></label>
+        <div class="combo-wrap">
+          <input type="text" id="svc_mechanicInput" list="svc_mechanicList"
+            placeholder="Type or select your name…"
+            autocomplete="off" autocorrect="off" spellcheck="false"/>
+          <datalist id="svc_mechanicList">
+            <option value="Carlos M."></option><option value="David R."></option>
+            <option value="James T."></option><option value="Luis G."></option>
+            <option value="Marcus H."></option><option value="Miguel S."></option>
+            <option value="Robert K."></option><option value="Tony V."></option>
+          </datalist>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Department (Col B) — dynamic -->
+    <div class="section" id="svc_step2Section">
+      <div class="section-header"><div class="step">2</div><h2>Department</h2></div>
+      <div class="section-body" id="svc_step2Body">
+        <div class="config-loading" id="svc_configLoadingMsg">
+          <svg viewBox="0 0 24 24"><path d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg>
+          Loading options…
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Level 2 -->
+    <div class="section" id="svc_step3Section" style="display:none;">
+      <div class="section-header"><div class="step">3</div><h2 id="svc_step3Title">Section</h2></div>
+      <div class="section-body" id="svc_step3Body">
+        <div class="step-pending">← Select a department first</div>
+      </div>
+    </div>
+
+    <!-- 4. Level 3 -->
+    <div class="section" id="svc_step4Section" style="display:none;">
+      <div class="section-header"><div class="step">4</div><h2 id="svc_step4Title">Equipment</h2></div>
+      <div class="section-body" id="svc_step4Body">
+        <div class="step-pending">← Select a section first</div>
+      </div>
+    </div>
+
+    <!-- 5. Level 4 -->
+    <div class="section" id="svc_step5Section" style="display:none;">
+      <div class="section-header"><div class="step">5</div><h2 id="svc_step5Title">Sub-Item</h2></div>
+      <div class="section-body" id="svc_step5Body">
+        <div class="step-pending">← Select an equipment item first</div>
+      </div>
+    </div>
+
+    <!-- 6. Photos -->
+    <div class="section">
+      <div class="section-header"><div class="step">6</div><h2>Photos <span style="font-size:.8rem;font-weight:400;opacity:.6;">(optional)</span></h2></div>
+      <div class="section-body">
+        <div class="photo-btns">
+          <button type="button" class="photo-btn camera-btn" style="grid-column:1/-1;" onclick="svc_openCamera()">
+            <svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/></svg>
+            Take Photo
+          </button>
+        </div>
+        <div class="photo-previews" id="svc_photoPreviews"></div>
+      </div>
+    </div>
+
+    <!-- 7. Issue -->
+    <div class="section">
+      <div class="section-header"><div class="step">7</div><h2>Issue Description</h2></div>
+      <div class="section-body">
+        <label for="svc_issueText">Describe the problem <span class="required-star">*</span></label>
+        <textarea id="svc_issueText" placeholder="Describe what happened, unusual sounds, error codes, or symptoms observed…" rows="5"></textarea>
+      </div>
+    </div>
+
+    <!-- 8. Estimated Time -->
+    <div class="section">
+      <div class="section-header"><div class="step">8</div><h2>Estimated Time to Resolve</h2></div>
+      <div class="section-body">
+        <label>How many hours will it take? <span class="required-star">*</span></label>
+        <div class="hours-wrap">
+          <button type="button" class="stepper-btn" onclick="svc_stepEstTime(-0.5)">−</button>
+          <input type="number" id="svc_estTimeInput" value="1.0" min="0.5" max="99" step="0.5" oninput="svc_updateEstDisplay()"/>
+          <button type="button" class="stepper-btn" onclick="svc_stepEstTime(0.5)">+</button>
+        </div>
+        <div class="est-time-display">
+          <span class="et-value" id="svc_estTimeDisplay">1.0</span>
+          <span class="et-label" id="svc_estUnitDisplay">Hour</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="button" class="submit-btn" id="svc_submitBtn" onclick="svc_submitTicket()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        Submit Service Ticket
+      </button>
+    </div>
+  </div>
+
+  <div class="overlay" id="svc_successOverlay">
+    <div class="overlay-card">
+      <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+      <h3>Ticket Submitted!</h3>
+      <p>Your service ticket has been logged successfully.</p>
+      <p class="tid" id="svc_successTicketId"></p>
+      <button class="new-btn" onclick="svc_resetForm()">Submit Another Ticket</button>
+    </div>
+  </div>
+  <div class="error-toast" id="svc_errorToast"></div>
+</div>
+
+<!-- ============================================================
+     CAMERA OVERLAY
+============================================================ -->
+<div class="camera-overlay" id="svc_cameraOverlay">
+  <video id="svc_cameraVideo" autoplay playsinline muted></video>
+  <canvas id="svc_cameraCanvas"></canvas>
+  <div class="camera-overlay-bar">
+    <button type="button" class="cam-close-btn" onclick="svc_closeCamera()">
+      <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      Close
+    </button>
+    <button type="button" class="cam-capture-btn" id="svc_camCaptureBtn" onclick="svc_capturePhoto()" aria-label="Capture photo"></button>
+    <div class="cam-count-badge" id="svc_camCountBadge">0 / 6</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     METALS PRODUCTION ENTRY VIEW
+============================================================ -->
+<div class="view form-view" id="productionView">
+  <header class="form-header">
+    <div class="form-header-inner">
+      <button type="button" class="back-to-dept-btn" onclick="showView('prodSelectView')">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Dept
+      </button>
+      <div class="form-header-center">
+        <div class="form-header-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        </div>
+        <div class="form-header-text">
+          <h1>Container Supply Co.</h1>
+          <p>Metal Production Entry</p>
+          <div class="form-header-datetime">
+            <span class="hd-date" id="prod_dtDate">—</span>
+            <span class="hd-sep"> · </span>
+            <span class="hd-time" id="prod_dtTime">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="id-badge">
+        <div class="label">Entry</div>
+        <div class="value" id="prod_entryIdDisplay">—</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="form-main" style="padding-bottom:40px;">
+    <input type="hidden" id="prod_dateInput"/>
+
+    <!-- 1. Dept Section -->
+    <div class="section">
+      <div class="section-header"><div class="step">1</div><h2>Dept. Section</h2></div>
+      <div class="section-body">
+        <label>Select Section <span class="required-star">*</span></label>
+        <div class="sel-btn-grid cols-1">
+          <button type="button" class="sel-btn" data-section="METAL LINES"        onclick="prod_selectDeptSection(this)">METAL LINES</button>
+          <button type="button" class="sel-btn" data-section="PRESS DEPARTMENT"   onclick="prod_selectDeptSection(this)">PRESS DEPARTMENT</button>
+          <button type="button" class="sel-btn" data-section="SLITTER DEPARTMENT" onclick="prod_selectDeptSection(this)">SLITTER DEPARTMENT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Line -->
+    <div class="section">
+      <div class="section-header"><div class="step">2</div><h2 id="prod_lineLabel">Line</h2></div>
+      <div class="section-body">
+        <label id="prod_lineSubLabel">Select a dept. section first</label>
+        <div id="prod_lineGrid" class="sel-btn-grid cols-5"></div>
+      </div>
+    </div>
+
+    <!-- 3. Item -->
+    <div class="section">
+      <div class="section-header"><div class="step">3</div><h2>Item</h2></div>
+      <div class="section-body">
+        <label>Search Item <span class="required-star">*</span></label>
+        <div class="combo-container" id="prod_itemComboWrap">
+          <input type="text" class="combo-input" id="prod_itemInput"
+            placeholder="Type item number or description…"
+            autocomplete="off" autocorrect="off" spellcheck="false"
+            oninput="prod_filterItems()" onfocus="prod_openCombo()" onblur="prod_closeComboDelay()"/>
+          <span class="combo-arrow">▾</span>
+        </div>
+        <input type="hidden" id="prod_itemValue"/>
+      </div>
+    </div>
+
+    <!-- 4. End Used -->
+    <div class="section">
+      <div class="section-header"><div class="step">4</div><h2>End Used</h2></div>
+      <div class="section-body">
+        <label for="prod_endUsedInput">End / Lid Type <span class="required-star">*</span></label>
+        <input type="text" id="prod_endUsedInput" placeholder="e.g. 401 Lug, 307 Easy Open…" autocomplete="off"/>
+      </div>
+    </div>
+
+    <!-- 5. Coating -->
+    <div class="section">
+      <div class="section-header"><div class="step">5</div><h2>IS / OR Coating</h2></div>
+      <div class="section-body">
+        <label>Select Coating <span class="required-star">*</span></label>
+        <div class="coating-grid">
+          <button type="button" class="coating-btn" data-coating="IS" onclick="prod_selectCoating(this)">
+            <svg viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34a1 1 0 0 0-1.41 0L9 12.25 11.75 15l8.96-8.96a1 1 0 0 0 0-1.41z"/></svg>
+            Inside Spray
+          </button>
+          <button type="button" class="coating-btn" data-coating="OR" onclick="prod_selectCoating(this)">
+            <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm1-11h-2v3H8v2h3v3h2v-3h3v-2h-3V8z"/></svg>
+            Outside Roll
+          </button>
+          <button type="button" class="coating-btn" data-coating="IS/OR" onclick="prod_selectCoating(this)">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Both (IS/OR)
+          </button>
+          <button type="button" class="coating-btn" data-coating="None" onclick="prod_selectCoating(this)">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/></svg>
+            None
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Quantities -->
+    <div class="section">
+      <div class="section-header"><div class="step">6</div><h2>Quantities</h2></div>
+      <div class="section-body">
+        <div class="two-col">
+          <div>
+            <label for="prod_qtyProduced">Qty Produced <span class="required-star">*</span></label>
+            <input type="number" id="prod_qtyProduced" placeholder="0" min="0"/>
+          </div>
+          <div>
+            <label for="prod_spoilageQty">Spoilage Qty <span class="required-star">*</span></label>
+            <input type="number" id="prod_spoilageQty" placeholder="0" min="0"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Hours -->
+    <div class="section">
+      <div class="section-header"><div class="step">7</div><h2>Hours Worked</h2></div>
+      <div class="section-body">
+        <label>Hours Worked <span class="required-star">*</span></label>
+        <div class="hours-wrap">
+          <button type="button" class="stepper-btn" onclick="prod_stepField('prod_hoursWorked',-0.5)">−</button>
+          <input type="number" id="prod_hoursWorked" value="8.0" min="0.5" max="24" step="0.5"/>
+          <button type="button" class="stepper-btn" onclick="prod_stepField('prod_hoursWorked',0.5)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="button" class="submit-btn" id="prod_submitBtn" onclick="prod_submitEntry()">
+        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Log Production Entry
+      </button>
+    </div>
+  </div>
+
+  <div class="combo-dropdown" id="prod_itemDropdown"></div>
+
+  <div class="overlay" id="prod_successOverlay">
+    <div class="overlay-card">
+      <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+      <h3>Entry Logged!</h3>
+      <p>Production data has been recorded successfully.</p>
+      <p class="tid" id="prod_successEntryId"></p>
+      <button class="new-btn" onclick="prod_resetForm()">Log Another Entry</button>
+    </div>
+  </div>
+  <div class="error-toast" id="prod_errorToast"></div>
+</div>
+
+<!-- ============================================================
+     PLASTICS PRODUCTION ENTRY VIEW
+============================================================ -->
+<div class="view form-view" id="plasticProdView">
+  <header class="form-header">
+    <div class="form-header-inner">
+      <button type="button" class="back-to-dept-btn" onclick="showView('prodSelectView')">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Dept
+      </button>
+      <div class="form-header-center">
+        <div class="form-header-icon" style="background:var(--accent-gold);">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-12a4 4 0 100 8 4 4 0 000-8z"/></svg>
+        </div>
+        <div class="form-header-text">
+          <h1>Container Supply Co.</h1>
+          <p>Plastic Production Entry</p>
+          <div class="form-header-datetime">
+            <span class="hd-date" id="plast_dtDate">—</span>
+            <span class="hd-sep"> · </span>
+            <span class="hd-time" id="plast_dtTime">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="id-badge">
+        <div class="label">Entry</div>
+        <div class="value" id="plast_entryIdDisplay">—</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="form-main" style="padding-bottom:40px;">
+    <input type="hidden" id="plast_dateInput"/>
+
+    <!-- 1. Department (config-driven) -->
+    <div class="section" id="plast_step1Section">
+      <div class="section-header"><div class="step">1</div><h2>Department</h2></div>
+      <div class="section-body" id="plast_step1Body">
+        <div class="config-loading">
+          <svg viewBox="0 0 24 24"><path d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg>
+          Loading options…
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Level 2 -->
+    <div class="section" id="plast_step2Section" style="display:none;">
+      <div class="section-header"><div class="step">2</div><h2 id="plast_step2Title">Section</h2></div>
+      <div class="section-body" id="plast_step2Body">
+        <div class="step-pending">← Select a department first</div>
+      </div>
+    </div>
+
+    <!-- 3. Level 3 -->
+    <div class="section" id="plast_step3Section" style="display:none;">
+      <div class="section-header"><div class="step">3</div><h2 id="plast_step3Title">Machine</h2></div>
+      <div class="section-body" id="plast_step3Body">
+        <div class="step-pending">← Select a section first</div>
+      </div>
+    </div>
+
+    <!-- 4. Level 4 -->
+    <div class="section" id="plast_step4Section" style="display:none;">
+      <div class="section-header"><div class="step">4</div><h2 id="plast_step4Title">Sub-Item</h2></div>
+      <div class="section-body" id="plast_step4Body">
+        <div class="step-pending">← Select a machine first</div>
+      </div>
+    </div>
+
+    <!-- 5. Item -->
+    <div class="section">
+      <div class="section-header"><div class="step">5</div><h2>Item</h2></div>
+      <div class="section-body">
+        <label for="plast_itemInput">Item / Part Number <span class="required-star">*</span></label>
+        <input type="text" id="plast_itemInput" placeholder="e.g. PL-401-LUG, PL-307-EOE…" autocomplete="off"/>
+      </div>
+    </div>
+
+    <!-- 6. End Used -->
+    <div class="section">
+      <div class="section-header"><div class="step">6</div><h2>End Used</h2></div>
+      <div class="section-body">
+        <label for="plast_endUsedInput">End / Lid Type <span class="required-star">*</span></label>
+        <input type="text" id="plast_endUsedInput" placeholder="e.g. 401 Lug, 307 Easy Open…" autocomplete="off"/>
+      </div>
+    </div>
+
+    <!-- 7. Coating -->
+    <div class="section">
+      <div class="section-header"><div class="step">7</div><h2>IS / OR Coating</h2></div>
+      <div class="section-body">
+        <label>Select Coating <span class="required-star">*</span></label>
+        <div class="coating-grid">
+          <button type="button" class="coating-btn" data-coating="IS" onclick="plast_selectCoating(this)">
+            <svg viewBox="0 0 24 24"><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34a1 1 0 0 0-1.41 0L9 12.25 11.75 15l8.96-8.96a1 1 0 0 0 0-1.41z"/></svg>
+            Inside Spray
+          </button>
+          <button type="button" class="coating-btn" data-coating="OR" onclick="plast_selectCoating(this)">
+            <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm1-11h-2v3H8v2h3v3h2v-3h3v-2h-3V8z"/></svg>
+            Outside Roll
+          </button>
+          <button type="button" class="coating-btn" data-coating="IS/OR" onclick="plast_selectCoating(this)">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Both (IS/OR)
+          </button>
+          <button type="button" class="coating-btn" data-coating="None" onclick="plast_selectCoating(this)">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/></svg>
+            None
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Quantities -->
+    <div class="section">
+      <div class="section-header"><div class="step">8</div><h2>Quantities</h2></div>
+      <div class="section-body">
+        <div class="two-col">
+          <div>
+            <label for="plast_qtyProduced">Qty Produced <span class="required-star">*</span></label>
+            <input type="number" id="plast_qtyProduced" placeholder="0" min="0"/>
+          </div>
+          <div>
+            <label for="plast_spoilageQty">Spoilage Qty <span class="required-star">*</span></label>
+            <input type="number" id="plast_spoilageQty" placeholder="0" min="0"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Hours -->
+    <div class="section">
+      <div class="section-header"><div class="step">9</div><h2>Hours Worked</h2></div>
+      <div class="section-body">
+        <label>Hours Worked <span class="required-star">*</span></label>
+        <div class="hours-wrap">
+          <button type="button" class="stepper-btn" onclick="plast_stepField('plast_hoursWorked',-0.5)">−</button>
+          <input type="number" id="plast_hoursWorked" value="8.0" min="0.5" max="24" step="0.5"/>
+          <button type="button" class="stepper-btn" onclick="plast_stepField('plast_hoursWorked',0.5)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="button" class="submit-btn" id="plast_submitBtn" onclick="plast_submitEntry()">
+        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Log Plastic Production Entry
+      </button>
+    </div>
+  </div>
+
+  <div class="overlay" id="plast_successOverlay">
+    <div class="overlay-card">
+      <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+      <h3>Entry Logged!</h3>
+      <p>Plastic production data recorded successfully.</p>
+      <p class="tid" id="plast_successEntryId"></p>
+      <button class="new-btn" onclick="plast_resetForm()">Log Another Entry</button>
+    </div>
+  </div>
+  <div class="error-toast" id="plast_errorToast"></div>
+</div>
+
+<!-- ============================================================
+     MACHINE SHOP VIEW
+============================================================ -->
+<div class="view form-view" id="machineShopView">
+  <header class="form-header">
+    <div class="form-header-inner">
+      <button type="button" class="back-to-dash-btn" onclick="showView('dashboardView')">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        Dashboard
+      </button>
+      <div class="form-header-center">
+        <div class="form-header-icon">
+          <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+        </div>
+        <div class="form-header-text">
+          <h1>Container Supply Co.</h1>
+          <p>Machine Shop Time Tracker</p>
+          <div class="form-header-datetime">
+            <span class="hd-date" id="ms_dtDate">—</span>
+            <span class="hd-sep"> · </span>
+            <span class="hd-time" id="ms_dtTime">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="id-badge">
+        <div class="label">Job</div>
+        <div class="value" id="ms_jobIdDisplay">—</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="form-main" style="padding-bottom:40px;">
+
+    <!-- 1. Technician -->
+    <div class="section">
+      <div class="section-header"><div class="step">1</div><h2>Technician</h2></div>
+      <div class="section-body">
+        <label for="ms_techInput">Your Name <span class="required-star">*</span></label>
+        <div class="combo-wrap">
+          <input type="text" id="ms_techInput" list="ms_techList" placeholder="Type or select your name…" autocomplete="off" autocorrect="off" spellcheck="false"/>
+          <datalist id="ms_techList">
+            <option value="Carlos M."></option><option value="David R."></option>
+            <option value="James T."></option><option value="Luis G."></option>
+            <option value="Marcus H."></option><option value="Miguel S."></option>
+            <option value="Robert K."></option><option value="Tony V."></option>
+          </datalist>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Department -->
+    <div class="section">
+      <div class="section-header"><div class="step">2</div><h2>Department</h2></div>
+      <div class="section-body">
+        <label>Select Department <span class="required-star">*</span></label>
+        <div class="dept-icon-grid">
+          <button type="button" class="dept-icon-btn" data-dept="Metals" onclick="ms_selectDept(this)">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+            Metals
+          </button>
+          <button type="button" class="dept-icon-btn" data-dept="Plastics" onclick="ms_selectDept(this)">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-12a4 4 0 100 8 4 4 0 000-8z"/></svg>
+            Plastics
+          </button>
+          <button type="button" class="dept-icon-btn" data-dept="Litho" onclick="ms_selectDept(this)">
+            <svg viewBox="0 0 24 24"><path d="M21 6.5l-4-4-9.5 9.5-2 4 4-2L21 6.5z"/></svg>
+            Litho
+          </button>
+          <button type="button" class="dept-icon-btn" data-dept="Utilities" onclick="ms_selectDept(this)">
+            <svg viewBox="0 0 24 24"><path d="M14.5 2.5c0 1.5-1.5 7-1.5 7h-2C10 9.5 8.5 4 8.5 2.5a3 3 0 0 1 6 0zM12 21.5a3 3 0 0 1-3-3c0-1.5 1.5-7 1.5-7h3s1.5 5.5 1.5 7a3 3 0 0 1-3 3z"/></svg>
+            Utilities
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Job Description -->
+    <div class="section">
+      <div class="section-header"><div class="step">3</div><h2>Job Description</h2></div>
+      <div class="section-body">
+        <div class="field">
+          <label for="ms_jobTitle">Job / Work Order <span class="required-star">*</span></label>
+          <input type="text" id="ms_jobTitle" placeholder="e.g. Repair press #14 feed rail…" autocomplete="off"/>
+        </div>
+        <div class="field">
+          <label for="ms_jobDesc">Brief Description <span class="required-star">*</span></label>
+          <textarea id="ms_jobDesc" placeholder="Describe the work performed, parts used, findings…" rows="4"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Time Tracking -->
+    <div class="section">
+      <div class="section-header"><div class="step">4</div><h2>Time on Job</h2></div>
+      <div class="section-body">
+        <div class="timer-display">
+          <div class="timer-label">Elapsed Time</div>
+          <div class="timer-clock" id="ms_timerClock">00:00:00</div>
+          <div class="timer-sub" id="ms_timerSub">Press Start when you begin the job</div>
+        </div>
+        <div class="timer-btns">
+          <button type="button" class="timer-btn start-btn" id="ms_startBtn" onclick="ms_startTimer()">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Start
+          </button>
+          <button type="button" class="timer-btn stop-btn" id="ms_stopBtn" onclick="ms_stopTimer()" disabled>
+            <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>Stop
+          </button>
+        </div>
+        <div class="time-row">
+          <div class="time-box">
+            <div class="t-label">Start Time</div>
+            <div class="t-value unset" id="ms_startTimeDisplay">Not started</div>
+          </div>
+          <div class="time-box">
+            <div class="t-label">End Time</div>
+            <div class="t-value unset" id="ms_endTimeDisplay">Not stopped</div>
+          </div>
+        </div>
+        <div class="field" style="margin-top:18px;">
+          <label>Hours Worked <span style="font-size:.7rem;font-weight:400;opacity:.7;">(auto-filled — adjust if needed)</span></label>
+          <div class="hours-wrap">
+            <button type="button" class="stepper-btn" onclick="ms_stepHours(-0.25)">−</button>
+            <input type="number" id="ms_hoursWorked" value="0.00" min="0" max="24" step="0.25"/>
+            <button type="button" class="stepper-btn" onclick="ms_stepHours(0.25)">+</button>
+          </div>
+          <div class="hours-unit">hours</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Job Status -->
+    <div class="section">
+      <div class="section-header"><div class="step">5</div><h2>Job Status</h2></div>
+      <div class="section-body">
+        <label>Status when logging <span class="required-star">*</span></label>
+        <div class="priority-grid">
+          <button type="button" class="priority-btn p-routine" data-status="Complete" onclick="ms_selectStatus(this)">
+            <span class="p-icon">✅</span><span class="p-label">COMPLETE</span>
+          </button>
+          <button type="button" class="priority-btn p-urgent" data-status="In Progress" onclick="ms_selectStatus(this)">
+            <span class="p-icon">🔧</span><span class="p-label">IN PROGRESS</span>
+          </button>
+          <button type="button" class="priority-btn p-critical" data-status="On Hold" onclick="ms_selectStatus(this)">
+            <span class="p-icon">⏸️</span><span class="p-label">ON HOLD</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="button" class="submit-btn" id="ms_submitBtn" onclick="ms_submitEntry()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        Log Job Time
+      </button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ms_successOverlay">
+    <div class="overlay-card">
+      <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+      <h3>Job Logged!</h3>
+      <p>Time entry recorded successfully.</p>
+      <p class="tid" id="ms_successJobId"></p>
+      <p style="font-size:.8rem;color:var(--muted-form);margin-bottom:4px;">Total time logged</p>
+      <div class="hrs" id="ms_successHours">—</div>
+      <button class="new-btn" onclick="ms_resetForm()">Log Another Job</button>
+    </div>
+  </div>
+  <div class="error-toast" id="ms_errorToast"></div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+// ── GAS fetch helper ─────────────────────────────────────────
+// Replaces google.script.run — posts to the Apps Script doPost endpoint.
+var GAS_URL = "https://script.google.com/a/macros/cscmfg.com/s/AKfycbzW_Ecoe-ugddMrg3vn7y1quXT2cgy9iNr7t-DWdjmn5JVbBwEkimT45oVZWhL6gEiG/exec";
+
+function GAS(action, payload, onSuccess, onError) {
+  fetch(GAS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify({ action: action, payload: payload })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) { if (onSuccess) onSuccess(data); })
+  .catch(function(err) { if (onError) onError(err.message || String(err)); });
+}
+
+// ── Camera — getUserMedia works here because we are NOT in an iframe ──
+var svc_cameraStream  = null;
+var svc_cameraOpening = false;
+
+function svc_openCamera() {
+  if (svc_photos.length >= 6) { svc_showError("Maximum 6 photos allowed."); return; }
+  if (svc_cameraOpening) return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    svc_showError("Camera not supported on this browser.");
+    return;
+  }
+  var overlay = document.getElementById("svc_cameraOverlay");
+  var video   = document.getElementById("svc_cameraVideo");
+  if (svc_cameraStream) {
+    svc_cameraStream.getTracks().forEach(function(t){ try{t.stop();}catch(e){} });
+    svc_cameraStream = null;
+    video.srcObject  = null;
+  }
+  svc_cameraOpening = true;
+  overlay.classList.add("open");
+  svc_updateCamCount();
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(function(stream) {
+      svc_cameraOpening = false;
+      if (!overlay.classList.contains("open")) {
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        return;
+      }
+      svc_cameraStream = stream;
+      video.srcObject  = stream;
+      var p = video.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(function(e){ console.warn("video.play():", e); });
+      }
+    })
+    .catch(function(err) {
+      svc_cameraOpening = false;
+      overlay.classList.remove("open");
+      var name = err && err.name ? err.name : "";
+      var msg  = err && err.message ? err.message : "Unknown error";
+      svc_showError("Camera error (" + name + "): " + msg);
+    });
+}
+
+function svc_capturePhoto() {
+  if (!svc_cameraStream) { svc_showError("Camera not ready."); return; }
+  if (svc_photos.length >= 6) { svc_showError("Maximum 6 photos allowed."); return; }
+  var video  = document.getElementById("svc_cameraVideo");
+  var canvas = document.getElementById("svc_cameraCanvas");
+  var w = video.videoWidth, h = video.videoHeight;
+  if (!w || !h) { svc_showError("Camera still starting — try again."); return; }
+  var MAX = 1200;
+  if (w > MAX || h > MAX) {
+    if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+    else       { w = Math.round(w * MAX / h); h = MAX; }
+  }
+  canvas.width = w; canvas.height = h;
+  canvas.getContext("2d").drawImage(video, 0, 0, w, h);
+  var dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+  svc_photos.push({ data: dataUrl, mimeType: "image/jpeg", ext: "jpg" });
+  svc_renderPreviews();
+  svc_updateCamCount();
+  var btn = document.getElementById("svc_camCaptureBtn");
+  if (btn) { btn.style.background = "#bbb"; setTimeout(function(){ btn.style.background = "#fff"; }, 150); }
+  if (svc_photos.length >= 6) setTimeout(svc_closeCamera, 500);
+}
+
+function svc_closeCamera() {
+  svc_cameraOpening = false;
+  var overlay = document.getElementById("svc_cameraOverlay");
+  var video   = document.getElementById("svc_cameraVideo");
+  if (svc_cameraStream) {
+    svc_cameraStream.getTracks().forEach(function(t){ try{t.stop();}catch(e){} });
+    svc_cameraStream = null;
+  }
+  if (video) { video.pause(); video.srcObject = null; }
+  overlay.classList.remove("open");
+}
+function svc_softRefresh() {
+  svc_configRows   = [];
+  svc_configLoaded = false;
+  svc_sel = { dept:"", level2:"", level3:"", level4:"" };
+  svc_resolvedCode = "";
+  document.getElementById("svc_step2Body").innerHTML =
+    '<div class="config-loading">'
+    + '<svg viewBox="0 0 24 24"><path d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg>'
+    + 'Refreshing…</div>';
+  svc_hideStep(3); svc_hideStep(4); svc_hideStep(5);
+  svc_updateTicketPreview();
+  svc_loadConfig();
+}
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  // Init plastics config when navigating to that view
+  if (id === 'plasticProdView' && !plast_configLoaded) {
+    plast_loadConfig();
+  }
+}
+
+// ── Shared clock ─────────────────────────────────────────────
+function updateAllClocks() {
+  var now    = new Date();
+  var days   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var dateStr = days[now.getDay()] + ", " + months[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
+  var timeStr = now.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  ["svc_dtDate","prod_dtDate","plast_dtDate","ms_dtDate"].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.textContent = dateStr;
+  });
+  ["svc_dtTime","prod_dtTime","plast_dtTime","ms_dtTime"].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.textContent = timeStr;
+  });
+}
+setInterval(updateAllClocks, 1000);
+updateAllClocks();
+
+// ════════════════════════════════════════════════════════════
+// SERVICE TICKETS — Config-driven dynamic form
+// ════════════════════════════════════════════════════════════
+
+var svc_configRows    = [];
+var svc_configLoaded  = false;
+var svc_photos        = [];
+var svc_sel = { dept:"", level2:"", level3:"", level4:"" };
+var svc_resolvedCode = "";
+var SVC_DEPT_CODES = {};
+
+(function svc_init(){
+  svc_updateTicketPreview();
+  svc_loadConfig();
+})();
+
+function svc_getDeptCode(dept) {
+  if (!dept) return "???";
+  for (var i = 0; i < svc_configRows.length; i++) {
+    if (svc_configRows[i].dept === dept && svc_configRows[i].deptCode) {
+      return svc_configRows[i].deptCode;
+    }
+  }
+  return "???";
+}
+
+function svc_updateTicketPreview() {
+  var now = new Date();
+  var yy  = String(now.getFullYear()).slice(2);
+  var mm  = String(now.getMonth()+1).padStart(2,"0");
+  var dd  = String(now.getDate()).padStart(2,"0");
+  var deptCode = svc_sel.dept ? svc_getDeptCode(svc_sel.dept) : "???";
+  var preview  = "MT-" + deptCode + "-" + yy+mm+dd + "-???";
+  document.getElementById("svc_ticketIdDisplay").textContent = preview;
+}
+
+function svc_loadConfig() {
+  GAS("getServiceTicketConfig", {}, function(result) {
+    if (result && result.ok) {
+      svc_configRows   = result.rows || [];
+      svc_configLoaded = true;
+      svc_renderDeptStep();
+    } else {
+      svc_showConfigError("Could not load config: " + (result ? result.error : "Unknown error"));
+    }
+  }, function(err) {
+    svc_showConfigError("Failed to load config: " + err);
+  });
+}
+
+function svc_showConfigError(msg) {
+  document.getElementById("svc_step2Body").innerHTML =
+    '<div class="config-error">⚠️ ' + msg + '<br><br><button onclick="svc_loadConfig()" style="padding:10px 18px;background:var(--blue-form);color:#fff;border:none;border-radius:8px;font-size:.9rem;cursor:pointer;">Retry</button></div>';
+}
+
+function svc_getUnique(col, filters) {
+  var seen = {};
+  var result = [];
+  svc_configRows.forEach(function(row) {
+    for (var key in filters) {
+      if (!filters[key]) continue;
+      if (row[key] !== filters[key]) return;
+    }
+    var val = row[col];
+    if (val && val.trim() !== "" && !seen[val]) {
+      seen[val] = true;
+      result.push(val);
+    }
+  });
+  return result;
+}
+
+function svc_nextColumn(afterCol) {
+  var order = ["level2", "level3", "level4"];
+  var start = afterCol ? order.indexOf(afterCol) + 1 : 0;
+  for (var i = start; i < order.length; i++) {
+    var col = order[i];
+    var opts = svc_getUnique(col, {
+      dept:   svc_sel.dept,
+      level2: svc_sel.level2,
+      level3: svc_sel.level3,
+      level4: svc_sel.level4
+    });
+    if (opts.length > 0) return { col: col, opts: opts };
+  }
+  return null;
+}
+
+function svc_chooseColClass(items) { return "cols-3"; }
+
+function svc_renderDeptStep() {
+  var depts = svc_getUnique("dept", {});
+  var body  = document.getElementById("svc_step2Body");
+  if (depts.length === 0) {
+    body.innerHTML = '<div class="config-error">No departments found in config sheet.</div>';
+    return;
+  }
+  var colClass = svc_chooseColClass(depts);
+  body.innerHTML = '<label>Select Department <span class="required-star">*</span></label>'
+    + '<div class="sel-btn-grid ' + colClass + '" id="svc_deptGrid"></div>';
+  var grid = document.getElementById("svc_deptGrid");
+  depts.forEach(function(dept) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "sel-btn";
+    btn.textContent = dept;
+    btn.onclick = function() { svc_selectDept(this, dept); };
+    grid.appendChild(btn);
+  });
+}
+
+function svc_selectDept(btn, dept) {
+  document.querySelectorAll("#svc_deptGrid .sel-btn").forEach(function(b){ b.classList.remove("active"); });
+  btn.classList.add("active");
+  svc_sel.dept = dept; svc_sel.level2 = ""; svc_sel.level3 = ""; svc_sel.level4 = "";
+  svc_resolvedCode = "";
+  svc_hideStep(3); svc_hideStep(4); svc_hideStep(5);
+  svc_tryResolveCode();
+  svc_updateTicketPreview();
+  svc_advanceToNextStep(null);
+}
+
+function svc_advanceToNextStep(prevCol) {
+  var stepMap = { level2: 3, level3: 4, level4: 5 };
+  var order = ["level2", "level3", "level4"];
+  var startHide = prevCol ? order.indexOf(prevCol) + 1 : 0;
+  for (var i = startHide; i < order.length; i++) { svc_hideStep(stepMap[order[i]]); }
+  var next = svc_nextColumn(prevCol);
+  if (!next) return;
+  var col = next.col;
+  var stepNum = stepMap[col];
+  var sectionIds = { level2:"svc_step3Section", level3:"svc_step4Section", level4:"svc_step5Section" };
+  var titleIds   = { level2:"svc_step3Title",   level3:"svc_step4Title",   level4:"svc_step5Title"   };
+  var bodyIds    = { level2:"svc_step3Body",     level3:"svc_step4Body",    level4:"svc_step5Body"    };
+  svc_renderLevelStep(stepNum, sectionIds[col], titleIds[col], bodyIds[col], col, next.opts, function(val) {
+    svc_sel[col] = val;
+    var idx = order.indexOf(col);
+    for (var j = idx + 1; j < order.length; j++) { svc_sel[order[j]] = ""; }
+    svc_resolvedCode = "";
+    svc_tryResolveCode();
+    svc_advanceToNextStep(col);
+  });
+}
+
+function svc_renderLevelStep(stepNum, sectionId, titleId, bodyId, colKey, options, onSelect) {
+  var colLabels = { level2:"Section", level3:"Equipment", level4:"Sub-Item" };
+  document.getElementById(titleId).textContent = colLabels[colKey] || "Selection";
+  document.getElementById(sectionId).style.display = "block";
+  var colClass = svc_chooseColClass(options);
+  var body = document.getElementById(bodyId);
+  body.innerHTML = '<label>Select <span class="required-star">*</span></label>'
+    + '<div class="sel-btn-grid ' + colClass + '" id="svc_lvl' + stepNum + 'Grid"></div>';
+  var grid = document.getElementById("svc_lvl" + stepNum + "Grid");
+  options.forEach(function(opt) {
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "sel-btn"; btn.textContent = opt;
+    btn.onclick = function() {
+      grid.querySelectorAll(".sel-btn").forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      onSelect(opt);
+    };
+    grid.appendChild(btn);
+  });
+  setTimeout(function(){ document.getElementById(sectionId).scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 80);
+}
+
+function svc_hideStep(stepNum) {
+  var map = { 3:"svc_step3Section", 4:"svc_step4Section", 5:"svc_step5Section" };
+  var sec = document.getElementById(map[stepNum]);
+  if (sec) sec.style.display = "none";
+}
+
+function svc_tryResolveCode() {
+  var match = svc_configRows.filter(function(row) {
+    if (row.dept !== svc_sel.dept) return false;
+    var cols = ["level2","level3","level4"];
+    for (var i = 0; i < cols.length; i++) {
+      var col = cols[i]; var rowVal = row[col]; var selVal = svc_sel[col];
+      if (rowVal && selVal && rowVal !== selVal) return false;
+      if (rowVal && !selVal) return false;
+    }
+    return true;
+  });
+  svc_resolvedCode = (match.length === 1) ? match[0].code : "";
+}
+
+function svc_updateCamCount() {
+  var el = document.getElementById("svc_camCountBadge");
+  if (el) el.textContent = svc_photos.length + " / 6";
+}
+function svc_removePhoto(idx) { svc_photos.splice(idx,1); svc_renderPreviews(); svc_updateCamCount(); }
+function svc_renderPreviews() {
+  document.getElementById("svc_photoPreviews").innerHTML = svc_photos.map(function(p,i){
+    return '<div class="photo-thumb"><img src="'+p.data+'" alt="Photo '+(i+1)+'"/>'
+      +'<button class="remove-btn" onclick="svc_removePhoto('+i+')">✕</button></div>';
+  }).join("");
+  svc_updateCamCount();
+}
+
+function svc_stepEstTime(delta) {
+  var input = document.getElementById("svc_estTimeInput");
+  var val = Math.max(0.5, Math.round(((parseFloat(input.value)||1) + delta) * 2) / 2);
+  input.value = val.toFixed(1);
+  svc_updateEstDisplay();
+}
+function svc_updateEstDisplay() {
+  var val = parseFloat(document.getElementById("svc_estTimeInput").value) || 1;
+  document.getElementById("svc_estTimeDisplay").textContent = val.toFixed(1);
+  document.getElementById("svc_estUnitDisplay").textContent = val === 1 ? "Hour" : "Hours";
+}
+
+function svc_submitTicket() {
+  var mechanic = document.getElementById("svc_mechanicInput").value.trim();
+  var issue    = document.getElementById("svc_issueText").value.trim();
+  var estVal   = parseFloat(document.getElementById("svc_estTimeInput").value);
+  if (!mechanic)       return svc_showError("Please enter your name.");
+  if (!svc_sel.dept)   return svc_showError("Please select a department.");
+  var order = ["level2","level3","level4"];
+  for (var i = 0; i < order.length; i++) {
+    var col = order[i];
+    var opts = svc_getUnique(col, {
+      dept:   svc_sel.dept,
+      level2: i > 0 ? svc_sel.level2 : "",
+      level3: i > 1 ? svc_sel.level3 : "",
+      level4: ""
+    });
+    if (opts.length > 0 && !svc_sel[col]) return svc_showError("Please complete all selection steps.");
+    if (!svc_sel[col]) break;
+  }
+  if (!issue)          return svc_showError("Please describe the issue.");
+  if (!estVal || estVal < 0.5) return svc_showError("Please enter an estimated time.");
+  var btn = document.getElementById("svc_submitBtn");
+  btn.disabled = true;
+  svc_setBtnText("Submitting…");
+  var timestamp = new Date().toLocaleString("en-US",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
+  var ticketData = {
+    timestamp:timestamp, mechanic:mechanic, jobCode:svc_resolvedCode,
+    dept:svc_sel.dept, deptCode:svc_getDeptCode(svc_sel.dept),
+    level2:svc_sel.level2, level3:svc_sel.level3, level4:svc_sel.level4,
+    issue:issue, estimatedTime: estVal.toFixed(1) + " Hours"
+  };
+  if (svc_photos.length === 0) { svc_writeTicketRow(ticketData, []); return; }
+  svc_setBtnText("Uploading photo 1 of " + svc_photos.length + "…");
+  svc_uploadPhotosSequentially(svc_photos, 0, [], ticketData);
+}
+
+function svc_uploadPhotosSequentially(photoList, index, links, ticketData) {
+  if (index >= photoList.length) { svc_writeTicketRow(ticketData, links); return; }
+  svc_setBtnText("Uploading photo " + (index+1) + " of " + photoList.length + "…");
+  var photo = photoList[index];
+  GAS("uploadPhoto", {
+    ticketId: ticketData.ticketId || "",
+    photoIndex: index + 1,
+    dataUrl: photo.data,
+    mimeType: photo.mimeType,
+    ext: photo.ext
+  }, function(r) {
+    links.push(r && r.url ? r.url : "Photo " + (index+1) + " upload failed");
+    svc_uploadPhotosSequentially(photoList, index+1, links, ticketData);
+  }, function(err) {
+    links.push("Photo " + (index+1) + " error: " + err);
+    svc_uploadPhotosSequentially(photoList, index+1, links, ticketData);
+  });
+}
+
+function svc_writeTicketRow(ticketData, photoLinks) {
+  svc_setBtnText("Saving ticket…");
+  ticketData.photoLinks = photoLinks;
+  GAS("submitTicket", ticketData, function(r) {
+    if (r && r.ok) {
+      document.getElementById("svc_ticketIdDisplay").textContent = r.ticketId;
+      document.getElementById("svc_successTicketId").textContent = "Ticket ID: " + r.ticketId;
+      document.getElementById("svc_successOverlay").classList.add("show");
+    } else { svc_resetBtn(); svc_showError("Error: " + (r ? r.error : "Unknown error")); }
+  }, function(err) { svc_resetBtn(); svc_showError("Submission failed: " + err); });
+}
+
+function svc_setBtnText(text) {
+  document.getElementById("svc_submitBtn").innerHTML =
+    '<svg viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><path fill="white" d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg> ' + text;
+}
+function svc_resetBtn() {
+  var btn = document.getElementById("svc_submitBtn");
+  btn.disabled = false;
+  btn.innerHTML = '<svg viewBox="0 0 24 24"><path fill="white" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Submit Service Ticket';
+}
+function svc_showError(msg) {
+  var t = document.getElementById("svc_errorToast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 3500);
+}
+function svc_resetForm() {
+  svc_closeCamera();
+  document.getElementById("svc_successOverlay").classList.remove("show");
+  document.getElementById("svc_mechanicInput").value = "";
+  document.getElementById("svc_issueText").value = "";
+  document.getElementById("svc_estTimeInput").value = "1.0";
+  svc_updateEstDisplay();
+  svc_sel = { dept:"", level2:"", level3:"", level4:"" };
+  svc_resolvedCode = "";
+  svc_hideStep(3); svc_hideStep(4); svc_hideStep(5);
+  if (svc_configLoaded) svc_renderDeptStep();
+  svc_updateTicketPreview();
+  svc_photos = []; svc_renderPreviews();
+  svc_resetBtn();
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+// ════════════════════════════════════════════════════════════
+// METALS PRODUCTION ENTRY
+// ════════════════════════════════════════════════════════════
+var prod_selectedLine        = "";
+var prod_selectedCoating     = "";
+var prod_selectedDeptSection = "";
+var prod_currentEntryId      = "";
+var prod_comboCloseTimer     = null;
+
+var PROD_ITEMS = [
+  {code:"211-075",desc:"211 x 400 Body"},{code:"211-100",desc:"211 x 414 Body"},
+  {code:"300-075",desc:"300 x 407 Body"},{code:"300-100",desc:"300 x 409 Body"},
+  {code:"301-075",desc:"301 x 411 Body"},{code:"307-100",desc:"307 x 409 Body"},
+  {code:"307-200",desc:"307 x 500 Body"},{code:"401-075",desc:"401 x 700 Body"},
+  {code:"603-050",desc:"603 x 700 Body"}
+];
+
+var PROD_LINE_CONFIGS = {
+  "METAL LINES":      {label:"Line",    sublabel:"Select Line",         gridClass:"cols-5", lines:[{val:"Line 2",top:"2",bot:"LINE"},{val:"Line 3",top:"3",bot:"LINE"},{val:"Line 4",top:"4",bot:"LINE"},{val:"Line 5",top:"5",bot:"LINE"},{val:"Line 6",top:"6",bot:"LINE"}]},
+  "PRESS DEPARTMENT": {label:"Press",   sublabel:"Select Press Number", gridClass:"cols-4", lines:[{val:"Press 13",top:"13",bot:"PRESS"},{val:"Press 14",top:"14",bot:"PRESS"},{val:"Press 15",top:"15",bot:"PRESS"},{val:"Press 16",top:"16",bot:"PRESS"},{val:"Press 17",top:"17",bot:"PRESS"},{val:"Press 18",top:"18",bot:"PRESS"},{val:"Press 19",top:"19",bot:"PRESS"},{val:"Press 20",top:"20",bot:"PRESS"}]},
+  "SLITTER DEPARTMENT":{label:"Slitter",sublabel:"Select Slitter",      gridClass:"cols-5", lines:[{val:"3-SS",top:"3",bot:"SS"},{val:"2-SS",top:"2",bot:"SS"},{val:"7A",top:"7A",bot:""},{val:"8A",top:"8A",bot:""},{val:"9A",top:"9A",bot:""}]}
+};
+
+(function prod_init(){
+  prod_generateEntryId();
+  var today = new Date();
+  document.getElementById("prod_dateInput").value = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+  prod_renderCombo("");
+})();
+
+function prod_generateEntryId(){
+  var now = new Date();
+  prod_currentEntryId = "PT-001-"+String(now.getFullYear()).slice(2)+String(now.getMonth()+1).padStart(2,"0")+String(now.getDate()).padStart(2,"0")+"-???";
+  document.getElementById("prod_entryIdDisplay").textContent = prod_currentEntryId;
+}
+
+function prod_selectDeptSection(btn){
+  document.querySelectorAll("#productionView .sel-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  prod_selectedDeptSection = btn.dataset.section;
+  prod_renderLineGrid(prod_selectedDeptSection);
+}
+
+function prod_renderLineGrid(section){
+  var cfg = PROD_LINE_CONFIGS[section];
+  var grid = document.getElementById("prod_lineGrid");
+  var label = document.getElementById("prod_lineLabel");
+  var sublabel = document.getElementById("prod_lineSubLabel");
+  prod_selectedLine = ""; grid.innerHTML = "";
+  if (!cfg) { label.textContent = "Line"; sublabel.textContent = "Select a dept. section first"; grid.className = "sel-btn-grid cols-5"; return; }
+  label.textContent = cfg.label; sublabel.textContent = cfg.sublabel;
+  grid.className = "sel-btn-grid " + cfg.gridClass;
+  cfg.lines.forEach(function(ln){
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "sel-btn"; btn.dataset.line = ln.val;
+    btn.innerHTML = '<span style="display:block;font-size:1.4rem;line-height:1;">'+ln.top+'</span>'+(ln.bot?'<span style="font-size:.65rem;letter-spacing:.3px;opacity:.7;">'+ln.bot+'</span>':'');
+    btn.onclick = function(){ prod_selectLine(this); };
+    grid.appendChild(btn);
+  });
+}
+
+function prod_selectLine(btn){
+  document.querySelectorAll("#productionView #prod_lineGrid .sel-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  prod_selectedLine = btn.dataset.line;
+}
+
+function prod_selectCoating(btn){
+  document.querySelectorAll("#productionView .coating-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  prod_selectedCoating = btn.dataset.coating;
+}
+
+function prod_renderCombo(filter){
+  var q = filter.toLowerCase().trim();
+  var matches = PROD_ITEMS.filter(function(it){ return it.code.toLowerCase().includes(q)||it.desc.toLowerCase().includes(q); });
+  var dd = document.getElementById("prod_itemDropdown");
+  dd.innerHTML = matches.length === 0
+    ? '<div class="combo-no-results">No items found</div>'
+    : matches.map(function(it){
+        return '<div class="combo-option" onmousedown="prod_pickItem(\''+it.code+'\',\''+it.desc.replace(/'/g,"&#39;")+'\')"><strong>'+it.code+'</strong><div class="item-sub">'+it.desc+'</div></div>';
+      }).join("");
+}
+
+function prod_positionDropdown(){
+  var rect = document.getElementById("prod_itemInput").getBoundingClientRect();
+  var dd   = document.getElementById("prod_itemDropdown");
+  dd.style.top = (rect.bottom+4)+"px"; dd.style.left = rect.left+"px"; dd.style.width = rect.width+"px";
+}
+function prod_filterItems(){ prod_renderCombo(document.getElementById("prod_itemInput").value); prod_positionDropdown(); document.getElementById("prod_itemDropdown").classList.add("open"); document.getElementById("prod_itemValue").value=""; }
+function prod_openCombo(){ if(prod_comboCloseTimer){clearTimeout(prod_comboCloseTimer);prod_comboCloseTimer=null;} prod_renderCombo(document.getElementById("prod_itemInput").value); prod_positionDropdown(); document.getElementById("prod_itemDropdown").classList.add("open"); }
+function prod_closeComboDelay(){ prod_comboCloseTimer=setTimeout(function(){document.getElementById("prod_itemDropdown").classList.remove("open");},200); }
+function prod_pickItem(code,desc){
+  var label = code+" — "+desc;
+  document.getElementById("prod_itemInput").value = label; document.getElementById("prod_itemValue").value = label;
+  document.getElementById("prod_itemDropdown").classList.remove("open");
+  if(prod_comboCloseTimer){clearTimeout(prod_comboCloseTimer);prod_comboCloseTimer=null;}
+}
+
+function prod_stepField(id,delta){
+  var el=document.getElementById(id); var val=parseFloat(el.value)||0;
+  val=Math.max(0,Math.min(24,val+delta)); el.value=val.toFixed(1);
+}
+
+function prod_submitEntry(){
+  var date    = document.getElementById("prod_dateInput").value;
+  var item    = document.getElementById("prod_itemValue").value;
+  var endUsed = document.getElementById("prod_endUsedInput").value.trim();
+  var qty     = document.getElementById("prod_qtyProduced").value;
+  var spoilage= document.getElementById("prod_spoilageQty").value;
+  if(!prod_selectedDeptSection) return prod_showError("Please select a dept. section.");
+  if(!prod_selectedLine)        return prod_showError("Please select a line.");
+  if(!item)                     return prod_showError("Please select an item.");
+  if(!endUsed)                  return prod_showError("Please enter the end used.");
+  if(!prod_selectedCoating)     return prod_showError("Please select a coating option.");
+  if(qty==="")                  return prod_showError("Please enter qty produced.");
+  if(spoilage==="")             return prod_showError("Please enter spoilage qty (0 if none).");
+  var btn = document.getElementById("prod_submitBtn"); btn.disabled=true;
+  btn.innerHTML='<svg viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><path fill="white" d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg> Saving…';
+  var data={
+    entryId:prod_currentEntryId, date:date, department:"METAL MANUFACTURING",
+    deptSection:prod_selectedDeptSection, line:prod_selectedLine, item:item,
+    endUsed:endUsed, coating:prod_selectedCoating,
+    qtyProduced:parseFloat(qty), spoilageQty:parseFloat(spoilage),
+    hoursWorked:parseFloat(document.getElementById("prod_hoursWorked").value)
+  };
+  GAS("submitProductionEntry", data, function(result){
+    if(result&&result.ok){ document.getElementById("prod_successEntryId").textContent="Entry ID: "+result.entryId; document.getElementById("prod_successOverlay").classList.add("show"); }
+    else{ prod_resetBtn(); prod_showError("Error: "+(result?result.error:"Unknown")); }
+  }, function(err){ prod_resetBtn(); prod_showError("Submission failed: "+err); });
+}
+
+function prod_resetBtn(){ var btn=document.getElementById("prod_submitBtn"); btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24"><path fill="white" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Log Production Entry'; }
+function prod_showError(msg){ var t=document.getElementById("prod_errorToast"); t.textContent=msg; t.classList.add("show"); setTimeout(function(){t.classList.remove("show");},3500); }
+function prod_resetForm(){
+  document.getElementById("prod_successOverlay").classList.remove("show");
+  ["prod_itemInput","prod_itemValue","prod_endUsedInput","prod_qtyProduced","prod_spoilageQty"].forEach(function(id){document.getElementById(id).value="";});
+  document.getElementById("prod_hoursWorked").value="8.0";
+  document.querySelectorAll("#productionView .sel-btn,.coating-btn").forEach(function(b){b.classList.remove("active");});
+  prod_selectedLine=prod_selectedCoating=prod_selectedDeptSection="";
+  prod_renderLineGrid(""); prod_generateEntryId(); prod_resetBtn();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// ════════════════════════════════════════════════════════════
+// PLASTICS PRODUCTION ENTRY — Config-driven (getProdEntryConfig)
+// ════════════════════════════════════════════════════════════
+var plast_configRows   = [];
+var plast_configLoaded = false;
+var plast_sel = { dept:"", level2:"", level3:"", level4:"" };
+var plast_resolvedCode = "";
+var plast_selectedCoating = "";
+var plast_currentEntryId  = "";
+
+(function plast_init(){
+  plast_generateEntryId();
+  var today = new Date();
+  document.getElementById("plast_dateInput").value = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+})();
+
+function plast_generateEntryId(){
+  var now = new Date();
+  plast_currentEntryId = "PT-003-"+String(now.getFullYear()).slice(2)+String(now.getMonth()+1).padStart(2,"0")+String(now.getDate()).padStart(2,"0")+"-???";
+  document.getElementById("plast_entryIdDisplay").textContent = plast_currentEntryId;
+}
+
+function plast_loadConfig(){
+  GAS("getProdEntryConfig", {}, function(result){
+    if(result && result.ok){
+      plast_configRows   = result.rows || [];
+      plast_configLoaded = true;
+      plast_renderDeptStep();
+    } else {
+      plast_showConfigError("Could not load config: " + (result ? result.error : "Unknown"));
+    }
+  }, function(err){
+    plast_showConfigError("Failed to load config: " + err);
+  });
+}
+
+function plast_showConfigError(msg){
+  document.getElementById("plast_step1Body").innerHTML =
+    '<div class="config-error">⚠️ ' + msg + '<br><br><button onclick="plast_loadConfig()" style="padding:10px 18px;background:var(--blue-form);color:#fff;border:none;border-radius:8px;font-size:.9rem;cursor:pointer;">Retry</button></div>';
+}
+
+function plast_getUnique(col, filters){
+  var seen = {}, result = [];
+  plast_configRows.forEach(function(row){
+    for(var key in filters){ if(!filters[key]) continue; if(row[key] !== filters[key]) return; }
+    var val = row[col];
+    if(val && val.trim() !== "" && !seen[val]){ seen[val]=true; result.push(val); }
+  });
+  return result;
+}
+
+function plast_nextColumn(afterCol){
+  var order = ["level2","level3","level4"];
+  var start = afterCol ? order.indexOf(afterCol)+1 : 0;
+  for(var i = start; i < order.length; i++){
+    var col = order[i];
+    var opts = plast_getUnique(col, { dept:plast_sel.dept, level2:plast_sel.level2, level3:plast_sel.level3, level4:plast_sel.level4 });
+    if(opts.length > 0) return { col:col, opts:opts };
+  }
+  return null;
+}
+
+function plast_renderDeptStep(){
+  var depts = plast_getUnique("dept", {});
+  var body  = document.getElementById("plast_step1Body");
+  if(depts.length === 0){ body.innerHTML = '<div class="config-error">No departments found in config.</div>'; return; }
+  var cols = depts.length <= 2 ? "cols-2" : depts.length === 3 ? "cols-3" : "cols-3";
+  body.innerHTML = '<label>Select Department <span class="required-star">*</span></label>'
+    + '<div class="sel-btn-grid '+cols+'" id="plast_deptGrid"></div>';
+  var grid = document.getElementById("plast_deptGrid");
+  depts.forEach(function(dept){
+    var btn = document.createElement("button");
+    btn.type="button"; btn.className="sel-btn"; btn.textContent=dept;
+    btn.onclick = function(){ plast_selectDept(this, dept); };
+    grid.appendChild(btn);
+  });
+}
+
+function plast_selectDept(btn, dept){
+  document.querySelectorAll("#plast_deptGrid .sel-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  plast_sel.dept=dept; plast_sel.level2=""; plast_sel.level3=""; plast_sel.level4="";
+  plast_resolvedCode="";
+  plast_hideStep(2); plast_hideStep(3); plast_hideStep(4);
+  plast_tryResolveCode();
+  plast_advanceToNextStep(null);
+}
+
+function plast_advanceToNextStep(prevCol){
+  var stepMap = { level2:2, level3:3, level4:4 };
+  var order   = ["level2","level3","level4"];
+  var startHide = prevCol ? order.indexOf(prevCol)+1 : 0;
+  for(var i=startHide; i<order.length; i++) plast_hideStep(stepMap[order[i]]);
+  var next = plast_nextColumn(prevCol);
+  if(!next) return;
+  var col = next.col;
+  var stepNum = stepMap[col];
+  var sectionIds = { level2:"plast_step2Section", level3:"plast_step3Section", level4:"plast_step4Section" };
+  var titleIds   = { level2:"plast_step2Title",   level3:"plast_step3Title",   level4:"plast_step4Title"   };
+  var bodyIds    = { level2:"plast_step2Body",     level3:"plast_step3Body",    level4:"plast_step4Body"    };
+  plast_renderLevelStep(stepNum, sectionIds[col], titleIds[col], bodyIds[col], col, next.opts, function(val){
+    plast_sel[col] = val;
+    var idx = order.indexOf(col);
+    for(var j=idx+1; j<order.length; j++) plast_sel[order[j]]="";
+    plast_resolvedCode="";
+    plast_tryResolveCode();
+    plast_advanceToNextStep(col);
+  });
+}
+
+function plast_renderLevelStep(stepNum, sectionId, titleId, bodyId, colKey, options, onSelect){
+  var colLabels = { level2:"Section", level3:"Machine", level4:"Sub-Item" };
+  document.getElementById(titleId).textContent = colLabels[colKey] || "Selection";
+  document.getElementById(sectionId).style.display = "block";
+  var cols = options.length <= 2 ? "cols-2" : options.length === 3 ? "cols-3" : options.length <= 6 ? "cols-3" : "cols-4";
+  var body = document.getElementById(bodyId);
+  body.innerHTML = '<label>Select <span class="required-star">*</span></label>'
+    + '<div class="sel-btn-grid '+cols+'" id="plast_lvl'+stepNum+'Grid"></div>';
+  var grid = document.getElementById("plast_lvl"+stepNum+"Grid");
+  options.forEach(function(opt){
+    var btn = document.createElement("button");
+    btn.type="button"; btn.className="sel-btn"; btn.textContent=opt;
+    btn.onclick = function(){
+      grid.querySelectorAll(".sel-btn").forEach(function(b){b.classList.remove("active");});
+      btn.classList.add("active");
+      onSelect(opt);
+    };
+    grid.appendChild(btn);
+  });
+  setTimeout(function(){ document.getElementById(sectionId).scrollIntoView({behavior:"smooth",block:"nearest"}); }, 80);
+}
+
+function plast_hideStep(stepNum){
+  var map = { 2:"plast_step2Section", 3:"plast_step3Section", 4:"plast_step4Section" };
+  var sec = document.getElementById(map[stepNum]);
+  if(sec) sec.style.display = "none";
+}
+
+function plast_tryResolveCode(){
+  var match = plast_configRows.filter(function(row){
+    if(row.dept !== plast_sel.dept) return false;
+    var cols = ["level2","level3","level4"];
+    for(var i=0; i<cols.length; i++){
+      var col=cols[i], rowVal=row[col], selVal=plast_sel[col];
+      if(rowVal && selVal && rowVal !== selVal) return false;
+      if(rowVal && !selVal) return false;
+    }
+    return true;
+  });
+  plast_resolvedCode = (match.length === 1) ? match[0].code : "";
+}
+
+function plast_selectCoating(btn){
+  document.querySelectorAll("#plasticProdView .coating-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  plast_selectedCoating = btn.dataset.coating;
+}
+
+function plast_stepField(id, delta){
+  var el=document.getElementById(id); var val=parseFloat(el.value)||0;
+  val=Math.max(0,Math.min(24,val+delta)); el.value=val.toFixed(1);
+}
+
+function plast_submitEntry(){
+  var item    = document.getElementById("plast_itemInput").value.trim();
+  var endUsed = document.getElementById("plast_endUsedInput").value.trim();
+  var qty     = document.getElementById("plast_qtyProduced").value;
+  var spoilage= document.getElementById("plast_spoilageQty").value;
+  var hours   = parseFloat(document.getElementById("plast_hoursWorked").value)||0;
+
+  if(!plast_sel.dept)       return plast_showError("Please select a department.");
+  var order = ["level2","level3","level4"];
+  for(var i=0; i<order.length; i++){
+    var col = order[i];
+    var opts = plast_getUnique(col, {
+      dept:plast_sel.dept,
+      level2: i>0 ? plast_sel.level2 : "",
+      level3: i>1 ? plast_sel.level3 : "",
+      level4: ""
+    });
+    if(opts.length>0 && !plast_sel[col]) return plast_showError("Please complete all selection steps.");
+    if(!plast_sel[col]) break;
+  }
+  if(!item)              return plast_showError("Please enter the item / part number.");
+  if(!endUsed)           return plast_showError("Please enter the end used.");
+  if(!plast_selectedCoating) return plast_showError("Please select a coating option.");
+  if(qty==="")           return plast_showError("Please enter qty produced.");
+  if(spoilage==="")      return plast_showError("Please enter spoilage qty (0 if none).");
+  if(hours <= 0)         return plast_showError("Hours worked must be greater than 0.");
+
+  var btn = document.getElementById("plast_submitBtn"); btn.disabled=true;
+  btn.innerHTML='<svg viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><path fill="white" d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg> Saving…';
+
+  var data = {
+    date:      document.getElementById("plast_dateInput").value,
+    dept:      plast_sel.dept,
+    level2:    plast_sel.level2,
+    level3:    plast_sel.level3,
+    level4:    plast_sel.level4,
+    jobCode:   plast_resolvedCode,
+    deptCode:  (function(){ for(var i=0;i<plast_configRows.length;i++){ if(plast_configRows[i].dept===plast_sel.dept && plast_configRows[i].deptCode) return plast_configRows[i].deptCode; } return "003"; })(),
+    item:      item,
+    endUsed:   endUsed,
+    coating:   plast_selectedCoating,
+    qtyProduced:  parseFloat(qty),
+    spoilageQty:  parseFloat(spoilage),
+    hoursWorked:  hours
+  };
+
+  GAS("submitPlasticProdEntry", data, function(result){
+    if(result && result.ok){
+      document.getElementById("plast_successEntryId").textContent = "Entry ID: " + result.entryId;
+      document.getElementById("plast_successOverlay").classList.add("show");
+    } else { plast_resetBtn(); plast_showError("Error: "+(result?result.error:"Unknown")); }
+  }, function(err){ plast_resetBtn(); plast_showError("Submission failed: "+err); });
+}
+
+function plast_resetBtn(){ var btn=document.getElementById("plast_submitBtn"); btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24"><path fill="white" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Log Plastic Production Entry'; }
+function plast_showError(msg){ var t=document.getElementById("plast_errorToast"); t.textContent=msg; t.classList.add("show"); setTimeout(function(){t.classList.remove("show");},3500); }
+function plast_resetForm(){
+  document.getElementById("plast_successOverlay").classList.remove("show");
+  ["plast_itemInput","plast_endUsedInput","plast_qtyProduced","plast_spoilageQty"].forEach(function(id){document.getElementById(id).value="";});
+  document.getElementById("plast_hoursWorked").value="8.0";
+  document.querySelectorAll("#plasticProdView .sel-btn,.coating-btn").forEach(function(b){b.classList.remove("active");});
+  plast_sel={dept:"",level2:"",level3:"",level4:""};
+  plast_resolvedCode=""; plast_selectedCoating="";
+  if(plast_configLoaded) plast_renderDeptStep();
+  plast_hideStep(2); plast_hideStep(3); plast_hideStep(4);
+  plast_generateEntryId(); plast_resetBtn();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// ════════════════════════════════════════════════════════════
+// MACHINE SHOP
+// ════════════════════════════════════════════════════════════
+var ms_selectedDept   = "";
+var ms_selectedStatus = "";
+var ms_currentJobId   = "";
+var ms_timerInterval  = null;
+var ms_timerStart     = null;
+var ms_timerEnd       = null;
+var ms_timerRunning   = false;
+
+(function ms_init(){ ms_generateJobId(); })();
+
+function ms_generateJobId(){
+  var now=new Date();
+  ms_currentJobId="MS-"+String(now.getFullYear()).slice(2)+String(now.getMonth()+1).padStart(2,"0")+String(now.getDate()).padStart(2,"0")+"-"+Math.floor(Math.random()*900+100);
+  document.getElementById("ms_jobIdDisplay").textContent=ms_currentJobId;
+}
+
+function ms_selectDept(btn){ document.querySelectorAll("#machineShopView .dept-icon-btn").forEach(function(b){b.classList.remove("active");}); btn.classList.add("active"); ms_selectedDept=btn.dataset.dept; }
+function ms_selectStatus(btn){ document.querySelectorAll("#machineShopView .priority-btn").forEach(function(b){b.classList.remove("active");}); btn.classList.add("active"); ms_selectedStatus=btn.dataset.status; }
+
+function ms_startTimer(){
+  if(ms_timerRunning) return;
+  ms_timerRunning=true; ms_timerStart=new Date(); ms_timerEnd=null;
+  document.getElementById("ms_startBtn").disabled=true;
+  document.getElementById("ms_stopBtn").disabled=false;
+  document.getElementById("ms_startTimeDisplay").textContent=ms_timerStart.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  document.getElementById("ms_startTimeDisplay").classList.remove("unset");
+  document.getElementById("ms_endTimeDisplay").textContent="Running…";
+  document.getElementById("ms_endTimeDisplay").classList.add("unset");
+  document.getElementById("ms_timerSub").textContent="Timer running — press Stop when finished";
+  document.getElementById("ms_timerClock").classList.add("running");
+  ms_timerInterval=setInterval(ms_tickTimer,1000);
+}
+function ms_tickTimer(){ var elapsed=Math.floor((new Date()-ms_timerStart)/1000); document.getElementById("ms_timerClock").textContent=ms_formatElapsed(elapsed); }
+function ms_stopTimer(){
+  if(!ms_timerRunning) return;
+  ms_timerRunning=false; ms_timerEnd=new Date();
+  clearInterval(ms_timerInterval);
+  var elapsed=(ms_timerEnd-ms_timerStart)/1000;
+  var hrs=elapsed/3600;
+  document.getElementById("ms_stopBtn").disabled=true;
+  document.getElementById("ms_startBtn").disabled=false;
+  document.getElementById("ms_timerClock").classList.remove("running");
+  document.getElementById("ms_endTimeDisplay").textContent=ms_timerEnd.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  document.getElementById("ms_endTimeDisplay").classList.remove("unset");
+  document.getElementById("ms_timerSub").textContent="Timer stopped — adjust hours below if needed";
+  document.getElementById("ms_hoursWorked").value=(Math.round(hrs*4)/4).toFixed(2);
+}
+function ms_formatElapsed(totalSecs){ var h=Math.floor(totalSecs/3600),m=Math.floor((totalSecs%3600)/60),s=totalSecs%60; return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0"); }
+function ms_stepHours(delta){ var input=document.getElementById("ms_hoursWorked"); var val=Math.max(0,Math.min(24,(parseFloat(input.value)||0)+delta)); input.value=val.toFixed(2); }
+
+function ms_submitEntry(){
+  var tech=document.getElementById("ms_techInput").value.trim();
+  var title=document.getElementById("ms_jobTitle").value.trim();
+  var desc=document.getElementById("ms_jobDesc").value.trim();
+  var hours=parseFloat(document.getElementById("ms_hoursWorked").value)||0;
+  if(!tech)            return ms_showError("Please enter your name.");
+  if(!ms_selectedDept) return ms_showError("Please select a department.");
+  if(!title)           return ms_showError("Please enter a job / work order.");
+  if(!desc)            return ms_showError("Please enter a brief description.");
+  if(!ms_selectedStatus) return ms_showError("Please select a job status.");
+  if(hours<=0)         return ms_showError("Hours worked must be greater than 0.");
+  var btn=document.getElementById("ms_submitBtn"); btn.disabled=true;
+  btn.innerHTML='<svg viewBox="0 0 24 24" style="animation:spin 1s linear infinite"><path fill="white" d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg> Saving…';
+  var now=new Date();
+  var timestamp=now.toLocaleString("en-US",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
+  var startStr=ms_timerStart?ms_timerStart.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"}):"Manual entry";
+  var endStr=ms_timerEnd?ms_timerEnd.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"}):"Manual entry";
+  var data={
+    jobId:ms_currentJobId, timestamp:timestamp, date:now.toLocaleDateString("en-US"),
+    technician:tech, department:ms_selectedDept, jobTitle:title, description:desc,
+    startTime:startStr, endTime:endStr, hoursWorked:hours, status:ms_selectedStatus
+  };
+  GAS("submitMachineShopEntry", data, function(result){
+    if(result&&result.ok){
+      document.getElementById("ms_successJobId").textContent="Job ID: "+data.jobId;
+      document.getElementById("ms_successHours").textContent=(data.hoursWorked===1?"1.00 hour":data.hoursWorked.toFixed(2)+" hours");
+      document.getElementById("ms_successOverlay").classList.add("show");
+    } else { ms_resetBtn(); ms_showError("Error: "+(result?result.error:"Unknown")); }
+  }, function(err){ ms_resetBtn(); ms_showError("Submission failed: "+err); });
+}
+
+function ms_resetBtn(){ var btn=document.getElementById("ms_submitBtn"); btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24"><path fill="white" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Log Job Time'; }
+function ms_showError(msg){ var t=document.getElementById("ms_errorToast"); t.textContent=msg; t.classList.add("show"); setTimeout(function(){t.classList.remove("show");},3500); }
+function ms_resetForm(){
+  document.getElementById("ms_successOverlay").classList.remove("show");
+  document.getElementById("ms_techInput").value=""; document.getElementById("ms_jobTitle").value=""; document.getElementById("ms_jobDesc").value=""; document.getElementById("ms_hoursWorked").value="0.00";
+  document.querySelectorAll("#machineShopView .dept-icon-btn,.priority-btn").forEach(function(b){b.classList.remove("active");});
+  ms_selectedDept=ms_selectedStatus="";
+  if(ms_timerInterval){clearInterval(ms_timerInterval);ms_timerInterval=null;}
+  ms_timerRunning=false; ms_timerStart=null; ms_timerEnd=null;
+  document.getElementById("ms_timerClock").textContent="00:00:00";
+  document.getElementById("ms_timerClock").classList.remove("running");
+  document.getElementById("ms_timerSub").textContent="Press Start when you begin the job";
+  document.getElementById("ms_startBtn").disabled=false; document.getElementById("ms_stopBtn").disabled=true;
+  document.getElementById("ms_startTimeDisplay").textContent="Not started"; document.getElementById("ms_startTimeDisplay").classList.add("unset");
+  document.getElementById("ms_endTimeDisplay").textContent="Not stopped"; document.getElementById("ms_endTimeDisplay").classList.add("unset");
+  ms_generateJobId(); ms_resetBtn(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+window.addEventListener("scroll", function(){
+  if(document.getElementById("prod_itemDropdown").classList.contains("open")) prod_positionDropdown();
+}, true);
+</script>
+</body>
+</html>
