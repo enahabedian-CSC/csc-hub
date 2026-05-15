@@ -1668,7 +1668,7 @@ var GAS_URL = "https://script.google.com/a/macros/cscmfg.com/s/AKfycbzW_Ecoe-ugd
 function GAS(action, payload, onSuccess, onError) {
   fetch(GAS_URL, {
     method: "POST",
-    headers: { "Content-Type": "text/plain" },
+    // No Content-Type header at all — this guarantees a simple CORS request, no preflight
     body: JSON.stringify({ action: action, payload: payload })
   })
   .then(function(res) { return res.json(); })
