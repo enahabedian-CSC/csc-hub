@@ -1670,7 +1670,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 <script>
 
 // ── App version — bump this on every deploy ──────────────────
-var APP_VERSION = "v7.3.0";
+var APP_VERSION = "G1.0.1";
    
 // ── GAS fetch helper ─────────────────────────────────────────
 // Replaces google.script.run — posts to the Apps Script doPost endpoint.
@@ -1679,8 +1679,12 @@ var GAS_URL = "https://script.google.com/a/macros/cscmfg.com/s/AKfycbzW_Ecoe-ugd
 function GAS(action, payload, onSuccess, onError) {
   fetch(GAS_URL, {
     method: "POST",
-    // No Content-Type header at all — this guarantees a simple CORS request, no preflight
-    body: JSON.stringify({ action: action, payload: payload })
+    // No Content-Type header — keeps this a "simple" CORS request, no preflight
+    body: JSON.stringify({
+      secret: "csc-tablet-2026-x9k2",  // must match API_SHARED_SECRET in Code.gs
+      action: action,
+      payload: payload
+    })
   })
   .then(function(res) { return res.json(); })
   .then(function(data) { if (onSuccess) onSuccess(data); })
