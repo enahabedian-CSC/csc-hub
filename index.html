@@ -885,6 +885,13 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 ============================================================ -->
 <div class="view active" id="dashboardView">
   <div class="dash-header">
+     <span id="appVersionLabel" style="
+      position: absolute; left: calc(20px + var(--safe-left));
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(236,240,241,0.4);
+    "></span>
     <h1>Tablet <span>Hub</span></h1>
     <button onclick="svc_softRefresh()" style="
       position: absolute; right: 20px;
@@ -1661,6 +1668,10 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
      JAVASCRIPT
 ============================================================ -->
 <script>
+
+// ── App version — bump this on every deploy ──────────────────
+var APP_VERSION = "v7.3.0";
+   
 // ── GAS fetch helper ─────────────────────────────────────────
 // Replaces google.script.run — posts to the Apps Script doPost endpoint.
 var GAS_URL = "https://script.google.com/a/macros/cscmfg.com/s/AKfycbzW_Ecoe-ugddMrg3vn7y1quXT2cgy9iNr7t-DWdjmn5JVbBwEkimT45oVZWhL6gEiG/exec";
@@ -2584,6 +2595,9 @@ function ms_resetForm(){
 window.addEventListener("scroll", function(){
   if(document.getElementById("prod_itemDropdown").classList.contains("open")) prod_positionDropdown();
 }, true);
+
+document.getElementById("appVersionLabel").textContent = APP_VERSION;
+
 </script>
 </body>
 </html>
