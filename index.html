@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>CSC Tablet Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -35,11 +33,6 @@
   --border:    rgba(93,173,226,0.2);
   --shadow:    0 4px 20px rgba(13,31,53,.10);
   --radius:    14px;
-  /* Safe area insets for notched iPhones */
-  --safe-top:    env(safe-area-inset-top,    0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left:   env(safe-area-inset-left,   0px);
-  --safe-right:  env(safe-area-inset-right,  0px);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,23 +41,12 @@ body {
   font-family: 'Barlow', sans-serif;
   background: var(--navy);
   min-height: 100vh;
-  min-height: -webkit-fill-available;
   -webkit-tap-highlight-color: transparent;
-  -webkit-text-size-adjust: 100%;
 }
 
 /* ── View system ── */
-.view { display: none; min-height: 100vh; min-height: -webkit-fill-available; flex-direction: column; }
+.view { display: none; min-height: 100vh; flex-direction: column; }
 .view.active { display: flex; }
-
-/* ── Global touch improvements ── */
-button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
-.dept-icon-btn, .priority-btn, .photo-btn, .timer-btn,
-.stepper-btn, .back-to-dash-btn, .back-to-dept-btn,
-.combo-option, .prodselect-back {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
 
 /* ============================================================
    DASHBOARD VIEW
@@ -92,9 +74,6 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
   background: var(--navy-mid);
   border-bottom: 2px solid var(--border);
   padding: 14px 20px;
-  padding-top: calc(14px + var(--safe-top));
-  padding-left: calc(20px + var(--safe-left));
-  padding-right: calc(20px + var(--safe-right));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,9 +97,6 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
   max-width: 640px;
   margin: 0 auto;
   padding: 32px 20px 40px;
-  padding-bottom: calc(40px + var(--safe-bottom));
-  padding-left: calc(20px + var(--safe-left));
-  padding-right: calc(20px + var(--safe-right));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -262,17 +238,14 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
 }
 
 .prodselect-header {
-  padding: 14px 20px;
-  padding-top: calc(14px + var(--safe-top));
-  padding-left: calc(20px + var(--safe-left));
-  padding-right: calc(20px + var(--safe-right));
-  display: flex;
-  align-items: center;
-  justify-content: space-between;  /* changed */
-  position: relative;
-  z-index: 10;
+  width: 100%;
   background: var(--navy-mid);
   border-bottom: 2px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
 }
 .prodselect-header h1 {
   font-family: 'Barlow Condensed', sans-serif;
@@ -281,9 +254,8 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--white);
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  flex: 1;
+  text-align: center;
 }
 .prodselect-header h1 span { color: var(--accent); }
 
@@ -306,9 +278,6 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
   max-width: 560px;
   margin: 0 auto;
   padding: 40px 24px 40px;
-  padding-bottom: calc(40px + var(--safe-bottom));
-  padding-left: calc(24px + var(--safe-left));
-  padding-right: calc(24px + var(--safe-right));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -433,9 +402,6 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
 .form-header {
   background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-deep) 100%);
   padding: 20px 20px 24px;
-  padding-top: calc(20px + var(--safe-top));
-  padding-left: calc(20px + var(--safe-left));
-  padding-right: calc(20px + var(--safe-right));
   position: sticky; top: 0; z-index: 100;
   box-shadow: 0 2px 16px rgba(0,0,0,.25);
 }
@@ -489,11 +455,11 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
   white-space: nowrap; flex-shrink: 0; cursor: pointer;
   transition: background .18s, transform .1s;
   -webkit-tap-highlight-color: transparent;
-  min-height: 44px;
 }
 .back-to-dash-btn:active { transform: scale(.96); background: #d99200; }
 .back-to-dash-btn svg { width: 16px; height: 16px; fill: var(--navy-dark); }
 
+/* Back-to-dept-select button — blue variant used inside form headers */
 .back-to-dept-btn {
   display: flex; align-items: center; gap: 7px;
   background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
@@ -504,16 +470,11 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
   white-space: nowrap; flex-shrink: 0; cursor: pointer;
   transition: background .18s, transform .1s;
   -webkit-tap-highlight-color: transparent;
-  min-height: 44px;
 }
 .back-to-dept-btn:active { transform: scale(.96); background: rgba(255,255,255,0.2); }
 .back-to-dept-btn svg { width: 16px; height: 16px; fill: #fff; }
 
-.form-main {
-  max-width: 600px; margin: 0 auto; padding: 20px 16px 0; width: 100%;
-  padding-left: calc(16px + var(--safe-left));
-  padding-right: calc(16px + var(--safe-right));
-}
+.form-main { max-width: 600px; margin: 0 auto; padding: 20px 16px 0; width: 100%; }
 
 .section {
   background: var(--card);
@@ -550,12 +511,11 @@ label {
 }
 .required-star { color: var(--red); margin-left: 2px; }
 
-/* CRITICAL: font-size ≥ 16px prevents iOS auto-zoom on focus */
 input[type="text"], input[type="number"], input[type="date"], select, textarea {
   width: 100%; background: var(--surface);
   border: 2px solid var(--border-light); border-radius: 10px;
   padding: 13px 14px;
-  font-family: 'Barlow', sans-serif; font-size: 16px; color: var(--text-dark);
+  font-family: 'Barlow', sans-serif; font-size: 1rem; color: var(--text-dark);
   appearance: none; -webkit-appearance: none;
   transition: border-color .2s, box-shadow .2s; outline: none;
 }
@@ -606,7 +566,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   color: var(--muted-form); text-align: center; letter-spacing: .4px; line-height: 1.2;
   transition: all .18s; -webkit-tap-highlight-color: transparent;
   word-break: break-word;
-  min-height: 50px;
 }
 .sel-btn:active, .sel-btn.active {
   border-color: var(--blue-form); background: var(--blue-form);
@@ -665,7 +624,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   cursor: pointer; color: #fff; font-size: 1.5rem; line-height: 1;
   display: flex; align-items: center; justify-content: center;
   min-height: 54px; transition: background .15s; flex-shrink: 0;
-  min-width: 56px;
 }
 .stepper-btn:active { background: var(--blue-form); }
 
@@ -673,14 +631,13 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .photo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .photo-btn {
   background: var(--navy-deep); border: none; border-radius: 10px;
-  padding: 15px 10px; color: #fff;
+  padding: 13px 10px; color: #fff;
   font-family: 'Barlow', sans-serif; font-size: .9rem; font-weight: 600;
   cursor: pointer; display: flex; align-items: center;
   justify-content: center; gap: 8px;
   position: relative; overflow: hidden;
   transition: background .18s, transform .1s;
   -webkit-tap-highlight-color: transparent;
-  min-height: 52px;
 }
 .photo-btn svg { width: 20px; height: 20px; fill: #fff; }
 .photo-btn.camera-btn { background: var(--blue-form); }
@@ -692,7 +649,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .photo-thumb .remove-btn {
   position: absolute; top: 4px; right: 4px;
   background: rgba(214,60,60,.85); border: none; border-radius: 50%;
-  width: 28px; height: 28px; display: flex; align-items: center;
+  width: 22px; height: 22px; display: flex; align-items: center;
   justify-content: center; cursor: pointer; color: #fff;
   font-size: .75rem; font-weight: 700;
 }
@@ -711,22 +668,19 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .combo-input { padding-right: 42px; }
 .combo-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted-form); pointer-events: none; font-size: 1rem; }
 .combo-dropdown {
-  display: none; position: absolute;
+  display: none; position: fixed;
   background: var(--card); border: 2px solid var(--blue-form);
   border-radius: 10px; max-height: 220px; overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   z-index: 9999; box-shadow: 0 8px 24px rgba(13,31,53,.15);
-  width: 100%; left: 0;
 }
 .combo-dropdown.open { display: block; }
 .combo-option {
-  padding: 14px 14px; font-size: 1rem; cursor: pointer;
+  padding: 12px 14px; font-size: .95rem; cursor: pointer;
   border-bottom: 1px solid var(--border-light); transition: background .12s; line-height: 1.3;
-  min-height: 50px; display: flex; flex-direction: column; justify-content: center;
 }
 .combo-option:last-child { border-bottom: none; }
 .combo-option:hover, .combo-option.highlighted { background: rgba(30,111,168,.08); color: var(--blue-form); }
-.combo-option .item-sub { font-size: .8rem; color: var(--muted-form); margin-top: 2px; }
+.combo-option .item-sub { font-size: .75rem; color: var(--muted-form); margin-top: 2px; }
 .combo-no-results { padding: 14px; font-size: .9rem; color: var(--muted-form); text-align: center; }
 
 /* Department buttons (machine shop) */
@@ -738,7 +692,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700;
   color: var(--muted-form); text-align: center; letter-spacing: .3px;
   transition: all .18s; -webkit-tap-highlight-color: transparent;
-  min-height: 80px;
 }
 .dept-icon-btn svg { width: 28px; height: 28px; fill: var(--muted-form); transition: fill .18s; }
 .dept-icon-btn:active, .dept-icon-btn.active {
@@ -759,12 +712,11 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .timer-display .timer-sub { font-size: .75rem; color: rgba(255,255,255,.4); margin-top: 6px; }
 .timer-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
 .timer-btn {
-  border: none; border-radius: 10px; padding: 16px 10px;
+  border: none; border-radius: 10px; padding: 14px 10px;
   font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700;
   letter-spacing: .4px; text-transform: uppercase; cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: opacity .2s, transform .1s; -webkit-tap-highlight-color: transparent;
-  min-height: 54px;
 }
 .timer-btn:active { transform: scale(.97); }
 .timer-btn:disabled { opacity: .35; cursor: not-allowed; }
@@ -785,7 +737,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
   text-align: center; transition: all .18s; background: var(--surface);
   -webkit-tap-highlight-color: transparent;
-  min-height: 80px;
 }
 .priority-btn .p-icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
 .priority-btn .p-label { font-size: .85rem; letter-spacing: .3px; color: var(--muted-form); }
@@ -805,7 +756,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   color: var(--muted-form); text-align: center; line-height: 1.3;
   transition: all .18s; -webkit-tap-highlight-color: transparent;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
-  min-height: 76px;
 }
 .coating-btn svg { width: 26px; height: 26px; fill: var(--muted-form); transition: fill .18s; }
 .coating-btn:active, .coating-btn.active {
@@ -815,10 +765,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .coating-btn.active svg { fill: var(--blue-form); }
 
 /* Submit button */
-.submit-wrap {
-  padding: 0 0 20px;
-  padding-bottom: calc(20px + var(--safe-bottom));
-}
+.submit-wrap { padding: 0 0 20px; }
 .submit-btn {
   width: 100%; background: linear-gradient(135deg, var(--blue-form) 0%, var(--navy-deep) 100%);
   border: none; border-radius: var(--radius); padding: 18px; color: #fff;
@@ -827,7 +774,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   display: flex; align-items: center; justify-content: center; gap: 12px;
   box-shadow: 0 6px 24px rgba(13,31,53,.3); transition: opacity .2s, transform .1s;
   -webkit-tap-highlight-color: transparent;
-  min-height: 58px;
 }
 .submit-btn:active { transform: scale(.98); opacity: .9; }
 .submit-btn svg { width: 22px; height: 22px; fill: #fff; }
@@ -838,9 +784,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   display: none; position: fixed; inset: 0;
   background: rgba(13,31,53,.85); z-index: 999;
   align-items: center; justify-content: center; padding: 24px;
-  padding-left: calc(24px + var(--safe-left));
-  padding-right: calc(24px + var(--safe-right));
-  padding-bottom: calc(24px + var(--safe-bottom));
 }
 .overlay.show { display: flex; }
 .overlay-card {
@@ -862,17 +805,15 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .overlay-card .hrs { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--green); }
 .overlay-card .new-btn {
   margin-top: 22px; width: 100%; background: var(--navy-dark);
-  border: none; border-radius: 10px; padding: 16px; color: #fff;
+  border: none; border-radius: 10px; padding: 14px; color: #fff;
   font-family: 'Barlow', sans-serif; font-size: .95rem; font-weight: 600; cursor: pointer;
-  min-height: 52px;
 }
 
 /* Error toast */
 .error-toast {
   display: none; position: fixed; bottom: 24px; left: 50%;
-  bottom: calc(24px + var(--safe-bottom));
   transform: translateX(-50%); background: var(--red); color: #fff;
-  padding: 14px 22px; border-radius: 10px; font-size: .9rem; font-weight: 600;
+  padding: 12px 20px; border-radius: 10px; font-size: .9rem; font-weight: 600;
   z-index: 9999; max-width: 90vw; text-align: center;
   box-shadow: 0 4px 20px rgba(0,0,0,.25);
 }
@@ -881,175 +822,71 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 @keyframes spin    { to { transform: rotate(360deg); } }
 
 /* ============================================================
-   RESPONSIVE — iPad (768px+)
+   CAMERA OVERLAY
 ============================================================ */
-@media (min-width: 768px) {
-  .dash-body { padding: 40px 32px 60px; gap: 32px; }
-  .logo-wrap svg { width: 240px; }
-  .grid { gap: 22px; }
-  .dash-btn { min-height: 180px; font-size: 1.35rem; gap: 16px; }
-  .dash-btn .icon-wrap { width: 64px; height: 64px; }
-  .dash-btn svg { width: 30px; height: 30px; }
-  
-  .prodselect-body { padding: 48px 32px; }
-  .dept-select-btn { min-height: 240px; font-size: 1.5rem; padding: 48px 24px; }
-  .dept-select-icon { width: 80px; height: 80px; }
-  .dept-select-icon svg { width: 38px; height: 38px; }
-  
-  .form-main { max-width: 680px; padding: 24px 24px 0; }
-  .section-body { padding: 22px; }
-  
-  /* Slightly larger selection buttons on iPad */
-  .sel-btn { padding: 16px 14px; font-size: 1.05rem; min-height: 56px; }
-  .coating-btn { padding: 18px 14px; font-size: .95rem; min-height: 88px; }
-  .coating-btn svg { width: 30px; height: 30px; }
-  .dept-icon-btn { min-height: 96px; padding: 20px 14px; font-size: 1.1rem; }
-  .dept-icon-btn svg { width: 32px; height: 32px; }
-  .priority-btn { min-height: 90px; padding: 18px 10px; }
-  .priority-btn .p-icon { font-size: 1.7rem; }
-  .priority-btn .p-label { font-size: .9rem; }
-  
-  .timer-display .timer-clock { font-size: 3.4rem; }
-  .timer-btn { min-height: 60px; font-size: 1.2rem; }
-  .stepper-btn { min-height: 60px; min-width: 64px; font-size: 1.6rem; }
-  .hours-wrap input[type="number"] { font-size: 1.6rem; }
-  
-  .submit-btn { font-size: 1.4rem; padding: 20px; min-height: 64px; }
+.camera-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-
-/* iPad landscape / large */
-@media (min-width: 1024px) {
-  .dash-body { max-width: 800px; }
-  .form-main { max-width: 760px; }
-  .grid { gap: 24px; }
-  .dash-btn { font-size: 1.4rem; min-height: 190px; }
+.camera-overlay.open { display: flex; }
+#svc_cameraVideo {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  position: absolute; inset: 0;
 }
-
-/* ============================================================
-   RESPONSIVE — iPhone (max 430px)
-============================================================ */
-@media (max-width: 430px) {
-  /* Dashboard */
-  .dash-body { padding: 20px 14px 36px; gap: 20px; }
-  .logo-wrap svg { width: 160px; }
-  .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .dash-btn { min-height: 130px; padding: 22px 12px; font-size: 1rem; gap: 10px; border-radius: 12px; }
-  .dash-btn .icon-wrap { width: 46px; height: 46px; }
-  .dash-btn svg { width: 22px; height: 22px; }
-  
-  /* Dept select */
-  .prodselect-body { padding: 24px 16px 36px; gap: 18px; }
-  .prodselect-title { font-size: 1.3rem; }
-  .dept-select-grid { grid-template-columns: 1fr; gap: 12px; }
-  .dept-select-btn {
-    min-height: 100px; padding: 20px 20px;
-    flex-direction: row; gap: 18px; font-size: 1.2rem;
-    text-align: left; border-radius: 14px;
-  }
-  .dept-select-icon { width: 52px; height: 52px; }
-  .dept-select-icon svg { width: 24px; height: 24px; }
-  .dept-select-btn .dept-sub { font-size: 0.65rem; margin-top: -4px; }
-  
-  /* Form headers */
-  .form-header { padding: 10px 12px 14px; padding-top: calc(10px + var(--safe-top)); }
-  .form-header-inner { gap: 6px; }
-  .back-to-dash-btn { padding: 8px 10px; font-size: 0.8rem; gap: 4px; min-height: 40px; border-radius: 7px; }
-  .back-to-dash-btn svg { width: 13px; height: 13px; }
-  .form-header-icon { width: 36px; height: 36px; border-radius: 9px; }
-  .form-header-icon svg { width: 18px; height: 18px; }
-  .form-header-center { gap: 9px; }
-  .form-header-text h1 { font-size: 1rem; }
-  .form-header-text p { font-size: 0.68rem; }
-  .hd-date, .hd-time { font-size: 0.62rem; }
-  .id-badge { padding: 4px 7px; }
-  .id-badge .label { font-size: 0.56rem; }
-  .id-badge .value { font-size: 0.8rem; }
-  
-  /* Form body */
-  .form-main { padding: 14px 12px 0; }
-  .section { margin-bottom: 10px; border-radius: 12px; }
-  .section-body { padding: 14px; }
-  .section-header { padding: 9px 14px; gap: 8px; }
-  .section-header h2 { font-size: 0.88rem; }
-  .section-header .step { width: 20px; height: 20px; font-size: 0.7rem; }
-  
-  /* Selection button grids */
-  .sel-btn-grid.cols-5 { grid-template-columns: repeat(3, 1fr); }
-  .sel-btn-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
-  .sel-btn { padding: 10px 6px; font-size: 0.85rem; min-height: 48px; }
-  .sel-btn-grid.cols-4 .sel-btn { padding: 10px 3px; font-size: 0.78rem; }
-  .sel-btn-grid.cols-1 .sel-btn { padding: 14px 16px; font-size: 0.95rem; min-height: 50px; }
-  
-  /* Coating */
-  .coating-btn { padding: 12px 8px; font-size: 0.8rem; min-height: 68px; }
-  .coating-btn svg { width: 22px; height: 22px; }
-  
-  /* Steppers */
-  .hours-wrap input[type="number"] { font-size: 1.2rem; padding: 12px 4px; }
-  .stepper-btn { padding: 0 14px; min-height: 50px; min-width: 50px; font-size: 1.3rem; }
-  
-  /* Timer */
-  .timer-display { padding: 14px; }
-  .timer-display .timer-clock { font-size: 2.4rem; letter-spacing: 1px; }
-  .timer-btn { padding: 13px 10px; font-size: 0.95rem; min-height: 50px; }
-  .time-row { gap: 8px; margin-top: 10px; }
-  .time-box { padding: 10px 12px; }
-  .time-box .t-value { font-size: 0.88rem; }
-  
-  /* Priority */
-  .priority-btn { padding: 12px 6px; min-height: 76px; }
-  .priority-btn .p-icon { font-size: 1.25rem; }
-  .priority-btn .p-label { font-size: 0.72rem; }
-  
-  /* Dept icons */
-  .dept-icon-btn { padding: 14px 8px; min-height: 76px; font-size: 0.92rem; }
-  .dept-icon-btn svg { width: 24px; height: 24px; }
-  
-  /* Submit */
-  .submit-btn { font-size: 1.1rem; padding: 16px; min-height: 54px; }
-  
-  /* Est time */
-  .et-value { font-size: 1.1rem; }
-  
-  /* Overlay */
-  .overlay-card { padding: 22px 18px; }
-  .overlay-card h3 { font-size: 1.25rem; }
-  .overlay-card p { font-size: 0.82rem; }
+#svc_cameraCanvas { display: none; }
+.camera-overlay-bar {
+  width: 100%; padding: 20px 24px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+  position: absolute; bottom: 0; left: 0; z-index: 1;
 }
-
-/* Very small iPhones — SE 1st gen, mini */
-@media (max-width: 375px) {
-  .grid { gap: 8px; }
-  .dash-btn { min-height: 118px; font-size: 0.92rem; padding: 18px 10px; }
-  .sel-btn-grid.cols-5 { grid-template-columns: repeat(3, 1fr); }
-  .sel-btn-grid.cols-4 { grid-template-columns: repeat(3, 1fr); }
-  .sel-btn-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
-  .two-col { grid-template-columns: 1fr; gap: 10px; }
+.cam-close-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 12px; padding: 12px 18px; color: #fff;
+  font-family: 'Barlow', sans-serif; font-size: 1rem; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  backdrop-filter: blur(6px); transition: background .15s;
+}
+.cam-close-btn:active { background: rgba(255,255,255,0.28); }
+.cam-close-btn svg { width: 18px; height: 18px; fill: #fff; }
+.cam-capture-btn {
+  width: 76px; height: 76px; border-radius: 50%;
+  background: #fff; border: 5px solid rgba(255,255,255,0.35);
+  cursor: pointer; flex-shrink: 0;
+  transition: transform .1s, background .1s, box-shadow .1s;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.2), 0 4px 20px rgba(0,0,0,0.4);
+}
+.cam-capture-btn:active {
+  transform: scale(0.90); background: #ddd;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.15), 0 2px 10px rgba(0,0,0,0.4);
+}
+.cam-count-badge {
+  background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px; padding: 10px 16px; color: #fff;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1rem;
+  font-weight: 700; letter-spacing: .5px; min-width: 68px;
+  text-align: center; backdrop-filter: blur(6px);
 }
 </style>
 </head>
 <body>
-  
-<!-- Update banner (hidden by default) -->
-<div id="updateBanner" style="
-  display:none; position:fixed; top:0; left:0; right:0;
-  background:linear-gradient(135deg,#f0a500,#d99200);
-  color:#0d1f35; padding:14px 20px; text-align:center;
-  font-family:'Barlow Condensed',sans-serif; font-weight:700;
-  font-size:1rem; letter-spacing:.5px; z-index:99999;
-  box-shadow:0 4px 16px rgba(0,0,0,.3); cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-" onclick="forceUpdate()">
-  ⚡ NEW VERSION AVAILABLE — TAP HERE TO UPDATE
-</div>
 
 <!-- ============================================================
      DASHBOARD VIEW
 ============================================================ -->
 <div class="view active" id="dashboardView">
   <div class="dash-header">
-    <span id="appVersionLabel" style="
-      position: absolute; left: calc(20px + var(--safe-left));
+     <span id="appVersionLabel" style="
+      position: absolute; left: 20px;
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 0.7rem; font-weight: 600;
       letter-spacing: 0.1em; text-transform: uppercase;
@@ -1057,10 +894,10 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
     "></span>
     <h1>Tablet <span>Hub</span></h1>
     <button onclick="svc_softRefresh()" style="
-      position: absolute; right: calc(20px + var(--safe-right));
-      background: none; border: none; cursor: pointer; padding: 8px;
+      position: absolute; right: 20px;
+      background: none; border: none; cursor: pointer; padding: 6px;
       display: flex; align-items: center; justify-content: center;
-      opacity: 0.45; transition: opacity .2s; min-width: 44px; min-height: 44px;
+      opacity: 0.45; transition: opacity .2s;
       -webkit-tap-highlight-color: transparent;
     " ontouchstart="this.style.opacity='0.9';this.querySelector('svg').style.transform='rotate(180deg)'"
        ontouchend="this.style.opacity='0.45'" title="Reload config">
@@ -1114,7 +951,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
         <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14zM6 13h5v4H6zm6-6h4v3h-4zM6 7h5v5H6zm6 4h4v6h-4z"/></svg></div>
         Service Tickets
       </button>
-      <button class="dash-btn placeholder"> <!--Change Back to: machine" onclick="showView('machineShopView')"-->
+      <button class="dash-btn machine" onclick="showView('machineShopView')">
         <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
         Machine Shop
       </button>
@@ -1142,8 +979,8 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 ============================================================ -->
 <div class="view" id="prodSelectView">
   <div class="prodselect-header">
-    <button type="button" class="back-to-dash-btn" onclick="showView('dashboardView')">
-      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg>
+    <button class="prodselect-back" onclick="showView('dashboardView')">
+      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
       Dashboard
     </button>
     <h1>Production <span>Entry</span></h1>
@@ -1160,7 +997,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
         Metal<br>Department
         <span class="dept-sub">Lines · Press · Slitter</span>
       </button>
-      <button class="dept-select-btn metals" onclick="showView('plasticProdView')">
+      <button class="dept-select-btn plastics" onclick="showView('plasticProdView')">
         <div class="dept-select-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-12a4 4 0 100 8 4 4 0 000-8z"/></svg>
         </div>
@@ -1213,7 +1050,12 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
           <input type="text" id="svc_mechanicInput" list="svc_mechanicList"
             placeholder="Type or select your name…"
             autocomplete="off" autocorrect="off" spellcheck="false"/>
-          <datalist id="svc_mechanicList"></datalist>
+          <datalist id="svc_mechanicList">
+            <option value="Carlos M."></option><option value="David R."></option>
+            <option value="James T."></option><option value="Luis G."></option>
+            <option value="Marcus H."></option><option value="Miguel S."></option>
+            <option value="Robert K."></option><option value="Tony V."></option>
+          </datalist>
         </div>
       </div>
     </div>
@@ -1263,8 +1105,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
             Take Photo
           </button>
         </div>
-        <input type="file" accept="image/*" capture="environment" id="svc_fileInput"
-          style="display:none" onchange="svc_handleFileCapture(this)"/>
         <div class="photo-previews" id="svc_photoPreviews"></div>
       </div>
     </div>
@@ -1316,15 +1156,31 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 </div>
 
 <!-- ============================================================
+     CAMERA OVERLAY
+============================================================ -->
+<div class="camera-overlay" id="svc_cameraOverlay">
+  <video id="svc_cameraVideo" autoplay playsinline muted></video>
+  <canvas id="svc_cameraCanvas"></canvas>
+  <div class="camera-overlay-bar">
+    <button type="button" class="cam-close-btn" onclick="svc_closeCamera()">
+      <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      Close
+    </button>
+    <button type="button" class="cam-capture-btn" id="svc_camCaptureBtn" onclick="svc_capturePhoto()" aria-label="Capture photo"></button>
+    <div class="cam-count-badge" id="svc_camCountBadge">0 / 6</div>
+  </div>
+</div>
+
+<!-- ============================================================
      METALS PRODUCTION ENTRY VIEW
 ============================================================ -->
 <div class="view form-view" id="productionView">
   <header class="form-header">
     <div class="form-header-inner">
-      <button type="button" class="back-to-dash-btn" onclick="showView('prodSelectView')">
-        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg>
-        Department      
-      </button>  
+      <button type="button" class="back-to-dept-btn" onclick="showView('prodSelectView')">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Dept
+      </button>
       <div class="form-header-center">
         <div class="form-header-icon">
           <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
@@ -1382,7 +1238,6 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
             autocomplete="off" autocorrect="off" spellcheck="false"
             oninput="prod_filterItems()" onfocus="prod_openCombo()" onblur="prod_closeComboDelay()"/>
           <span class="combo-arrow">▾</span>
-          <div class="combo-dropdown" id="prod_itemDropdown"></div>
         </div>
         <input type="hidden" id="prod_itemValue"/>
       </div>
@@ -1461,6 +1316,8 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
     </div>
   </div>
 
+  <div class="combo-dropdown" id="prod_itemDropdown"></div>
+
   <div class="overlay" id="prod_successOverlay">
     <div class="overlay-card">
       <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
@@ -1479,10 +1336,10 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 <div class="view form-view" id="plasticProdView">
   <header class="form-header">
     <div class="form-header-inner">
-      <button type="button" class="back-to-dash-btn" onclick="showView('prodSelectView')">
-        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg>
-        Department      
-      </button>  
+      <button type="button" class="back-to-dept-btn" onclick="showView('prodSelectView')">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Dept
+      </button>
       <div class="form-header-center">
         <div class="form-header-icon" style="background:var(--accent-gold);">
           <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-12a4 4 0 100 8 4 4 0 000-8z"/></svg>
@@ -1676,7 +1533,12 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
         <label for="ms_techInput">Your Name <span class="required-star">*</span></label>
         <div class="combo-wrap">
           <input type="text" id="ms_techInput" list="ms_techList" placeholder="Type or select your name…" autocomplete="off" autocorrect="off" spellcheck="false"/>
-          <datalist id="ms_techList"></datalist>
+          <datalist id="ms_techList">
+            <option value="Carlos M."></option><option value="David R."></option>
+            <option value="James T."></option><option value="Luis G."></option>
+            <option value="Marcus H."></option><option value="Miguel S."></option>
+            <option value="Robert K."></option><option value="Tony V."></option>
+          </datalist>
         </div>
       </div>
     </div>
@@ -1803,66 +1665,110 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 </div>
 
 <!-- ============================================================
-     JAVASCRIPT  (unchanged from original)
+     JAVASCRIPT
 ============================================================ -->
 <script>
 
 // ── App version — bump this on every deploy ──────────────────
-var APP_VERSION = "v2.0.0";
+var APP_VERSION = "G1.0.1";
+   
+// ── GAS fetch helper ─────────────────────────────────────────
+// Replaces google.script.run — posts to the Apps Script doPost endpoint.
+var GAS_URL = "https://script.google.com/a/macros/cscmfg.com/s/AKfycbzW_Ecoe-ugddMrg3vn7y1quXT2cgy9iNr7t-DWdjmn5JVbBwEkimT45oVZWhL6gEiG/exec";
 
-// ── Mechanics (Service Tickets) — edit this list only ────────
-var MECHANIC_NAMES = [
-  "Anthony Gonzalez",
-  "Art Ramos",
-  "Danny Zubia",
-  "David Avila",
-  "Efren Becerra",
-  "Giovanni Hernandez",
-  "Ismael Silva",
-  "Jaime Magdaleno",
-  "Jorge Guzman",
-  "Justino Flores",
-  "Martin Ventura",
-  "Mike Magallanes",
-  "Steven Zuniga",
-  "Art Ramos Jr.",
-  "Joel Gonzalez",
-  "Alex Baltazar",
-  "Arnel Nagel",
-  "Alfonso Melchor",
-  "Jesus Nunez",
-  "Jorge Juarez",
-  "John Messina",
-  "Christian Gavina",
-].sort();
+function GAS(action, payload, onSuccess, onError) {
+  fetch(GAS_URL, {
+    method: "POST",
+    // No Content-Type header — keeps this a "simple" CORS request, no preflight
+    body: JSON.stringify({
+      secret: "csc-tablet-2026-x9k2",  // must match API_SHARED_SECRET in Code.gs
+      action: action,
+      payload: payload
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) { if (onSuccess) onSuccess(data); })
+  .catch(function(err) { if (onError) onError(err.message || String(err)); });
+}
 
-// ── Technicians (Machine Shop) — edit this list only ─────────
-var TECHNICIAN_NAMES = [
-  "Arnel Nagel",
-  "Alfonso Melchor",
-  "Jesus Nunez",
-  "Jorge Juarez",
-  "John Messina",
-  "Christian Gavina",
-].sort();
+// ── Camera — getUserMedia works here because we are NOT in an iframe ──
+var svc_cameraStream  = null;
+var svc_cameraOpening = false;
 
-(function populateNameLists() {
-  var mechanicDl = document.getElementById("svc_mechanicList");
-  MECHANIC_NAMES.forEach(function(name) {
-    var opt = document.createElement("option");
-    opt.value = name;
-    mechanicDl.appendChild(opt);
-  });
+function svc_openCamera() {
+  if (svc_photos.length >= 6) { svc_showError("Maximum 6 photos allowed."); return; }
+  if (svc_cameraOpening) return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    svc_showError("Camera not supported on this browser.");
+    return;
+  }
+  var overlay = document.getElementById("svc_cameraOverlay");
+  var video   = document.getElementById("svc_cameraVideo");
+  if (svc_cameraStream) {
+    svc_cameraStream.getTracks().forEach(function(t){ try{t.stop();}catch(e){} });
+    svc_cameraStream = null;
+    video.srcObject  = null;
+  }
+  svc_cameraOpening = true;
+  overlay.classList.add("open");
+  svc_updateCamCount();
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(function(stream) {
+      svc_cameraOpening = false;
+      if (!overlay.classList.contains("open")) {
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        return;
+      }
+      svc_cameraStream = stream;
+      video.srcObject  = stream;
+      var p = video.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(function(e){ console.warn("video.play():", e); });
+      }
+    })
+    .catch(function(err) {
+      svc_cameraOpening = false;
+      overlay.classList.remove("open");
+      var name = err && err.name ? err.name : "";
+      var msg  = err && err.message ? err.message : "Unknown error";
+      svc_showError("Camera error (" + name + "): " + msg);
+    });
+}
 
-  var techDl = document.getElementById("ms_techList");
-  TECHNICIAN_NAMES.forEach(function(name) {
-    var opt = document.createElement("option");
-    opt.value = name;
-    techDl.appendChild(opt);
-  });
-})();
+function svc_capturePhoto() {
+  if (!svc_cameraStream) { svc_showError("Camera not ready."); return; }
+  if (svc_photos.length >= 6) { svc_showError("Maximum 6 photos allowed."); return; }
+  var video  = document.getElementById("svc_cameraVideo");
+  var canvas = document.getElementById("svc_cameraCanvas");
+  var w = video.videoWidth, h = video.videoHeight;
+  if (!w || !h) { svc_showError("Camera still starting — try again."); return; }
+  var MAX = 1200;
+  if (w > MAX || h > MAX) {
+    if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+    else       { w = Math.round(w * MAX / h); h = MAX; }
+  }
+  canvas.width = w; canvas.height = h;
+  canvas.getContext("2d").drawImage(video, 0, 0, w, h);
+  var dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+  svc_photos.push({ data: dataUrl, mimeType: "image/jpeg", ext: "jpg" });
+  svc_renderPreviews();
+  svc_updateCamCount();
+  var btn = document.getElementById("svc_camCaptureBtn");
+  if (btn) { btn.style.background = "#bbb"; setTimeout(function(){ btn.style.background = "#fff"; }, 150); }
+  if (svc_photos.length >= 6) setTimeout(svc_closeCamera, 500);
+}
 
-// ── Soft refresh ─────────────────────────────────────────────
+function svc_closeCamera() {
+  svc_cameraOpening = false;
+  var overlay = document.getElementById("svc_cameraOverlay");
+  var video   = document.getElementById("svc_cameraVideo");
+  if (svc_cameraStream) {
+    svc_cameraStream.getTracks().forEach(function(t){ try{t.stop();}catch(e){} });
+    svc_cameraStream = null;
+  }
+  if (video) { video.pause(); video.srcObject = null; }
+  overlay.classList.remove("open");
+}
 function svc_softRefresh() {
   svc_configRows   = [];
   svc_configLoaded = false;
@@ -1881,6 +1787,7 @@ function showView(id) {
   document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
+  // Init plastics config when navigating to that view
   if (id === 'plasticProdView' && !plast_configLoaded) {
     plast_loadConfig();
   }
@@ -1902,87 +1809,6 @@ function updateAllClocks() {
 }
 setInterval(updateAllClocks, 1000);
 updateAllClocks();
-
-// ════════════════════════════════════════════════════════════
-// LIVE REFRESH SYSTEM — never reloads, never breaks
-// ════════════════════════════════════════════════════════════
-var __configVersion = null;
-var __codeVersion   = null;
-var __refreshInFlight = false;
-
-function checkRefreshVersion() {
-  if (__refreshInFlight) return;
-  __refreshInFlight = true;
-  google.script.run
-    .withSuccessHandler(function(result) {
-      __refreshInFlight = false;
-      if (!result || !result.ok) return;
-
-      // First call: just record current versions, do nothing
-      if (__configVersion === null) {
-        __configVersion = result.configVersion;
-        __codeVersion   = result.codeVersion;
-        return;
-      }
-
-      // Config bump = silent live refresh of all dynamic data
-      if (result.configVersion !== __configVersion) {
-        __configVersion = result.configVersion;
-        performSoftRefresh();
-      }
-
-      // Code bump = show banner; user taps to reload
-      if (result.codeVersion !== __codeVersion) {
-        __codeVersion = result.codeVersion;
-        document.getElementById("updateBanner").style.display = "block";
-      }
-    })
-    .withFailureHandler(function() { __refreshInFlight = false; })
-    .getRefreshVersion();
-}
-
-function forceUpdate() {
-  // The user tapped — this is a real user gesture, so top-level navigation is allowed.
-  // Navigate the parent Google Site to itself with a cache-buster.
-  try {
-    var topUrl = window.top.location.href.split("?")[0].split("#")[0];
-    var link = document.createElement("a");
-    link.href = topUrl + "?t=" + Date.now();
-    link.target = "_top";
-    link.rel = "noopener";
-    document.body.appendChild(link);
-    link.click();
-  } catch (e) {
-    // Fallback: try parent, then current window
-    try {
-      window.parent.location.href = window.parent.location.href.split("?")[0] + "?t=" + Date.now();
-    } catch (e2) {
-      window.location.href = window.location.href.split("?")[0] + "?t=" + Date.now();
-    }
-  }
-}
-
-function performSoftRefresh() {
-  // Reload all config from sheets
-  if (typeof svc_loadConfig === 'function') {
-    svc_configLoaded = false;
-    svc_loadConfig();
-  }
-  if (typeof plast_loadConfig === 'function') {
-    plast_configLoaded = false;
-    plast_loadConfig();
-  }
-  // Reset all forms to clean state
-  if (typeof svc_resetForm   === 'function') svc_resetForm();
-  if (typeof prod_resetForm  === 'function') prod_resetForm();
-  if (typeof plast_resetForm === 'function') plast_resetForm();
-  if (typeof ms_resetForm    === 'function') ms_resetForm();
-  // Return to dashboard
-  showView('dashboardView');
-}
-
-setInterval(checkRefreshVersion, 10000);
-checkRefreshVersion();
 
 // ════════════════════════════════════════════════════════════
 // SERVICE TICKETS — Config-driven dynamic form
@@ -2021,20 +1847,17 @@ function svc_updateTicketPreview() {
 }
 
 function svc_loadConfig() {
-  google.script.run
-    .withSuccessHandler(function(result) {
-      if (result && result.ok) {
-        svc_configRows   = result.rows || [];
-        svc_configLoaded = true;
-        svc_renderDeptStep();
-      } else {
-        svc_showConfigError("Could not load config: " + (result ? result.error : "Unknown error"));
-      }
-    })
-    .withFailureHandler(function(err) {
-      svc_showConfigError("Failed to load config: " + err.message);
-    })
-    .getServiceTicketConfig();
+  GAS("getServiceTicketConfig", {}, function(result) {
+    if (result && result.ok) {
+      svc_configRows   = result.rows || [];
+      svc_configLoaded = true;
+      svc_renderDeptStep();
+    } else {
+      svc_showConfigError("Could not load config: " + (result ? result.error : "Unknown error"));
+    }
+  }, function(err) {
+    svc_showConfigError("Failed to load config: " + err);
+  });
 }
 
 function svc_showConfigError(msg) {
@@ -2173,50 +1996,17 @@ function svc_tryResolveCode() {
   svc_resolvedCode = (match.length === 1) ? match[0].code : "";
 }
 
-function svc_openCamera() {
-  if (svc_photos.length >= 6) { svc_showError("Maximum 6 photos allowed."); return; }
-  document.getElementById("svc_fileInput").click();
+function svc_updateCamCount() {
+  var el = document.getElementById("svc_camCountBadge");
+  if (el) el.textContent = svc_photos.length + " / 6";
 }
-
-function svc_handleFileCapture(input) {
-  if (!input.files || !input.files.length) return;
-  var files = Array.from(input.files);
-  var remaining = 6 - svc_photos.length;
-  files.slice(0, remaining).forEach(function(file) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var img = new Image();
-      img.onload = function() {
-        var MAX = 1200, w = img.width, h = img.height;
-        if (w > MAX || h > MAX) {
-          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-          else       { w = Math.round(w * MAX / h); h = MAX; }
-        }
-        var canvas = document.createElement("canvas");
-        canvas.width = w; canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-        var ext  = file.type === "image/png" ? "png" : "jpg";
-        var mime = file.type === "image/png" ? "image/png" : "image/jpeg";
-        var quality = mime === "image/jpeg" ? 0.80 : undefined;
-        svc_photos.push({ data: canvas.toDataURL(mime, quality), mimeType: mime, ext: ext });
-        svc_renderPreviews();
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-  if (files.length > remaining) svc_showError("Maximum 6 photos allowed. Only " + remaining + " added.");
-  input.value = "";
-}
-
-function svc_closeCamera() {}
-function svc_updateCamCount() {}
-function svc_removePhoto(idx) { svc_photos.splice(idx,1); svc_renderPreviews(); }
+function svc_removePhoto(idx) { svc_photos.splice(idx,1); svc_renderPreviews(); svc_updateCamCount(); }
 function svc_renderPreviews() {
   document.getElementById("svc_photoPreviews").innerHTML = svc_photos.map(function(p,i){
     return '<div class="photo-thumb"><img src="'+p.data+'" alt="Photo '+(i+1)+'"/>'
       +'<button class="remove-btn" onclick="svc_removePhoto('+i+')">✕</button></div>';
   }).join("");
+  svc_updateCamCount();
 }
 
 function svc_stepEstTime(delta) {
@@ -2270,31 +2060,31 @@ function svc_uploadPhotosSequentially(photoList, index, links, ticketData) {
   if (index >= photoList.length) { svc_writeTicketRow(ticketData, links); return; }
   svc_setBtnText("Uploading photo " + (index+1) + " of " + photoList.length + "…");
   var photo = photoList[index];
-  google.script.run
-    .withSuccessHandler(function(r) {
-      links.push(r && r.url ? r.url : "Photo " + (index+1) + " upload failed");
-      svc_uploadPhotosSequentially(photoList, index+1, links, ticketData);
-    })
-    .withFailureHandler(function(err) {
-      links.push("Photo " + (index+1) + " error: " + err.message);
-      svc_uploadPhotosSequentially(photoList, index+1, links, ticketData);
-    })
-    .uploadPhoto(ticketData.ticketId, index+1, photo.data, photo.mimeType, photo.ext);
+  GAS("uploadPhoto", {
+    ticketId: ticketData.ticketId || "",
+    photoIndex: index + 1,
+    dataUrl: photo.data,
+    mimeType: photo.mimeType,
+    ext: photo.ext
+  }, function(r) {
+    links.push(r && r.url ? r.url : "Photo " + (index+1) + " upload failed");
+    svc_uploadPhotosSequentially(photoList, index+1, links, ticketData);
+  }, function(err) {
+    links.push("Photo " + (index+1) + " error: " + err);
+    svc_uploadPhotosSequentially(photoList, index+1, links, ticketData);
+  });
 }
 
 function svc_writeTicketRow(ticketData, photoLinks) {
   svc_setBtnText("Saving ticket…");
   ticketData.photoLinks = photoLinks;
-  google.script.run
-    .withSuccessHandler(function(r) {
-      if (r && r.ok) {
-        document.getElementById("svc_ticketIdDisplay").textContent = r.ticketId;
-        document.getElementById("svc_successTicketId").textContent = "Ticket ID: " + r.ticketId;
-        document.getElementById("svc_successOverlay").classList.add("show");
-      } else { svc_resetBtn(); svc_showError("Error: " + (r ? r.error : "Unknown error")); }
-    })
-    .withFailureHandler(function(err) { svc_resetBtn(); svc_showError("Submission failed: " + err.message); })
-    .submitTicket(ticketData);
+  GAS("submitTicket", ticketData, function(r) {
+    if (r && r.ok) {
+      document.getElementById("svc_ticketIdDisplay").textContent = r.ticketId;
+      document.getElementById("svc_successTicketId").textContent = "Ticket ID: " + r.ticketId;
+      document.getElementById("svc_successOverlay").classList.add("show");
+    } else { svc_resetBtn(); svc_showError("Error: " + (r ? r.error : "Unknown error")); }
+  }, function(err) { svc_resetBtn(); svc_showError("Submission failed: " + err); });
 }
 
 function svc_setBtnText(text) {
@@ -2312,6 +2102,7 @@ function svc_showError(msg) {
   setTimeout(function(){ t.classList.remove("show"); }, 3500);
 }
 function svc_resetForm() {
+  svc_closeCamera();
   document.getElementById("svc_successOverlay").classList.remove("show");
   document.getElementById("svc_mechanicInput").value = "";
   document.getElementById("svc_issueText").value = "";
@@ -2412,10 +2203,12 @@ function prod_renderCombo(filter){
 }
 
 function prod_positionDropdown(){
-  // Dropdown is now position:absolute inside .combo-container, no positioning needed
+  var rect = document.getElementById("prod_itemInput").getBoundingClientRect();
+  var dd   = document.getElementById("prod_itemDropdown");
+  dd.style.top = (rect.bottom+4)+"px"; dd.style.left = rect.left+"px"; dd.style.width = rect.width+"px";
 }
-function prod_filterItems(){ prod_renderCombo(document.getElementById("prod_itemInput").value); document.getElementById("prod_itemDropdown").classList.add("open"); document.getElementById("prod_itemValue").value=""; }
-function prod_openCombo(){ if(prod_comboCloseTimer){clearTimeout(prod_comboCloseTimer);prod_comboCloseTimer=null;} prod_renderCombo(document.getElementById("prod_itemInput").value); document.getElementById("prod_itemDropdown").classList.add("open"); }
+function prod_filterItems(){ prod_renderCombo(document.getElementById("prod_itemInput").value); prod_positionDropdown(); document.getElementById("prod_itemDropdown").classList.add("open"); document.getElementById("prod_itemValue").value=""; }
+function prod_openCombo(){ if(prod_comboCloseTimer){clearTimeout(prod_comboCloseTimer);prod_comboCloseTimer=null;} prod_renderCombo(document.getElementById("prod_itemInput").value); prod_positionDropdown(); document.getElementById("prod_itemDropdown").classList.add("open"); }
 function prod_closeComboDelay(){ prod_comboCloseTimer=setTimeout(function(){document.getElementById("prod_itemDropdown").classList.remove("open");},200); }
 function prod_pickItem(code,desc){
   var label = code+" — "+desc;
@@ -2451,13 +2244,10 @@ function prod_submitEntry(){
     qtyProduced:parseFloat(qty), spoilageQty:parseFloat(spoilage),
     hoursWorked:parseFloat(document.getElementById("prod_hoursWorked").value)
   };
-  google.script.run
-    .withSuccessHandler(function(result){
-      if(result&&result.ok){ document.getElementById("prod_successEntryId").textContent="Entry ID: "+result.entryId; document.getElementById("prod_successOverlay").classList.add("show"); }
-      else{ prod_resetBtn(); prod_showError("Error: "+(result?result.error:"Unknown")); }
-    })
-    .withFailureHandler(function(err){ prod_resetBtn(); prod_showError("Submission failed: "+err.message); })
-    .submitProductionEntry(data);
+  GAS("submitProductionEntry", data, function(result){
+    if(result&&result.ok){ document.getElementById("prod_successEntryId").textContent="Entry ID: "+result.entryId; document.getElementById("prod_successOverlay").classList.add("show"); }
+    else{ prod_resetBtn(); prod_showError("Error: "+(result?result.error:"Unknown")); }
+  }, function(err){ prod_resetBtn(); prod_showError("Submission failed: "+err); });
 }
 
 function prod_resetBtn(){ var btn=document.getElementById("prod_submitBtn"); btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24"><path fill="white" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Log Production Entry'; }
@@ -2495,20 +2285,17 @@ function plast_generateEntryId(){
 }
 
 function plast_loadConfig(){
-  google.script.run
-    .withSuccessHandler(function(result){
-      if(result && result.ok){
-        plast_configRows   = result.rows || [];
-        plast_configLoaded = true;
-        plast_renderDeptStep();
-      } else {
-        plast_showConfigError("Could not load config: " + (result ? result.error : "Unknown"));
-      }
-    })
-    .withFailureHandler(function(err){
-      plast_showConfigError("Failed to load config: " + err.message);
-    })
-    .getProdEntryConfig();
+  GAS("getProdEntryConfig", {}, function(result){
+    if(result && result.ok){
+      plast_configRows   = result.rows || [];
+      plast_configLoaded = true;
+      plast_renderDeptStep();
+    } else {
+      plast_showConfigError("Could not load config: " + (result ? result.error : "Unknown"));
+    }
+  }, function(err){
+    plast_showConfigError("Failed to load config: " + err);
+  });
 }
 
 function plast_showConfigError(msg){
@@ -2684,15 +2471,12 @@ function plast_submitEntry(){
     hoursWorked:  hours
   };
 
-  google.script.run
-    .withSuccessHandler(function(result){
-      if(result && result.ok){
-        document.getElementById("plast_successEntryId").textContent = "Entry ID: " + result.entryId;
-        document.getElementById("plast_successOverlay").classList.add("show");
-      } else { plast_resetBtn(); plast_showError("Error: "+(result?result.error:"Unknown")); }
-    })
-    .withFailureHandler(function(err){ plast_resetBtn(); plast_showError("Submission failed: "+err.message); })
-    .submitPlasticProdEntry(data);
+  GAS("submitPlasticProdEntry", data, function(result){
+    if(result && result.ok){
+      document.getElementById("plast_successEntryId").textContent = "Entry ID: " + result.entryId;
+      document.getElementById("plast_successOverlay").classList.add("show");
+    } else { plast_resetBtn(); plast_showError("Error: "+(result?result.error:"Unknown")); }
+  }, function(err){ plast_resetBtn(); plast_showError("Submission failed: "+err); });
 }
 
 function plast_resetBtn(){ var btn=document.getElementById("plast_submitBtn"); btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24"><path fill="white" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Log Plastic Production Entry'; }
@@ -2785,16 +2569,13 @@ function ms_submitEntry(){
     technician:tech, department:ms_selectedDept, jobTitle:title, description:desc,
     startTime:startStr, endTime:endStr, hoursWorked:hours, status:ms_selectedStatus
   };
-  google.script.run
-    .withSuccessHandler(function(result){
-      if(result&&result.ok){
-        document.getElementById("ms_successJobId").textContent="Job ID: "+data.jobId;
-        document.getElementById("ms_successHours").textContent=(data.hoursWorked===1?"1.00 hour":data.hoursWorked.toFixed(2)+" hours");
-        document.getElementById("ms_successOverlay").classList.add("show");
-      } else { ms_resetBtn(); ms_showError("Error: "+(result?result.error:"Unknown")); }
-    })
-    .withFailureHandler(function(err){ ms_resetBtn(); ms_showError(err.message); })
-    .submitMachineShopEntry(data);
+  GAS("submitMachineShopEntry", data, function(result){
+    if(result&&result.ok){
+      document.getElementById("ms_successJobId").textContent="Job ID: "+data.jobId;
+      document.getElementById("ms_successHours").textContent=(data.hoursWorked===1?"1.00 hour":data.hoursWorked.toFixed(2)+" hours");
+      document.getElementById("ms_successOverlay").classList.add("show");
+    } else { ms_resetBtn(); ms_showError("Error: "+(result?result.error:"Unknown")); }
+  }, function(err){ ms_resetBtn(); ms_showError("Submission failed: "+err); });
 }
 
 function ms_resetBtn(){ var btn=document.getElementById("ms_submitBtn"); btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24"><path fill="white" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Log Job Time'; }
@@ -2814,6 +2595,10 @@ function ms_resetForm(){
   document.getElementById("ms_endTimeDisplay").textContent="Not stopped"; document.getElementById("ms_endTimeDisplay").classList.add("unset");
   ms_generateJobId(); ms_resetBtn(); window.scrollTo({top:0,behavior:"smooth"});
 }
+
+window.addEventListener("scroll", function(){
+  if(document.getElementById("prod_itemDropdown").classList.contains("open")) prod_positionDropdown();
+}, true);
 
 document.getElementById("appVersionLabel").textContent = APP_VERSION;
 
