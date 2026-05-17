@@ -1725,7 +1725,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 <script>
 
 // ── App version — bump this on every deploy ──────────────────
-var APP_VERSION = "v8.0.0";
+var APP_VERSION = "v8.1.0";
 
 // ── Cloudflare Worker fetch helper ───────────────────────────
 var GAS_URL = "https://tablet-hub.enahabedian.workers.dev/";
@@ -1839,6 +1839,63 @@ function updateAllClocks() {
 }
 setInterval(updateAllClocks, 1000);
 updateAllClocks();
+
+// ════════════════════════════════════════════════════════════
+// REMOTE REFRESH POLLER
+// Polls every 60s. If the version in the Refresh Control sheet
+// changes, all forms reset, configs reload, return to dashboard.
+// ════════════════════════════════════════════════════════════
+var __currentRefreshVersion = null;
+var __refreshCheckInFlight = false;
+
+function checkRefreshVersion() {
+  if (__refreshCheckInFlight) return;
+  __refreshCheckInFlight = true;
+
+  GAS("getRefreshVersion", {}, function(result) {
+    __refreshCheckInFlight = false;
+    if (!result || !result.ok) return;
+
+    // First call: just store the current version, don't refresh
+    if (__currentRefreshVersion === null) {
+      __currentRefreshVersion = result.version;
+      return;
+    }
+
+    // Version changed — trigger remote refresh
+    if (result.version !== __currentRefreshVersion) {
+      __currentRefreshVersion = result.version;
+      performRemoteRefresh();
+    }
+  }, function() {
+    __refreshCheckInFlight = false;
+  });
+}
+
+function performRemoteRefresh() {
+  // Reset all forms to clean state
+  try { if (typeof svc_resetForm   === "function") svc_resetForm();   } catch(e) {}
+  try { if (typeof prod_resetForm  === "function") prod_resetForm();  } catch(e) {}
+  try { if (typeof plast_resetForm === "function") plast_resetForm(); } catch(e) {}
+  try { if (typeof ms_resetForm    === "function") ms_resetForm();    } catch(e) {}
+
+  // Force config reload on next view
+  svc_configRows   = [];
+  svc_configLoaded = false;
+  plast_configRows   = [];
+  plast_configLoaded = false;
+
+  // Reload service ticket config now (since it loads on startup)
+  if (typeof svc_loadConfig === "function") svc_loadConfig();
+
+  // Return everyone to the dashboard
+  if (typeof showView === "function") showView("dashboardView");
+}
+
+// Start polling — every 60 seconds
+setInterval(checkRefreshVersion, 60000);
+// Initial call to capture the starting version
+setTimeout(checkRefreshVersion, 2000);
 
 // ════════════════════════════════════════════════════════════
 // SERVICE TICKETS
