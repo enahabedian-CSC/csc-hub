@@ -1873,25 +1873,12 @@ function checkRefreshVersion() {
 }
 
 function performRemoteRefresh() {
-  // Skip the soft reset, just hard reload
+  // Hard reload — pulls fresh code from GitHub Pages AND fresh config
   window.location.reload();
 }
 
-  // Force config reload on next view
-  svc_configRows   = [];
-  svc_configLoaded = false;
-  plast_configRows   = [];
-  plast_configLoaded = false;
-
-  // Reload service ticket config now (since it loads on startup)
-  if (typeof svc_loadConfig === "function") svc_loadConfig();
-
-  // Return everyone to the dashboard
-  if (typeof showView === "function") showView("dashboardView");
-}
-
 // Start polling — every 60 seconds
-setInterval(checkRefreshVersion, 5000);
+setInterval(checkRefreshVersion, 60000);
 // Initial call to capture the starting version
 setTimeout(checkRefreshVersion, 2000);
 
