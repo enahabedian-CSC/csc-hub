@@ -1873,11 +1873,9 @@ function checkRefreshVersion() {
 }
 
 function performRemoteRefresh() {
-  // Reset all forms to clean state
-  try { if (typeof svc_resetForm   === "function") svc_resetForm();   } catch(e) {}
-  try { if (typeof prod_resetForm  === "function") prod_resetForm();  } catch(e) {}
-  try { if (typeof plast_resetForm === "function") plast_resetForm(); } catch(e) {}
-  try { if (typeof ms_resetForm    === "function") ms_resetForm();    } catch(e) {}
+  // Skip the soft reset, just hard reload
+  window.location.reload();
+}
 
   // Force config reload on next view
   svc_configRows   = [];
