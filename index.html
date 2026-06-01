@@ -1195,23 +1195,20 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   <div class="form-main" style="padding-bottom:40px;">
 
     <div class="section">
-      <div class="section-header"><div class="step">1</div><h2>Mechanic</h2></div>
-      <div class="section-body">
-        <label>Your Name <span class="required-star">*</span></label>
-        <input type="hidden" id="svc_mechanicInput"/>
-        <div id="svc_mechanicPicker">
-          <input type="text" class="name-picker-search" id="svc_nameSearch"
-            placeholder="Search names…"
-            oninput="filterNameTiles('svc_nameTiles', this.value)"
-            autocomplete="off" autocorrect="off" spellcheck="false"/>
-          <div class="name-tiles" id="svc_nameTiles"></div>
-        </div>
-        <div class="name-selected" id="svc_mechanicSelected" style="display:none;">
-          <span class="name-val" id="svc_mechanicSelectedVal"></span>
-          <button type="button" class="name-change-btn" onclick="clearNamePicker('svc_mechanicInput','svc_mechanicPicker','svc_mechanicSelected','svc_mechanicSelectedVal','svc_nameSearch','svc_nameTiles')">Change</button>
-        </div>
-      </div>
+  <div class="section-header"><div class="step">1</div><h2>Mechanic</h2></div>
+  <div class="section-body">
+    <label>Your Name <span class="required-star">*</span></label>
+    <div class="combo-container" id="svc_nameComboWrap">
+      <input type="text" class="combo-input" id="svc_nameInput"
+        placeholder="Start typing your name…"
+        autocomplete="off" autocorrect="off" spellcheck="false"
+        oninput="svc_filterNames()" onfocus="svc_openNameCombo()" onblur="svc_closeNameComboDelay()"/>
+      <span class="combo-arrow">▾</span>
+      <div class="combo-dropdown" id="svc_nameDropdown"></div>
     </div>
+    <input type="hidden" id="svc_mechanicInput"/>
+  </div>
+</div>
 
     <div class="section" id="svc_step2Section">
       <div class="section-header"><div class="step">2</div><h2>Department</h2></div>
