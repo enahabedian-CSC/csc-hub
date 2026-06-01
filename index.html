@@ -731,6 +731,15 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   justify-content: center; cursor: pointer; color: #fff;
   font-size: .75rem; font-weight: 700;
 }
+.photo-thumb .file-thumb-label {
+  width: 100%; height: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; background: #f0f4f8;
+  gap: 6px; padding: 8px; box-sizing: border-box;
+}
+.photo-thumb .file-thumb-label span {
+  font-size: 0.55rem; text-align: center; color: #555; word-break: break-all;
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical;
+}
 
 .est-time-display {
   margin-top: 12px; background: var(--navy-dark);
@@ -1793,6 +1802,7 @@ var API_SHARED_SECRET = "csc-tablet-2026-x9k2"; // must match Worker secret
 function GAS(action, payload, onSuccess, onError) {
   fetch(GAS_URL, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       secret: API_SHARED_SECRET,
       action: action,
@@ -2157,38 +2167,58 @@ function svc_handleFileCapture(input) {
   if (!input.files || !input.files.length) return;
   var files = Array.from(input.files);
   var remaining = 6 - svc_photos.length;
+  if (files.length > remaining) svc_showError("Maximum 6 files allowed. Only " + remaining + " added.");
   files.slice(0, remaining).forEach(function(file) {
     var reader = new FileReader();
     reader.onload = function(e) {
-      var img = new Image();
-      img.onload = function() {
-        var MAX = 1200, w = img.width, h = img.height;
-        if (w > MAX || h > MAX) {
-          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-          else       { w = Math.round(w * MAX / h); h = MAX; }
-        }
-        var canvas = document.createElement("canvas");
-        canvas.width = w; canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-        var ext  = file.type === "image/png" ? "png" : "jpg";
-        var mime = file.type === "image/png" ? "image/png" : "image/jpeg";
-        var quality = mime === "image/jpeg" ? 0.80 : undefined;
-        svc_photos.push({ data: canvas.toDataURL(mime, quality), mimeType: mime, ext: ext });
+      var dot = file.name.lastIndexOf(".");
+      var fileExt = dot >= 0 ? file.name.slice(dot + 1).toLowerCase() : "bin";
+      if (file.type.startsWith("image/")) {
+        var img = new Image();
+        img.onload = function() {
+          var MAX = 1200, w = img.width, h = img.height;
+          if (w > MAX || h > MAX) {
+            if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+            else       { w = Math.round(w * MAX / h); h = MAX; }
+          }
+          var canvas = document.createElement("canvas");
+          canvas.width = w; canvas.height = h;
+          canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+          var ext  = file.type === "image/png" ? "png" : "jpg";
+          var mime = file.type === "image/png" ? "image/png" : "image/jpeg";
+          var quality = mime === "image/jpeg" ? 0.80 : undefined;
+          svc_photos.push({ data: canvas.toDataURL(mime, quality), mimeType: mime, ext: ext, name: file.name });
+          svc_renderPreviews();
+        };
+        img.onerror = function() {
+          // Canvas can't decode this format (e.g. HEIC on some browsers) — store as-is
+          svc_photos.push({ data: e.target.result, mimeType: file.type, ext: fileExt, name: file.name });
+          svc_renderPreviews();
+        };
+        img.src = e.target.result;
+      } else {
+        // Non-image file (PDF, etc.) — store data URL as-is
+        svc_photos.push({ data: e.target.result, mimeType: file.type, ext: fileExt, name: file.name });
         svc_renderPreviews();
-      };
-      img.src = e.target.result;
+      }
     };
     reader.readAsDataURL(file);
   });
-  if (files.length > remaining) svc_showError("Maximum 6 photos allowed. Only " + remaining + " added.");
   input.value = "";
 }
 
 function svc_removePhoto(idx) { svc_photos.splice(idx,1); svc_renderPreviews(); }
 function svc_renderPreviews() {
-  document.getElementById("svc_photoPreviews").innerHTML = svc_photos.map(function(p,i){
-    return '<div class="photo-thumb"><img src="'+p.data+'" alt="Photo '+(i+1)+'"/>'
-      +'<button class="remove-btn" onclick="svc_removePhoto('+i+')">✕</button></div>';
+  document.getElementById("svc_photoPreviews").innerHTML = svc_photos.map(function(p, i) {
+    var isImage = p.mimeType && p.mimeType.startsWith("image/");
+    var inner = isImage
+      ? '<img src="' + p.data + '" alt="File ' + (i+1) + '"/>'
+      : '<div class="file-thumb-label">'
+          + '<svg viewBox="0 0 24 24" width="32" height="32"><path fill="#5a6a7a" d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>'
+          + '<span>' + (p.name || ("File " + (i+1))) + '</span>'
+          + '</div>';
+    return '<div class="photo-thumb">' + inner
+      + '<button class="remove-btn" onclick="svc_removePhoto(' + i + ')">✕</button></div>';
   }).join("");
 }
 
