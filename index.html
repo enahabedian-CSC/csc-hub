@@ -1853,14 +1853,21 @@ function showNameFallback(pickerId, hiddenId) {
 }
 
 GAS("getMechanicNames", {}, function(result) {
-  if (result && result.ok && result.names.length) {
+  if (result && result.ok && result.names && result.names.length) {
     ALL_NAMES = result.names.slice().sort();
-    buildNameTiles("svc_nameTiles", "svc_mechanicInput", "svc_mechanicPicker", "svc_mechanicSelected", "svc_mechanicSelectedVal");
+    SVC_NAMES = ALL_NAMES;                 // feeds the service-ticket typeahead
     buildNameTiles("ms_nameTiles", "ms_techInput", "ms_techPicker", "ms_techSelected", "ms_techSelectedVal");
   } else {
-    showNameFallback("svc_mechanicPicker", "svc_mechanicInput");
+    SVC_NAMES = [];
+    console.warn("getMechanicNames returned no names:", result);
+    svc_renderNameCombo("");
     showNameFallback("ms_techPicker", "ms_techInput");
   }
+}, function(err) {
+  SVC_NAMES = [];
+  console.error("getMechanicNames fetch failed:", err);
+  svc_renderNameCombo("");
+  showNameFallback("ms_techPicker", "ms_techInput");
 });
 
 // ── Soft refresh ─────────────────────────────────────────────
@@ -2271,7 +2278,7 @@ function svc_showError(msg) {
 }
 function svc_resetForm() {
   document.getElementById("svc_successOverlay").classList.remove("show");
-  clearNamePicker("svc_mechanicInput","svc_mechanicPicker","svc_mechanicSelected","svc_mechanicSelectedVal","svc_nameSearch","svc_nameTiles");
+  svc_clearName();
   document.getElementById("svc_issueText").value = "";
   document.getElementById("svc_estTimeInput").value = "1.0";
   svc_updateEstDisplay();
@@ -2284,6 +2291,59 @@ function svc_resetForm() {
   svc_resetBtn();
   window.scrollTo({ top:0, behavior:"smooth" });
 }
+
+   // ── Mechanic name typeahead (Service Tickets) ────────────────
+var SVC_NAMES = [];
+var svc_nameComboTimer = null;
+
+function svc_renderNameCombo(filter){
+  var dd = document.getElementById("svc_nameDropdown");
+  if (!SVC_NAMES.length){
+    dd.innerHTML = '<div class="combo-no-results">No names loaded yet — you can type your name manually.</div>';
+    return;
+  }
+  var q = (filter || "").toLowerCase().trim();
+  var matches = q ? SVC_NAMES.filter(function(n){ return n.toLowerCase().indexOf(q) >= 0; }) : SVC_NAMES;
+  dd.innerHTML = matches.length === 0
+    ? '<div class="combo-no-results">No matching names</div>'
+    : matches.map(function(n){
+        var safe = n.replace(/'/g, "&#39;");
+        return '<div class="combo-option" onmousedown="svc_pickName(\''+safe+'\')">'+n+'</div>';
+      }).join("");
+}
+
+function svc_filterNames(){
+  var val = document.getElementById("svc_nameInput").value;
+  svc_renderNameCombo(val);
+  document.getElementById("svc_nameDropdown").classList.add("open");
+  document.getElementById("svc_mechanicInput").value = val.trim(); // keeps manual text valid
+}
+
+function svc_openNameCombo(){
+  if (svc_nameComboTimer){ clearTimeout(svc_nameComboTimer); svc_nameComboTimer = null; }
+  svc_renderNameCombo(document.getElementById("svc_nameInput").value);
+  document.getElementById("svc_nameDropdown").classList.add("open");
+}
+
+function svc_closeNameComboDelay(){
+  svc_nameComboTimer = setTimeout(function(){
+    document.getElementById("svc_nameDropdown").classList.remove("open");
+  }, 200);
+}
+
+function svc_pickName(name){
+  document.getElementById("svc_nameInput").value     = name;
+  document.getElementById("svc_mechanicInput").value = name;
+  document.getElementById("svc_nameDropdown").classList.remove("open");
+  if (svc_nameComboTimer){ clearTimeout(svc_nameComboTimer); svc_nameComboTimer = null; }
+}
+
+function svc_clearName(){
+  document.getElementById("svc_nameInput").value     = "";
+  document.getElementById("svc_mechanicInput").value = "";
+  document.getElementById("svc_nameDropdown").classList.remove("open");
+}
+   
 
 // ════════════════════════════════════════════════════════════
 // METALS PRODUCTION ENTRY
