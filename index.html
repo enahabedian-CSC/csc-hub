@@ -1808,6 +1808,10 @@ var ALL_NAMES = [];
 function buildNameTiles(tilesId, hiddenId, pickerId, selectedId, selectedValId) {
   var container = document.getElementById(tilesId);
   if (!container) return;
+  container.dataset.hiddenId    = hiddenId;
+  container.dataset.pickerId    = pickerId;
+  container.dataset.selectedId  = selectedId;
+  container.dataset.selectedValId = selectedValId;
   container.innerHTML = ALL_NAMES.map(function(name) {
     var safe = name.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
     return '<button type="button" class="name-tile" onclick="pickName(\''
@@ -1832,10 +1836,17 @@ function clearNamePicker(hiddenId, pickerId, selectedId, selectedValId, searchId
 }
 
 function filterNameTiles(tilesId, query) {
+  var container = document.getElementById(tilesId);
   var q = (query || "").trim().toLowerCase();
-  Array.from(document.getElementById(tilesId).children).forEach(function(tile) {
-    tile.classList.toggle("hidden", q !== "" && tile.textContent.toLowerCase().indexOf(q) < 0);
+  var visible = [];
+  Array.from(container.children).forEach(function(tile) {
+    var match = !q || tile.textContent.toLowerCase().indexOf(q) >= 0;
+    tile.classList.toggle("hidden", !match);
+    if (match) visible.push(tile.textContent);
   });
+  if (q && visible.length === 1 && container.dataset.hiddenId) {
+    pickName(visible[0], container.dataset.hiddenId, container.dataset.pickerId, container.dataset.selectedId, container.dataset.selectedValId);
+  }
 }
 
 function showNameFallback(pickerId, hiddenId) {
