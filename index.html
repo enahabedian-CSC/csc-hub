@@ -1270,13 +1270,10 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
         <label>How many hours will it take? <span class="required-star">*</span></label>
         <div class="hours-wrap">
           <button type="button" class="stepper-btn" onclick="svc_stepEstTime(-0.5)">−</button>
-          <input type="number" id="svc_estTimeInput" value="1.0" min="0.5" max="99" step="0.5" oninput="svc_updateEstDisplay()"/>
+          <input type="number" id="svc_estTimeInput" value="1.0" min="0.5" max="99" step="0.5"/>
           <button type="button" class="stepper-btn" onclick="svc_stepEstTime(0.5)">+</button>
         </div>
-        <div class="est-time-display">
-          <span class="et-value" id="svc_estTimeDisplay">1.0</span>
-          <span class="et-label" id="svc_estUnitDisplay">Hour</span>
-        </div>
+
       </div>
     </div>
 
@@ -2188,12 +2185,6 @@ function svc_stepEstTime(delta) {
   var input = document.getElementById("svc_estTimeInput");
   var val = Math.max(0.5, Math.round(((parseFloat(input.value)||1) + delta) * 2) / 2);
   input.value = val.toFixed(1);
-  svc_updateEstDisplay();
-}
-function svc_updateEstDisplay() {
-  var val = parseFloat(document.getElementById("svc_estTimeInput").value) || 1;
-  document.getElementById("svc_estTimeDisplay").textContent = val.toFixed(1);
-  document.getElementById("svc_estUnitDisplay").textContent = val === 1 ? "Hour" : "Hours";
 }
 
 function svc_submitTicket() {
@@ -2281,7 +2272,6 @@ function svc_resetForm() {
   svc_clearName();
   document.getElementById("svc_issueText").value = "";
   document.getElementById("svc_estTimeInput").value = "1.0";
-  svc_updateEstDisplay();
   svc_sel = { dept:"", level2:"", level3:"", level4:"" };
   svc_resolvedCode = "";
   svc_hideStep(3); svc_hideStep(4); svc_hideStep(5);
