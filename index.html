@@ -1838,11 +1838,20 @@ function filterNameTiles(tilesId, query) {
   });
 }
 
+function showNameFallback(pickerId, hiddenId) {
+  var picker = document.getElementById(pickerId);
+  if (!picker) return;
+  picker.innerHTML = '<input type="text" style="width:100%;background:var(--surface);border:2px solid var(--border-light);border-radius:10px;padding:13px 14px;font-family:\'Barlow\',sans-serif;font-size:16px;color:var(--text-dark);outline:none;" placeholder="Type your name…" oninput="document.getElementById(\''+hiddenId+'\').value=this.value.trim()" autocomplete="off" autocorrect="off" spellcheck="false"/>';
+}
+
 GAS("getMechanicNames", {}, function(result) {
   if (result && result.ok && result.names.length) {
     ALL_NAMES = result.names.slice().sort();
     buildNameTiles("svc_nameTiles", "svc_mechanicInput", "svc_mechanicPicker", "svc_mechanicSelected", "svc_mechanicSelectedVal");
     buildNameTiles("ms_nameTiles", "ms_techInput", "ms_techPicker", "ms_techSelected", "ms_techSelectedVal");
+  } else {
+    showNameFallback("svc_mechanicPicker", "svc_mechanicInput");
+    showNameFallback("ms_techPicker", "ms_techInput");
   }
 });
 
