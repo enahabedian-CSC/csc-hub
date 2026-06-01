@@ -2265,7 +2265,7 @@ function svc_submitTicket() {
 
 function svc_uploadPhotosSequentially(photoList, index, links, ticketData) {
   if (index >= photoList.length) { svc_writeTicketRow(ticketData, links); return; }
-  svc_setBtnText("Uploading photo " + (index+1) + " of " + photoList.length + "…");
+  svc_setBtnText("Uploading file " + (index+1) + " of " + photoList.length + "…");
   var photo = photoList[index];
   GAS("uploadPhoto", {
     ticketId: ticketData.ticketId || "",
@@ -2274,10 +2274,17 @@ function svc_uploadPhotosSequentially(photoList, index, links, ticketData) {
     mimeType: photo.mimeType,
     ext: photo.ext
   }, function(r) {
-    links.push(r && r.url ? r.url : "Photo " + (index+1) + " upload failed");
+    if (r && r.ok && r.url) {
+      links.push(r.url);
+    } else {
+      var msg = (r && r.error) ? r.error : "No response from server";
+      svc_showError("File " + (index+1) + " upload error: " + msg, 7000);
+      links.push("UPLOAD_FAILED: " + msg);
+    }
     svc_uploadPhotosSequentially(photoList, index+1, links, ticketData);
   }, function(err) {
-    links.push("Photo " + (index+1) + " error: " + err);
+    svc_showError("File " + (index+1) + " network error: " + err, 7000);
+    links.push("NETWORK_ERROR: " + err);
     svc_uploadPhotosSequentially(photoList, index+1, links, ticketData);
   });
 }
@@ -2303,10 +2310,10 @@ function svc_resetBtn() {
   btn.disabled = false;
   btn.innerHTML = '<svg viewBox="0 0 24 24"><path fill="white" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Submit Service Ticket';
 }
-function svc_showError(msg) {
+function svc_showError(msg, duration) {
   var t = document.getElementById("svc_errorToast");
   t.textContent = msg; t.classList.add("show");
-  setTimeout(function(){ t.classList.remove("show"); }, 3500);
+  setTimeout(function(){ t.classList.remove("show"); }, duration || 3500);
 }
 function svc_resetForm() {
   document.getElementById("svc_successOverlay").classList.remove("show");
