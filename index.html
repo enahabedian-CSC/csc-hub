@@ -1745,57 +1745,24 @@ function GAS(action, payload, onSuccess, onError) {
   .catch(function(err) { if (onError) onError(err.message || String(err)); });
 }
 
-// ── Mechanics (Service Tickets) ──────────────────────────────
-var MECHANIC_NAMES = [
-  "Anthony Gonzalez",
-  "Art Ramos",
-  "Danny Zubia",
-  "David Avila",
-  "Efren Becerra",
-  "Giovanni Hernandez",
-  "Ismael Silva",
-  "Jaime Magdaleno",
-  "Jorge Guzman",
-  "Justino Flores",
-  "Martin Ventura",
-  "Mike Magallanes",
-  "Steven Zuniga",
-  "Art Ramos Jr.",
-  "Joel Gonzalez",
-  "Alex Baltazar",
-  "Arnel Nagel",
-  "Alfonso Melchor",
-  "Jesus Nunez",
-  "Jorge Juarez",
-  "John Messina",
-  "Christian Gavina"
-].sort();
-
-// ── Technicians (Machine Shop) ───────────────────────────────
-var TECHNICIAN_NAMES = [
-  "Arnel Nagel",
-  "Alfonso Melchor",
-  "Jesus Nunez",
-  "Jorge Juarez",
-  "John Messina",
-  "Christian Gavina"
-].sort();
-
-(function populateNameLists() {
-  var mechanicDl = document.getElementById("svc_mechanicList");
-  MECHANIC_NAMES.forEach(function(name) {
+function populateNameList(elId, names) {
+  var dl = document.getElementById(elId);
+  if (!dl) return;
+  dl.innerHTML = "";
+  names.forEach(function(name) {
     var opt = document.createElement("option");
     opt.value = name;
-    mechanicDl.appendChild(opt);
+    dl.appendChild(opt);
   });
+}
 
-  var techDl = document.getElementById("ms_techList");
-  TECHNICIAN_NAMES.forEach(function(name) {
-    var opt = document.createElement("option");
-    opt.value = name;
-    techDl.appendChild(opt);
-  });
-})();
+GAS("getMechanicNames", {}, function(result) {
+  if (result && result.ok && result.names.length) {
+    var sorted = result.names.slice().sort();
+    populateNameList("svc_mechanicList", sorted);
+    populateNameList("ms_techList", sorted);
+  }
+});
 
 // ── Soft refresh ─────────────────────────────────────────────
 function svc_softRefresh() {
