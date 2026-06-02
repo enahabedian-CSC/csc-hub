@@ -2259,8 +2259,20 @@ function svc_submitTicket() {
     issue:issue, estimatedTime: estVal.toFixed(1) + " Hours"
   };
   if (svc_photos.length === 0) { svc_writeTicketRow(ticketData, []); return; }
-  svc_setBtnText("Uploading photo 1 of " + svc_photos.length + "…");
-  svc_uploadPhotosSequentially(svc_photos, 0, [], ticketData);
+  svc_setBtnText("Preparing…");
+  GAS("reserveTicketId", { deptCode: ticketData.deptCode }, function(r) {
+    if (!r || !r.ok) {
+      svc_resetBtn();
+      svc_showError("Could not prepare ticket: " + (r ? r.error : "No response"), 7000);
+      return;
+    }
+    ticketData.ticketId = r.ticketId;
+    svc_setBtnText("Uploading file 1 of " + svc_photos.length + "…");
+    svc_uploadPhotosSequentially(svc_photos, 0, [], ticketData);
+  }, function(err) {
+    svc_resetBtn();
+    svc_showError("Could not prepare ticket: " + err, 7000);
+  });
 }
 
 function svc_uploadPhotosSequentially(photoList, index, links, ticketData) {
