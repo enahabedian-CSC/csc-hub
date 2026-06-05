@@ -1043,6 +1043,175 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
   .sel-btn-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
   .two-col { grid-template-columns: 1fr; gap: 10px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   TECH WORK BOARD — scoped styles (.tb-scope)
+═══════════════════════════════════════════════════════════════ */
+.tb-scope{background:#f4f7fb;color:#1a2a3a;font-family:'Barlow Condensed',Arial,sans-serif;font-size:16px}
+.tb-scope .hdr{background:linear-gradient(135deg,#0d1f35 0%,#1a3a5c 100%);border-bottom:2px solid rgba(93,173,226,.25);padding:14px 18px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;box-shadow:0 2px 16px rgba(0,0,0,.25);flex-wrap:wrap}
+.tb-scope .hdr-logo{width:42px;height:42px;background:#f0a500;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:#0d1f35;flex-shrink:0}
+.tb-scope .hdr-title{font-size:20px;font-weight:700;color:#fff;letter-spacing:1px;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-scope .hdr-sub{font-size:13px;color:rgba(255,255,255,.55);margin-top:3px;letter-spacing:.5px}
+.tb-scope .hdr-tech{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tb-scope .tech-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#f0a500;padding:8px 14px;border-radius:20px;font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+.tb-scope .tech-chip-ini{width:24px;height:24px;border-radius:50%;background:#f0a500;color:#0d1f35;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.tb-scope .btn-switch{background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6);padding:6px 12px;border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.5px}
+.tb-scope .btn-switch:active{background:rgba(255,255,255,.15);color:#fff}
+.tb-scope .btn-back{display:flex;align-items:center;gap:7px;background:#f0a500;border:none;border-radius:9px;padding:9px 13px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.4px;color:#0d1f35;white-space:nowrap;flex-shrink:0;min-height:44px;transition:background .18s,transform .1s}
+.tb-scope .btn-back:active{transform:scale(.96);background:#d99200}
+.tb-scope .hdr-tno{font-family:'Courier New',monospace;font-size:13px;color:rgba(255,255,255,.45);margin-top:3px;letter-spacing:.5px}
+.tb-scope .splash{padding:30px 20px;text-align:center;flex:1;display:flex;flex-direction:column;justify-content:center}
+.tb-scope .splash-title{font-size:32px;font-weight:700;color:#1a2a3a;letter-spacing:2px;margin-bottom:8px}
+.tb-scope .splash-sub{font-size:16px;color:#6b7f94;margin-bottom:30px;letter-spacing:1px}
+.tb-scope .tech-search-wrap{position:relative;max-width:480px;margin:0 auto 20px;padding:0 10px;display:flex;align-items:center}
+.tb-scope .tech-search{width:100%;padding:14px 44px 14px 16px;background:#fff;color:#1a2a3a;border:2px solid #d0dae7;border-radius:10px;font-family:inherit;font-size:17px;font-weight:500;letter-spacing:.5px;transition:border-color .15s,box-shadow .15s;outline:none}
+.tb-scope .tech-search:focus{border-color:#1e6fa8;box-shadow:0 0 0 3px rgba(30,111,168,.15);background:#fff}
+.tb-scope .tech-search::placeholder{color:#6b7f94;font-weight:400}
+.tb-scope .tech-search-clear{position:absolute;right:16px;width:30px;height:30px;background:#d0dae7;color:#1a2a3a;border:none;border-radius:50%;font-size:18px;font-weight:bold;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.tb-scope .tech-search-clear:active{background:#1e6fa8;color:#fff}
+.tb-scope .tech-tile.hidden{display:none}
+.tb-scope .tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;max-width:760px;margin:0 auto;padding:0 10px}
+.tb-scope .tech-tile{background:#fff;border:2px solid #d0dae7;border-radius:12px;padding:16px 10px;cursor:pointer;text-align:center;transition:all .15s;font-family:inherit;overflow:hidden;min-width:0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.tb-scope .tech-tile:active{transform:scale(.96);border-color:#1e6fa8;background:rgba(30,111,168,.06)}
+.tb-scope .tech-tile-ini{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#1e6fa8,#1a3a5c);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;margin:0 auto 10px}
+.tb-scope .tech-tile-name{font-size:16px;font-weight:600;color:#1a2a3a;line-height:1.2;letter-spacing:.3px;word-break:break-word;overflow-wrap:break-word;hyphens:auto}
+.tb-scope .tab-bar{display:flex;background:#fff;border-bottom:2px solid #d0dae7;position:sticky;top:74px;z-index:40;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.tb-scope .tab{flex:1;padding:14px 8px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;font-family:inherit;background:transparent;border-top:none;border-left:none;border-right:none;color:#6b7f94;font-weight:600;font-size:14px;letter-spacing:.8px;text-transform:uppercase}
+.tb-scope .tab.active{color:#1e6fa8;border-bottom-color:#1e6fa8;background:rgba(30,111,168,.04)}
+.tb-scope .tab:active{background:rgba(30,111,168,.08)}
+.tb-scope .tab-count{display:inline-block;margin-left:6px;padding:1px 8px;background:#d0dae7;color:#1a2a3a;border-radius:10px;font-size:12px;font-weight:700;min-width:22px}
+.tb-scope .tab.active .tab-count{background:#1e6fa8;color:#fff}
+.tb-scope .tb-body{padding:14px;flex:1}
+.tb-scope .tkt-card{background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:12px;border-left:5px solid #d0dae7;cursor:pointer;transition:all .12s;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.tb-scope .tkt-card:active{transform:scale(.98)}
+.tb-scope .tkt-card.p-critical{border-left-color:#d63c3c;box-shadow:0 0 0 1px rgba(214,60,60,.15),0 2px 8px rgba(0,0,0,.07)}
+.tb-scope .tkt-card.p-high{border-left-color:#e07b2a}
+.tb-scope .tkt-card.p-medium{border-left-color:#f0a500}
+.tb-scope .tkt-card.p-low{border-left-color:#2e9e6b}
+.tb-scope .tkt-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.tb-scope .tkt-no{font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:#f0a500;letter-spacing:1px}
+.tb-scope .tkt-age{font-size:12px;color:#6b7f94;font-weight:500}
+.tb-scope .tkt-age.warn{color:#e07b2a}
+.tb-scope .tkt-age.crit{color:#d63c3c;font-weight:700}
+.tb-scope .tkt-pri{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;margin-right:8px}
+.tb-scope .tkt-pri.p-critical{background:rgba(214,60,60,.1);color:#d63c3c;border:1px solid rgba(214,60,60,.3)}
+.tb-scope .tkt-pri.p-high{background:rgba(224,123,42,.1);color:#e07b2a;border:1px solid rgba(224,123,42,.3)}
+.tb-scope .tkt-pri.p-medium{background:rgba(240,165,0,.1);color:#f0a500;border:1px solid rgba(240,165,0,.3)}
+.tb-scope .tkt-pri.p-low{background:rgba(46,158,107,.1);color:#2e9e6b;border:1px solid rgba(46,158,107,.3)}
+.tb-scope .tkt-equip{font-size:17px;font-weight:600;color:#1a2a3a;line-height:1.2;margin:8px 0 4px}
+.tb-scope .tkt-dept{font-size:13px;color:#6b7f94;font-weight:500;margin-bottom:8px;letter-spacing:.5px}
+.tb-scope .tkt-desc{font-size:17px;color:#1a2a3a;line-height:1.4;margin:8px 0 12px;font-weight:500}
+.tb-scope .tkt-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#6b7f94;border-top:1px solid #d0dae7;padding-top:8px}
+.tb-scope .tkt-meta-item{display:flex;align-items:center;gap:5px}
+.tb-scope .tkt-meta-lbl{color:#6b7f94;font-weight:500}
+.tb-scope .tkt-meta-val{color:#1a2a3a;font-weight:600}
+.tb-scope .tkt-action{margin-top:10px;padding:10px;background:rgba(30,111,168,.06);border:1px solid rgba(30,111,168,.3);border-radius:8px;text-align:center;color:#1e6fa8;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase}
+.tb-scope .tkt-list{display:flex;flex-direction:column;gap:8px}
+.tb-scope .tkt-row{background:#fff;border-radius:10px;padding:12px 14px;border-left:5px solid #d0dae7;display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .1s;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.tb-scope .tkt-row:active{transform:scale(.98)}
+.tb-scope .tkt-row.p-critical{border-left-color:#d63c3c}
+.tb-scope .tkt-row.p-high{border-left-color:#e07b2a}
+.tb-scope .tkt-row.p-medium{border-left-color:#f0a500}
+.tb-scope .tkt-row.p-low{border-left-color:#2e9e6b}
+.tb-scope .tkt-row-pri-dot{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.5px}
+.tb-scope .tkt-row.p-critical .tkt-row-pri-dot{background:rgba(214,60,60,.1);color:#d63c3c}
+.tb-scope .tkt-row.p-high     .tkt-row-pri-dot{background:rgba(224,123,42,.1);color:#e07b2a}
+.tb-scope .tkt-row.p-medium   .tkt-row-pri-dot{background:rgba(240,165,0,.1);color:#f0a500}
+.tb-scope .tkt-row.p-low      .tkt-row-pri-dot{background:rgba(46,158,107,.1);color:#2e9e6b}
+.tb-scope .tkt-row-body{flex:1;min-width:0}
+.tb-scope .tkt-row-top{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.tb-scope .tkt-row-no{font-family:'Courier New',monospace;font-size:12px;color:#f0a500;font-weight:700}
+.tb-scope .tkt-row-status{font-size:10px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.5px;background:#e8ecf0;color:#6b7f94}
+.tb-scope .tkt-row-status.s-open{background:rgba(100,181,246,.15);color:#1565c0}
+.tb-scope .tkt-row-status.s-pending{background:rgba(206,147,216,.15);color:#6a1b9a}
+.tb-scope .tkt-row-status.s-hold{background:rgba(240,165,0,.12);color:#e07b2a}
+.tb-scope .tkt-row-status.s-waiting{background:rgba(240,165,0,.1);color:#f0a500}
+.tb-scope .tkt-row-equip{font-size:15px;font-weight:600;color:#1a2a3a;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-scope .tkt-row-meta{font-size:12px;color:#6b7f94;margin-top:2px}
+.tb-scope .tkt-row-arrow{color:#1e6fa8;font-size:24px;flex-shrink:0;font-weight:700}
+.tb-scope .tb-empty{padding:60px 20px;text-align:center;color:#6b7f94}
+.tb-scope .tb-empty-ico{font-size:54px;margin-bottom:14px;opacity:.4}
+.tb-scope .tb-empty-msg{font-size:17px;font-weight:600;color:#6b7f94;margin-bottom:6px}
+.tb-scope .tb-empty-sub{font-size:13px;color:#6b7f94}
+.tb-scope .tb-loading{padding:60px;text-align:center;color:#6b7f94;font-size:16px;letter-spacing:1px}
+.tb-scope .tb-loading::before{content:'';display:inline-block;width:20px;height:20px;border:3px solid #d0dae7;border-top-color:#1e6fa8;border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;vertical-align:middle}
+.tb-scope .tb-fab{position:fixed;bottom:18px;right:18px;width:54px;height:54px;border-radius:50%;background:#1e6fa8;color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(30,111,168,.4);z-index:30}
+.tb-scope .tb-fab:active{transform:scale(.9)}
+.tb-scope .progress{display:flex;gap:6px;padding:12px 16px;background:#fff;justify-content:center;border-bottom:1px solid #d0dae7}
+.tb-scope .prog-dot{width:34px;height:6px;border-radius:3px;background:#d0dae7;transition:all .2s}
+.tb-scope .prog-dot.active{background:#1e6fa8}
+.tb-scope .prog-dot.done{background:#2e9e6b}
+.tb-scope .info-card{background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:18px;border-left:5px solid #1e6fa8;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.tb-scope .info-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:8px}
+.tb-scope .info-pri{display:inline-block;padding:4px 12px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px}
+.tb-scope .info-pri.p-critical{background:rgba(214,60,60,.1);color:#d63c3c;border:1px solid rgba(214,60,60,.3)}
+.tb-scope .info-pri.p-high{background:rgba(224,123,42,.1);color:#e07b2a;border:1px solid rgba(224,123,42,.3)}
+.tb-scope .info-pri.p-medium{background:rgba(240,165,0,.1);color:#f0a500;border:1px solid rgba(240,165,0,.3)}
+.tb-scope .info-pri.p-low{background:rgba(46,158,107,.1);color:#2e9e6b;border:1px solid rgba(46,158,107,.3)}
+.tb-scope .info-status{font-size:11px;color:#6b7f94;letter-spacing:1px;text-transform:uppercase;padding-top:6px}
+.tb-scope .info-equip{font-size:20px;font-weight:700;color:#1a2a3a;line-height:1.2;margin:8px 0 4px}
+.tb-scope .info-dept{font-size:13px;color:#6b7f94;font-weight:500;letter-spacing:.5px;margin-bottom:10px}
+.tb-scope .info-desc{font-size:20px;color:#1a2a3a;line-height:1.45;padding-top:10px;border-top:1px solid #d0dae7;font-weight:500}
+.tb-scope .info-desc-lbl{font-size:11px;color:#6b7f94;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.tb-scope .step-title{font-size:22px;font-weight:700;color:#1e6fa8;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}
+.tb-scope .step-sub{font-size:14px;color:#6b7f94;margin-bottom:18px;letter-spacing:.5px}
+.tb-scope .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.tb-scope .quick-btn{padding:18px 12px;border:none;border-radius:12px;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:1px;cursor:pointer;text-align:center;transition:transform .1s;text-transform:uppercase}
+.tb-scope .quick-btn:active{transform:scale(.96)}
+.tb-scope .q-start{background:linear-gradient(180deg,#1565C0,#0D47A1);color:#fff}
+.tb-scope .q-pending{background:linear-gradient(180deg,#6A1B9A,#4A148C);color:#fff}
+.tb-scope .q-hold{background:linear-gradient(180deg,#F57F17,#E65100);color:#fff}
+.tb-scope .q-complete{background:linear-gradient(180deg,#2E7D32,#1B5E20);color:#fff;grid-column:span 2;padding:22px}
+.tb-scope .tb-field{margin-bottom:14px}
+.tb-scope .field-lbl{display:block;font-size:11px;font-weight:600;color:#6b7f94;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.tb-scope .field-input,.tb-scope .field-select,.tb-scope .field-textarea{width:100%;padding:14px;background:#f4f7fb;color:#1a2a3a;border:2px solid #d0dae7;border-radius:8px;font-family:inherit;font-size:16px;transition:border-color .2s,box-shadow .2s;outline:none}
+.tb-scope .field-input:focus,.tb-scope .field-select:focus,.tb-scope .field-textarea:focus{border-color:#1e6fa8;box-shadow:0 0 0 3px rgba(30,111,168,.15);background:#fff}
+.tb-scope .field-textarea{min-height:100px;resize:vertical;line-height:1.4}
+.tb-scope .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tb-scope .chk-row{display:flex;align-items:center;gap:12px;padding:14px;background:#f4f7fb;border:2px solid #d0dae7;border-radius:10px;margin-bottom:8px;cursor:pointer;transition:border-color .12s}
+.tb-scope .chk-row.checked{border-color:#1e6fa8;background:rgba(30,111,168,.06)}
+.tb-scope .chk-row .chk-box{width:26px;height:26px;border:2px solid #d0dae7;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;color:#1e6fa8}
+.tb-scope .chk-row.checked .chk-box{background:#1e6fa8;border-color:#1e6fa8;color:#fff}
+.tb-scope .chk-row .chk-lbl{font-size:15px;color:#1a2a3a;flex:1;line-height:1.3}
+.tb-scope .review-row{display:flex;justify-content:space-between;align-items:start;padding:10px 0;border-bottom:1px solid #d0dae7;gap:14px}
+.tb-scope .review-row:last-child{border-bottom:none}
+.tb-scope .review-lbl{font-size:12px;color:#6b7f94;letter-spacing:1px;text-transform:uppercase;font-weight:600;flex-shrink:0;min-width:120px}
+.tb-scope .review-val{font-size:15px;color:#1a2a3a;text-align:right;flex:1}
+.tb-scope .review-val.long{text-align:left;margin-top:4px}
+.tb-scope .tb-foot{position:sticky;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #d0dae7;padding:12px 16px;display:flex;gap:10px;z-index:40;box-shadow:0 -4px 12px rgba(0,0,0,.08)}
+.tb-scope .btn-nav{flex:1;padding:16px;border:none;border-radius:10px;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase}
+.tb-scope .btn-prev{background:#e8ecf0;color:#1a2a3a;flex:0 0 90px}
+.tb-scope .btn-prev:active{background:#d0dae7}
+.tb-scope .btn-next{background:#1e6fa8;color:#fff}
+.tb-scope .btn-next:active{transform:scale(.97)}
+.tb-scope .btn-submit{background:linear-gradient(135deg,#1e6fa8 0%,#1a3a5c 100%);color:#fff}
+.tb-scope .btn-submit:active{transform:scale(.97)}
+.tb-scope .tb-overlay{position:absolute;inset:0;background:rgba(13,31,53,.85);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.tb-scope .tb-overlay.show{display:flex}
+.tb-scope .tb-modal{background:#fff;border-radius:20px;padding:32px 28px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.tb-scope .tb-modal-ico{font-size:60px;margin-bottom:14px}
+.tb-scope .tb-modal-msg{font-size:20px;color:#1a2a3a;font-weight:700;margin-bottom:8px;letter-spacing:1px}
+.tb-scope .tb-modal-sub{font-size:14px;color:#6b7f94;margin-bottom:20px;line-height:1.4}
+.tb-scope .tb-modal-btn{width:100%;padding:14px;background:#1e6fa8;color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:1px;cursor:pointer}
+.tb-scope .err-banner{background:rgba(214,60,60,.08);color:#d63c3c;padding:14px;border-radius:8px;margin-bottom:14px;font-size:14px;border:1px solid rgba(214,60,60,.3)}
+@media(min-width:768px){
+  .tb-scope .tech-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+  .tb-scope .tech-tile{padding:18px 14px}
+  .tb-scope .tech-tile-name{font-size:17px}
+  .tb-scope .splash-title{font-size:40px}
+  .tb-scope .tkt-equip{font-size:19px}
+}
+@media(max-width:480px){
+  .tb-scope .tech-grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 6px}
+  .tb-scope .tech-tile{padding:14px 8px}
+  .tb-scope .tech-tile-ini{width:46px;height:46px;font-size:18px}
+  .tb-scope .tech-tile-name{font-size:14px}
+  .tb-scope .splash-title{font-size:26px}
+  .tb-scope .hdr{padding:12px 14px;gap:10px}
+  .tb-scope .hdr-title{font-size:17px}
+  .tb-scope .tech-chip{padding:6px 10px;font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tb-scope .btn-switch{padding:5px 9px;font-size:11px}
+}
 </style>
 </head>
 <body>
@@ -1122,7 +1291,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
         <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
         Machine Shop
       </button>
-      <button class="dash-btn techboard" onclick="showView('techBoardView')">
+      <button class="dash-btn techboard" onclick="tb_enter()">
         <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
         Tech Work Board
       </button>
@@ -1792,17 +1961,96 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 </div>
 
 <!-- ============================================================
-     TECH WORK BOARD VIEW
+     TECH WORK BOARD — SPLASH (tech picker)
 ============================================================ -->
-<div class="view" id="techBoardView">
-  <div class="prodselect-header">
-    <button type="button" class="back-to-dash-btn" onclick="showView('dashboardView')">
-      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg>
-      Dashboard
-    </button>
-    <h1>Tech <span>Work Board</span></h1>
+<div class="view tb-scope" id="tbSplashView">
+  <div class="hdr">
+    <div class="hdr-logo">⚡</div>
+    <div style="flex:1">
+      <div class="hdr-title">CSC TECH BOARD</div>
+      <div class="hdr-sub">Maintenance — Garden Grove</div>
+    </div>
+    <button class="btn-switch" onclick="showView('dashboardView')">← HUB</button>
   </div>
-  <iframe id="techBoardFrame" src="about:blank" style="flex:1;width:100%;border:none;display:block" allow="camera"></iframe>
+  <div class="splash">
+    <div class="splash-title">TAP YOUR NAME</div>
+    <div class="splash-sub">or type to search</div>
+    <div class="tech-search-wrap">
+      <input type="text" id="tbTechSearch" class="tech-search" placeholder="🔍 Type to filter…"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        oninput="tb_filterTechTiles()">
+      <button type="button" class="tech-search-clear" id="tbTechSearchClear" onclick="tb_clearTechSearch()" style="display:none">×</button>
+    </div>
+    <div class="tech-grid" id="tbTechGrid"><div class="tb-loading">Loading…</div></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TECH WORK BOARD — BOARD (pool / my tickets)
+============================================================ -->
+<div class="view tb-scope" id="tbBoardView">
+  <div class="hdr">
+    <div class="hdr-logo">⚡</div>
+    <div style="flex:1">
+      <div class="hdr-title">CSC TECH BOARD</div>
+      <div class="hdr-sub" id="tbHdrDate"></div>
+    </div>
+    <div class="hdr-tech">
+      <div class="tech-chip">
+        <div class="tech-chip-ini" id="tbTechIni">—</div>
+        <span id="tbTechName">—</span>
+      </div>
+      <button class="btn-switch" onclick="tb_switchTech()">SWITCH</button>
+      <button class="btn-switch" onclick="showView('dashboardView')">← HUB</button>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab active" data-tbtab="mine" onclick="tb_switchTab('mine')">My Tickets <span class="tab-count" id="tbCntMine">0</span></button>
+    <button class="tab" data-tbtab="pool" onclick="tb_switchTab('pool')">My Dept Pool <span class="tab-count" id="tbCntPool">0</span></button>
+  </div>
+  <div class="tb-body" id="tbBoardBody"><div class="tb-loading">Loading tickets…</div></div>
+  <button class="tb-fab" onclick="tb_loadData()" title="Refresh">🔄</button>
+</div>
+
+<!-- ============================================================
+     TECH WORK BOARD — UPDATE TICKET
+============================================================ -->
+<div class="view tb-scope" id="tbUpdateView" style="position:relative">
+  <div class="hdr">
+    <button class="btn-back" onclick="tb_goBack()">← BACK</button>
+    <div style="flex:1">
+      <div class="hdr-title">UPDATE TICKET</div>
+      <div class="hdr-tno" id="tbHdrTno">Loading…</div>
+    </div>
+  </div>
+  <div class="progress" id="tbProgress" style="display:none">
+    <div class="prog-dot" data-step="1"></div>
+    <div class="prog-dot" data-step="2"></div>
+    <div class="prog-dot" data-step="3"></div>
+  </div>
+  <div class="tb-body" id="tbUpdateBody" style="padding:14px 16px 120px;max-width:740px;margin:0 auto">
+    <div class="tb-loading">Loading ticket…</div>
+  </div>
+  <div id="tbFoot"></div>
+  <div class="tb-overlay" id="tbOverlay">
+    <div class="tb-modal">
+      <div class="tb-modal-ico" id="tbModalIco">✅</div>
+      <div class="tb-modal-msg" id="tbModalMsg">Saved!</div>
+      <div class="tb-modal-sub" id="tbModalSub"></div>
+      <button class="tb-modal-btn" onclick="tb_goBack()">BACK TO BOARD</button>
+    </div>
+  </div>
+  <div class="tb-overlay" id="tbConfirmOverlay">
+    <div class="tb-modal">
+      <div class="tb-modal-ico">❓</div>
+      <div class="tb-modal-msg" id="tbConfirmMsg">Are you sure?</div>
+      <div class="tb-modal-sub" id="tbConfirmSub"></div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button class="tb-modal-btn" id="tbConfirmNo" style="background:#e8ecf0;color:#1a2a3a">CANCEL</button>
+        <button class="tb-modal-btn" id="tbConfirmYes" style="background:#1e6fa8;color:#fff">CONFIRM</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ============================================================
@@ -1923,12 +2171,6 @@ function showView(id) {
   document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
-  if (id === 'techBoardView') {
-    var frame = document.getElementById('techBoardFrame');
-    if (!frame.src || frame.src === 'about:blank') {
-      frame.src = 'https://enahabedian-csc.github.io/csc-tech-board/board.html';
-    }
-  }
   if (id === 'plasticProdView' && !plast_configLoaded) {
     plast_loadConfig();
   }
@@ -2895,6 +3137,519 @@ function ms_resetForm(){
 }
 
 document.getElementById("appVersionLabel").textContent = APP_VERSION;
+
+// ═══════════════════════════════════════════════════════════════
+//  TECH WORK BOARD
+// ═══════════════════════════════════════════════════════════════
+
+var TB_API = {
+  WORKER: 'https://tech-work-board.enahabedian.workers.dev',
+  call: function(path, payload) {
+    return fetch(this.WORKER + path, {
+      method: 'POST', mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload || {})
+    }).then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    });
+  },
+  getBoard:       function()    { return this.call('/api/board'); },
+  getTicket:      function(no)  { return this.call('/api/ticket/get',      { ticketNo: no }); },
+  assignTicket:   function(d)   { return this.call('/api/ticket/assign',   d); },
+  quickStatus:    function(d)   { return this.call('/api/ticket/status',   d); },
+  completeTicket: function(d)   { return this.call('/api/ticket/complete', d); }
+};
+
+// ── Board state ──────────────────────────────────────────────
+var tb_ALL_TICKETS  = [];
+var tb_TECH_LIST    = [];
+var tb_TECH_DEPTS   = {};
+var tb_SELECTED_TECH = '';
+var tb_SELECTED_DEPTS = [];
+var tb_CURRENT_TAB  = 'mine';
+var tb_TICKET_NO    = '';
+var tb_TICKET       = null;
+var tb_STEP         = 0;
+var tb_FORM_DATA    = { actualHours:'', fixType:'', correctiveAction:'', rootCause:'', preventativeAction:'', tempFix:false, partsNeeded:false, partsStatus:'', notes:'' };
+
+function tb_isHighPriority() {
+  var p = (tb_TICKET && tb_TICKET.priority || '').toUpperCase();
+  return p === 'CRITICAL' || p === 'HIGH';
+}
+
+// ── Entry point ───────────────────────────────────────────────
+function tb_enter() {
+  try { tb_SELECTED_TECH = localStorage.getItem('csc_tech_name') || ''; } catch(e) {}
+  showView('tbSplashView');
+  tb_loadData();
+}
+
+async function tb_loadData() {
+  try {
+    var d = await TB_API.getBoard();
+    tb_ALL_TICKETS = d.tickets || [];
+    tb_TECH_DEPTS  = d.techDepartments || {};
+    var seen = {}, fromTickets = [];
+    tb_ALL_TICKETS.forEach(function(t) {
+      if (t.assignedTo && !seen[t.assignedTo]) { seen[t.assignedTo] = true; fromTickets.push(t.assignedTo); }
+    });
+    tb_TECH_LIST = (d.technicians && d.technicians.length) ? d.technicians : fromTickets;
+    if (tb_SELECTED_TECH && tb_TECH_LIST.indexOf(tb_SELECTED_TECH) >= 0) {
+      tb_SELECTED_DEPTS = tb_TECH_DEPTS[tb_SELECTED_TECH] || [];
+      tb_showBoard();
+    } else {
+      tb_showSplash();
+    }
+  } catch(e) {
+    document.getElementById('tbTechGrid').innerHTML =
+      '<div class="tb-empty"><div class="tb-empty-ico">⚠️</div><div class="tb-empty-msg">Connection Error</div><div class="tb-empty-sub">' + tb_esc(e.message) + '</div></div>';
+  }
+}
+
+function tb_showSplash() {
+  showView('tbSplashView');
+  var grid = document.getElementById('tbTechGrid');
+  if (!tb_TECH_LIST.length) {
+    grid.innerHTML = '<div class="tb-empty"><div class="tb-empty-ico">👷</div><div class="tb-empty-msg">No technicians found</div></div>';
+    return;
+  }
+  grid.innerHTML = tb_TECH_LIST.slice().sort().map(function(t) {
+    return '<button class="tech-tile" data-name="' + tb_escA(t.toLowerCase()) + '" onclick="tb_pickTech(\'' + tb_escA(t) + '\')">' +
+             '<div class="tech-tile-ini">' + tb_initials(t) + '</div>' +
+             '<div class="tech-tile-name">' + tb_esc(t) + '</div>' +
+           '</button>';
+  }).join('');
+  var s = document.getElementById('tbTechSearch');
+  if (s) { s.value = ''; s.focus(); }
+  var c = document.getElementById('tbTechSearchClear');
+  if (c) c.style.display = 'none';
+}
+
+function tb_filterTechTiles() {
+  var q = (document.getElementById('tbTechSearch').value || '').trim().toLowerCase();
+  document.getElementById('tbTechSearchClear').style.display = q ? 'flex' : 'none';
+  document.querySelectorAll('#tbTechGrid .tech-tile').forEach(function(tile) {
+    tile.classList.toggle('hidden', q && (tile.dataset.name || '').indexOf(q) < 0);
+  });
+}
+
+function tb_clearTechSearch() {
+  var s = document.getElementById('tbTechSearch');
+  s.value = ''; s.focus(); tb_filterTechTiles();
+}
+
+function tb_pickTech(name) {
+  tb_SELECTED_TECH  = name;
+  tb_SELECTED_DEPTS = tb_TECH_DEPTS[name] || [];
+  try { localStorage.setItem('csc_tech_name', name); } catch(e) {}
+  tb_showBoard();
+}
+
+function tb_switchTech() {
+  tb_SELECTED_TECH  = '';
+  tb_SELECTED_DEPTS = [];
+  try { localStorage.removeItem('csc_tech_name'); } catch(e) {}
+  tb_showSplash();
+}
+
+function tb_showBoard() {
+  showView('tbBoardView');
+  document.getElementById('tbTechName').textContent = tb_SELECTED_TECH;
+  document.getElementById('tbTechIni').textContent  = tb_initials(tb_SELECTED_TECH);
+  var deptLabel = tb_SELECTED_DEPTS.length ? ' • ' + tb_SELECTED_DEPTS.join(' / ') : '';
+  document.getElementById('tbHdrDate').textContent =
+    new Date().toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' }) + deptLabel;
+  tb_renderTabs();
+  tb_renderBody();
+}
+
+function tb_switchTab(tab) {
+  tb_CURRENT_TAB = tab;
+  document.querySelectorAll('#tbBoardView .tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.tbtab === tab);
+  });
+  tb_renderBody();
+}
+
+function tb_isActive(t) {
+  var s = String(t.status || '').toUpperCase();
+  return s !== 'CLOSED' && s !== 'COMPLETE';
+}
+
+function tb_isInMyPool(t) {
+  if (t.assignedTo && t.assignedTo.trim()) return false;
+  if (String(t.status || '').toUpperCase() !== 'OPEN') return false;
+  var pri = String(t.priority || '').toUpperCase();
+  if (pri === 'CRITICAL' || pri === 'HIGH') return false;
+  if (!tb_SELECTED_DEPTS.length) return true;
+  return tb_SELECTED_DEPTS.indexOf(String(t.dept || '').trim().toUpperCase()) >= 0;
+}
+
+function tb_renderTabs() {
+  var active = tb_ALL_TICKETS.filter(tb_isActive);
+  document.getElementById('tbCntMine').textContent = active.filter(function(t) { return t.assignedTo === tb_SELECTED_TECH; }).length;
+  document.getElementById('tbCntPool').textContent = active.filter(tb_isInMyPool).length;
+}
+
+function tb_renderBody() {
+  var body  = document.getElementById('tbBoardBody');
+  var today = new Date(); today.setHours(0,0,0,0);
+  var active = tb_ALL_TICKETS.filter(tb_isActive);
+  if (tb_CURRENT_TAB === 'mine') {
+    var mine = active.filter(function(t) { return t.assignedTo === tb_SELECTED_TECH; });
+    mine.sort(tb_byPriority);
+    body.innerHTML = mine.length === 0
+      ? tb_emptyState('🎯','No tickets assigned to you','Check the Pool tab to pick up new work')
+      : '<div class="tkt-list">' + mine.map(function(t) { return tb_renderRow(t, today); }).join('') + '</div>';
+  } else {
+    var pool = active.filter(tb_isInMyPool);
+    pool.sort(tb_byPriority);
+    var dept = tb_SELECTED_DEPTS.length ? tb_SELECTED_DEPTS.join(' / ') : 'your department';
+    body.innerHTML = pool.length === 0
+      ? tb_emptyState('📥','No tickets in ' + dept,'Nothing waiting right now')
+      : pool.map(function(t) { return tb_renderCard(t, today); }).join('');
+  }
+}
+
+async function tb_pickUpTicket(ticketNo) {
+  try {
+    var r = await TB_API.assignTicket({ ticketNo: ticketNo, tech: tb_SELECTED_TECH });
+    if (r.success) { await tb_loadData(); tb_switchTab('mine'); }
+    else alert('Could not pick up ticket: ' + (r.error || 'Unknown error'));
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+function tb_renderCard(t, today) {
+  var p = (t.priority || 'MEDIUM').toLowerCase();
+  var age = tb_ageInfo(t.dateOpened, today);
+  return '<div class="tkt-card p-' + p + '" onclick="tb_pickUpTicket(\'' + tb_escA(t.ticketNo) + '\')">' +
+    '<div class="tkt-top"><div><span class="tkt-pri p-' + p + '">' + tb_esc(t.priority||'—') + '</span><span class="tkt-no">' + tb_esc(t.ticketNo||'—') + '</span></div>' +
+    '<div class="tkt-age ' + age.cls + '">' + age.text + '</div></div>' +
+    '<div class="tkt-equip">' + tb_esc(t.specificEquip||t.equipType||'—') + '</div>' +
+    '<div class="tkt-dept">' + tb_esc(t.dept||'') + (t.line?' • Line '+tb_esc(t.line):'') + '</div>' +
+    (t.description?'<div class="tkt-desc">'+tb_esc(tb_trunc(t.description,200))+'</div>':'') +
+    '<div class="tkt-meta">' +
+      (t.problemType?'<div class="tkt-meta-item"><span class="tkt-meta-lbl">Type:</span><span class="tkt-meta-val">'+tb_esc(t.problemType)+'</span></div>':'') +
+      (t.estHours?'<div class="tkt-meta-item"><span class="tkt-meta-lbl">Est:</span><span class="tkt-meta-val">'+tb_esc(t.estHours)+' hr</span></div>':'') +
+    '</div><div class="tkt-action">✋ TAP TO PICK UP</div></div>';
+}
+
+function tb_renderRow(t, today) {
+  var p = (t.priority||'MEDIUM').toLowerCase();
+  var s = String(t.status||'OPEN').toUpperCase().replace(/\s+/g,'-').toLowerCase().split('-')[0];
+  var age = tb_ageInfo(t.dateOpened, today);
+  return '<div class="tkt-row p-' + p + '" onclick="tb_openUpdate(\'' + tb_escA(t.ticketNo) + '\')">' +
+    '<div class="tkt-row-pri-dot">' + tb_esc((t.priority||'MED').substring(0,4)) + '</div>' +
+    '<div class="tkt-row-body">' +
+      '<div class="tkt-row-top"><span class="tkt-row-no">' + tb_esc(t.ticketNo||'—') + '</span>' +
+      '<span class="tkt-row-status s-' + s + '">' + tb_esc(t.status||'OPEN') + '</span>' +
+      '<span class="tkt-age ' + age.cls + '" style="margin-left:auto;font-size:11px">' + age.text + '</span></div>' +
+      '<div class="tkt-row-equip">' + tb_esc(t.specificEquip||t.equipType||'—') + '</div>' +
+      '<div class="tkt-row-meta">' + tb_esc(t.dept||'') + (t.line?' • Line '+tb_esc(t.line):'') + (t.problemType?' • '+tb_esc(t.problemType):'') + '</div>' +
+    '</div><div class="tkt-row-arrow">›</div></div>';
+}
+
+function tb_openUpdate(ticketNo) {
+  tb_TICKET_NO = ticketNo;
+  tb_TICKET    = null;
+  tb_STEP      = 0;
+  tb_FORM_DATA = { actualHours:'', fixType:'', correctiveAction:'', rootCause:'', preventativeAction:'', tempFix:false, partsNeeded:false, partsStatus:'', notes:'' };
+  showView('tbUpdateView');
+  document.getElementById('tbProgress').style.display = 'none';
+  document.getElementById('tbFoot').innerHTML = '';
+  document.getElementById('tbHdrTno').textContent = ticketNo;
+  document.getElementById('tbUpdateBody').innerHTML = '<div class="tb-loading">Loading ticket…</div>';
+  tb_loadTicket();
+}
+
+// ── Update ticket ─────────────────────────────────────────────
+async function tb_loadTicket() {
+  try {
+    var r = await TB_API.getTicket(tb_TICKET_NO);
+    if (!r.success) { document.getElementById('tbUpdateBody').innerHTML = '<div class="err-banner">' + tb_esc(r.error) + '</div>'; return; }
+    tb_TICKET = r;
+    tb_renderInitial();
+  } catch(e) {
+    document.getElementById('tbUpdateBody').innerHTML = '<div class="err-banner">' + tb_esc(e.message) + '</div>';
+  }
+}
+
+function tb_renderInitial() {
+  document.getElementById('tbHdrTno').textContent = tb_TICKET.ticketNo;
+  tb_STEP = 0;
+  document.getElementById('tbProgress').style.display = 'none';
+  document.getElementById('tbFoot').innerHTML = '';
+  var p = (tb_TICKET.priority||'MEDIUM').toLowerCase();
+  document.getElementById('tbUpdateBody').innerHTML =
+    '<div class="info-card">' +
+      '<div class="info-top"><span class="info-pri p-' + p + '">' + tb_esc(tb_TICKET.priority||'—') + '</span>' +
+      '<span class="info-status">' + tb_esc(tb_TICKET.status||'OPEN') + '</span></div>' +
+      '<div class="info-equip">' + tb_esc(tb_TICKET.specificEquip||tb_TICKET.equipType||'—') + '</div>' +
+      '<div class="info-dept">' + tb_esc(tb_TICKET.dept||'') + (tb_TICKET.lineNo?' • Line '+tb_esc(tb_TICKET.lineNo):'') + (tb_TICKET.equipCode?' • '+tb_esc(tb_TICKET.equipCode):'') + '</div>' +
+      (tb_TICKET.description?'<div class="info-desc"><div class="info-desc-lbl">Problem</div>'+tb_esc(tb_TICKET.description)+'</div>':'') +
+      tb_renderNotesAndPhotos(tb_TICKET.notes) +
+    '</div>' +
+    '<div><div class="step-title">QUICK STATUS</div>' +
+    '<div class="step-sub">Tap to update — or scroll down to complete</div>' +
+    '<div class="quick-grid">' +
+      '<button class="quick-btn q-pending" onclick="tb_doQuick(\'PENDING PARTS\')" style="grid-column:span 2">🔩 PENDING PARTS</button>' +
+      '<button class="quick-btn q-complete" onclick="tb_startCompleteFlow()">✅ COMPLETE &amp; SUBMIT REPORT</button>' +
+    '</div></div>';
+}
+
+function tb_startCompleteFlow() { tb_STEP = 1; document.getElementById('tbProgress').style.display = ''; tb_renderStep(); }
+
+function tb_renderStep() {
+  document.querySelectorAll('#tbProgress .prog-dot').forEach(function(d) {
+    var n = parseInt(d.dataset.step, 10);
+    d.classList.toggle('active', n === tb_STEP);
+    d.classList.toggle('done',   n < tb_STEP);
+  });
+  var p = (tb_TICKET.priority||'MEDIUM').toLowerCase();
+  var infoCard =
+    '<div class="info-card">' +
+      '<div class="info-top"><span class="info-pri p-' + p + '">' + tb_esc(tb_TICKET.priority||'—') + '</span>' +
+      '<span class="info-status">' + tb_esc(tb_TICKET.status||'OPEN') + '</span></div>' +
+      '<div class="info-equip">' + tb_esc(tb_TICKET.specificEquip||tb_TICKET.equipType||'—') + '</div>' +
+      '<div class="info-dept">' + tb_esc(tb_TICKET.dept||'') + (tb_TICKET.lineNo?' • Line '+tb_esc(tb_TICKET.lineNo):'') + '</div>' +
+      (tb_TICKET.description?'<div class="info-desc"><div class="info-desc-lbl">Problem</div>'+tb_esc(tb_TICKET.description)+'</div>':'') +
+      tb_renderNotesAndPhotos(tb_TICKET.notes) +
+    '</div>';
+  var html = '';
+  if (tb_STEP === 1) html = infoCard + tb_renderStep1();
+  else if (tb_STEP === 2) html = infoCard + tb_renderStep2();
+  else if (tb_STEP === 3) html = infoCard + tb_renderStep3();
+  document.getElementById('tbUpdateBody').innerHTML = html;
+  tb_renderFoot();
+}
+
+function tb_renderStep1() {
+  var fixOpts = ['','Permanent','Temporary'].map(function(v) {
+    return '<option value="' + tb_escA(v) + '"' + (v===tb_FORM_DATA.fixType?' selected':'') + '>' + (v||'—') + '</option>';
+  }).join('');
+  var highPri = '';
+  if (tb_isHighPriority()) {
+    highPri = '<div style="background:rgba(214,60,60,.06);border:1px solid rgba(214,60,60,.25);border-radius:10px;padding:14px;margin-bottom:14px">' +
+      '<div style="font-size:11px;font-weight:700;color:#d63c3c;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">⚠ Required for ' + tb_esc(tb_TICKET.priority) + ' priority tickets</div>' +
+      '<div class="tb-field" style="margin-bottom:12px"><label class="field-lbl">Root Cause *</label>' +
+        '<textarea class="field-textarea" id="tbRootCause" placeholder="Why did this happen?">' + tb_esc(tb_FORM_DATA.rootCause) + '</textarea></div>' +
+      '<div class="tb-field" style="margin-bottom:0"><label class="field-lbl">Preventative Action *</label>' +
+        '<textarea class="field-textarea" id="tbPreventativeAction" placeholder="What will prevent this from happening again?">' + tb_esc(tb_FORM_DATA.preventativeAction) + '</textarea></div>' +
+    '</div>';
+  }
+  return '<div><div class="step-title">STEP 1 — WORK COMPLETED</div>' +
+    '<div class="step-sub">Summarize what was done to resolve the issue</div>' +
+    '<div class="row2">' +
+      '<div class="tb-field"><label class="field-lbl">Actual Hours</label>' +
+        '<input class="field-input" type="number" step="0.25" min="0" id="tbActualHours" placeholder="e.g. 2.5" value="' + tb_escA(tb_FORM_DATA.actualHours) + '"></div>' +
+      '<div class="tb-field"><label class="field-lbl">Fix Type</label>' +
+        '<select class="field-select" id="tbFixType">' + fixOpts + '</select></div>' +
+    '</div>' +
+    '<div class="tb-field"><label class="field-lbl">Corrective Action / Work Summary *</label>' +
+      '<textarea class="field-textarea" id="tbCorrectiveAction" placeholder="What did you do? What was fixed or replaced?" style="min-height:120px">' + tb_esc(tb_FORM_DATA.correctiveAction) + '</textarea></div>' +
+    highPri + '</div>';
+}
+
+function tb_renderStep2() {
+  return '<div><div class="step-title">STEP 2 — ADDITIONAL DETAILS</div>' +
+    '<div class="step-sub">Flag anything that needs follow-up</div>' +
+    '<div class="chk-row ' + (tb_FORM_DATA.tempFix?'checked':'') + '" onclick="tb_toggleChk(\'tempFix\')">' +
+      '<div class="chk-box">' + (tb_FORM_DATA.tempFix?'✓':'') + '</div>' +
+      '<div class="chk-lbl">⚠️ This is a temporary fix — needs follow-up monitoring</div></div>' +
+    '<div class="chk-row ' + (tb_FORM_DATA.partsNeeded?'checked':'') + '" onclick="tb_toggleChk(\'partsNeeded\')">' +
+      '<div class="chk-box">' + (tb_FORM_DATA.partsNeeded?'✓':'') + '</div>' +
+      '<div class="chk-lbl">🔩 Parts still needed for permanent fix</div></div>' +
+    '<div class="tb-field" id="tbPartsStatusWrap" style="display:' + (tb_FORM_DATA.partsNeeded?'block':'none') + '">' +
+      '<label class="field-lbl">Parts Status</label>' +
+      '<select class="field-select" id="tbPartsStatus"><option value="">—</option>' +
+        (tb_TICKET.partsStatuses||[]).map(function(s) {
+          return '<option value="' + tb_escA(s) + '"' + (s===tb_FORM_DATA.partsStatus?' selected':'') + '>' + tb_esc(s) + '</option>';
+        }).join('') +
+      '</select></div>' +
+    '<div class="tb-field"><label class="field-lbl">Notes for Manager (optional)</label>' +
+      '<textarea class="field-textarea" id="tbNotes" placeholder="Anything else the manager should know">' + tb_esc(tb_FORM_DATA.notes) + '</textarea></div>' +
+  '</div>';
+}
+
+function tb_renderStep3() {
+  return '<div><div class="step-title">STEP 3 — REVIEW &amp; SUBMIT</div>' +
+    '<div class="step-sub">Check it over, then submit for manager review</div>' +
+    '<div class="info-card" style="border-left-color:#2e9e6b">' +
+      '<div class="review-row"><span class="review-lbl">Tech</span><span class="review-val">' + tb_esc(tb_SELECTED_TECH||'—') + '</span></div>' +
+      '<div class="review-row"><span class="review-lbl">Actual Hours</span><span class="review-val">' + tb_esc(tb_FORM_DATA.actualHours||'—') + '</span></div>' +
+      '<div class="review-row"><span class="review-lbl">Fix Type</span><span class="review-val">' + tb_esc(tb_FORM_DATA.fixType||'—') + '</span></div>' +
+      '<div class="review-row"><span class="review-lbl">Temp Fix</span><span class="review-val">' + (tb_FORM_DATA.tempFix?'YES':'No') + '</span></div>' +
+      '<div class="review-row"><span class="review-lbl">Parts Still Needed</span><span class="review-val">' + (tb_FORM_DATA.partsNeeded?(tb_FORM_DATA.partsStatus||'YES'):'No') + '</span></div>' +
+      '<div class="review-row" style="flex-direction:column"><span class="review-lbl">Corrective Action / Summary</span><span class="review-val long">' + tb_esc(tb_FORM_DATA.correctiveAction||'—') + '</span></div>' +
+      (tb_FORM_DATA.rootCause          ? '<div class="review-row" style="flex-direction:column"><span class="review-lbl">Root Cause</span><span class="review-val long">' + tb_esc(tb_FORM_DATA.rootCause) + '</span></div>' : '') +
+      (tb_FORM_DATA.preventativeAction ? '<div class="review-row" style="flex-direction:column"><span class="review-lbl">Preventative Action</span><span class="review-val long">' + tb_esc(tb_FORM_DATA.preventativeAction) + '</span></div>' : '') +
+      (tb_FORM_DATA.notes              ? '<div class="review-row" style="flex-direction:column"><span class="review-lbl">Notes</span><span class="review-val long">' + tb_esc(tb_FORM_DATA.notes) + '</span></div>' : '') +
+    '</div>' +
+    '<div style="text-align:center;padding:14px;background:rgba(46,158,107,.08);border:1px solid rgba(46,158,107,.3);border-radius:10px;color:#2e9e6b;font-size:13px;letter-spacing:.8px">Manager will verify before final close</div>' +
+  '</div>';
+}
+
+function tb_renderFoot() {
+  var foot = document.getElementById('tbFoot');
+  foot.innerHTML = '';
+  if (tb_STEP === 0) return;
+  if (tb_STEP === 1) {
+    foot.innerHTML = '<div class="tb-foot"><button class="btn-nav btn-prev" onclick="tb_cancelFlow()">CANCEL</button><button class="btn-nav btn-next" onclick="tb_goStep(2)">NEXT →</button></div>';
+  } else if (tb_STEP === 2) {
+    foot.innerHTML = '<div class="tb-foot"><button class="btn-nav btn-prev" onclick="tb_goStep(1)">← BACK</button><button class="btn-nav btn-next" onclick="tb_goStep(3)">REVIEW →</button></div>';
+  } else if (tb_STEP === 3) {
+    foot.innerHTML = '<div class="tb-foot"><button class="btn-nav btn-prev" onclick="tb_goStep(2)">← BACK</button><button class="btn-nav btn-submit" onclick="tb_submitFinal()">✅ SUBMIT</button></div>';
+  }
+}
+
+function tb_goStep(target) {
+  if (tb_STEP === 1 && target === 2) {
+    tb_FORM_DATA.actualHours      = document.getElementById('tbActualHours').value.trim();
+    tb_FORM_DATA.fixType          = document.getElementById('tbFixType').value;
+    tb_FORM_DATA.correctiveAction = document.getElementById('tbCorrectiveAction').value.trim();
+    if (tb_isHighPriority()) {
+      tb_FORM_DATA.rootCause          = document.getElementById('tbRootCause').value.trim();
+      tb_FORM_DATA.preventativeAction = document.getElementById('tbPreventativeAction').value.trim();
+    }
+    if (!tb_FORM_DATA.correctiveAction) { tb_alert('Corrective Action / Work Summary required', 'Please describe what was done before continuing.'); return; }
+    if (tb_isHighPriority() && !tb_FORM_DATA.rootCause) { tb_alert('Root Cause required', 'Required for ' + tb_TICKET.priority + ' priority tickets.'); return; }
+    if (tb_isHighPriority() && !tb_FORM_DATA.preventativeAction) { tb_alert('Preventative Action required', 'Required for ' + tb_TICKET.priority + ' priority tickets.'); return; }
+  } else if (tb_STEP === 2 && (target === 3 || target === 1)) {
+    if (tb_FORM_DATA.partsNeeded) tb_FORM_DATA.partsStatus = document.getElementById('tbPartsStatus').value;
+    tb_FORM_DATA.notes = document.getElementById('tbNotes').value.trim();
+  }
+  tb_STEP = target;
+  tb_renderStep();
+  document.getElementById('tbUpdateView').scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function tb_cancelFlow() {
+  tb_confirm('Cancel and lose your progress?', '', function() {
+    tb_STEP = 0;
+    tb_FORM_DATA = { actualHours:'', fixType:'', correctiveAction:'', rootCause:'', preventativeAction:'', tempFix:false, partsNeeded:false, partsStatus:'', notes:'' };
+    document.getElementById('tbProgress').style.display = 'none';
+    tb_renderInitial();
+  });
+}
+
+function tb_toggleChk(id) {
+  if (id === 'tempFix')    tb_FORM_DATA.tempFix    = !tb_FORM_DATA.tempFix;
+  if (id === 'partsNeeded') tb_FORM_DATA.partsNeeded = !tb_FORM_DATA.partsNeeded;
+  var nt = document.getElementById('tbNotes'); if (nt) tb_FORM_DATA.notes = nt.value;
+  tb_renderStep();
+}
+
+function tb_doQuick(newStatus) {
+  if (!tb_SELECTED_TECH) { tb_alert('Tech name missing', 'Go back and pick your name first.'); return; }
+  tb_confirm('Set this ticket to ' + newStatus + '?', '', function() { tb_doSubmitQuick(newStatus); });
+}
+
+async function tb_doSubmitQuick(newStatus) {
+  tb_showModal('⏳', 'UPDATING…', '');
+  try {
+    var r = await TB_API.quickStatus({ ticketNo: tb_TICKET_NO, newStatus: newStatus, tech: tb_SELECTED_TECH });
+    if (r.success) tb_showModal('✅', 'STATUS UPDATED', 'Ticket is now ' + newStatus);
+    else tb_showModal('⚠️', 'ERROR', r.error);
+  } catch(e) { tb_showModal('⚠️', 'ERROR', e.message); }
+}
+
+function tb_submitFinal() {
+  if (!tb_SELECTED_TECH) { tb_alert('Tech name missing'); return; }
+  tb_confirm('Submit this ticket as COMPLETE?', 'Manager will verify before final close.', function() { tb_doSubmitFinal(); });
+}
+
+async function tb_doSubmitFinal() {
+  tb_showModal('⏳', 'SUBMITTING…', 'Saving to tracker');
+  try {
+    var r = await TB_API.completeTicket({
+      ticketNo: tb_TICKET_NO, tech: tb_SELECTED_TECH, newStatus: 'COMPLETE',
+      actualHours: tb_FORM_DATA.actualHours, fixType: tb_FORM_DATA.fixType,
+      correctiveAction: tb_FORM_DATA.correctiveAction, rootCause: tb_FORM_DATA.rootCause,
+      preventativeAction: tb_FORM_DATA.preventativeAction,
+      tempFixFlag: tb_FORM_DATA.tempFix, partsNeeded: tb_FORM_DATA.partsNeeded,
+      partsStatus: tb_FORM_DATA.partsStatus, notes: tb_FORM_DATA.notes,
+      lineNo: tb_TICKET.lineNo
+    });
+    if (r.success) tb_showModal('✅', 'SUBMITTED!', 'Sent to manager for review.');
+    else tb_showModal('⚠️', 'ERROR', r.error);
+  } catch(e) { tb_showModal('⚠️', 'ERROR', e.message); }
+}
+
+function tb_goBack() {
+  document.getElementById('tbOverlay').classList.remove('show');
+  tb_loadData();
+}
+
+function tb_showModal(ico, msg, sub) {
+  var el = document.getElementById('tbOverlay');
+  document.getElementById('tbModalIco').textContent = ico;
+  document.getElementById('tbModalMsg').textContent = msg;
+  document.getElementById('tbModalSub').textContent = sub || '';
+  el.classList.add('show');
+}
+
+function tb_confirm(msg, sub, onYes) {
+  var el = document.getElementById('tbConfirmOverlay');
+  document.getElementById('tbConfirmMsg').textContent = msg;
+  document.getElementById('tbConfirmSub').textContent = sub || '';
+  el.classList.add('show');
+  var yes = document.getElementById('tbConfirmYes');
+  var no  = document.getElementById('tbConfirmNo');
+  var yc = yes.cloneNode(true); var nc = no.cloneNode(true);
+  yes.parentNode.replaceChild(yc, yes);
+  no.parentNode.replaceChild(nc, no);
+  yc.onclick = function() { el.classList.remove('show'); if (typeof onYes==='function') onYes(); };
+  nc.onclick = function() { el.classList.remove('show'); };
+}
+
+function tb_alert(msg, sub) { tb_showModal('⚠️', msg, sub||''); }
+
+// ── Photo / notes helpers ─────────────────────────────────────
+function tb_parseDriveIds(notes) {
+  if (!notes) return [];
+  return (notes.match(/\/file\/d\/([^\/\s"]+)/g)||[]).map(function(m){ return m.replace('/file/d/',''); }).filter(Boolean);
+}
+function tb_renderNotesAndPhotos(notes) {
+  if (!notes || notes.trim()==='' || notes==='No photos') return '';
+  var ids  = tb_parseDriveIds(notes);
+  var text = notes.replace(/https:\/\/drive\.google\.com\/\S+/g,'').replace(/\n{2,}/g,'\n').trim();
+  var html = '<div style="padding-top:10px;margin-top:10px;border-top:1px solid #d0dae7">';
+  if (text) html += '<div style="font-size:11px;font-weight:600;color:#6b7f94;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">Notes</div>' +
+    '<div style="font-size:14px;color:#1a2a3a;line-height:1.5;white-space:pre-wrap;margin-bottom:'+(ids.length?'10px':'0')+'">' + tb_esc(text) + '</div>';
+  if (ids.length) {
+    html += '<div style="font-size:11px;font-weight:600;color:#6b7f94;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">Photos ('+ids.length+')</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">' +
+      ids.map(function(id){
+        return '<a href="https://drive.google.com/file/d/'+id+'/view" target="_blank" style="display:block;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid #d0dae7;background:#f4f7fb">' +
+          '<img src="https://drive.google.com/thumbnail?id='+id+'&sz=w300" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.parentElement.style.display=\'none\'">' +
+          '</a>';
+      }).join('') + '</div>';
+  }
+  return html + '</div>';
+}
+
+// ── Shared utilities ──────────────────────────────────────────
+function tb_byPriority(a,b) { var o={CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3}; return (o[a.priority]||3)-(o[b.priority]||3); }
+function tb_ageInfo(dateOpened, today) {
+  if (!dateOpened) return {text:'—',cls:''};
+  var d = new Date(dateOpened); if (isNaN(d)) return {text:'—',cls:''};
+  var days = Math.floor((today-d)/86400000); if (days<0) days=0;
+  if (days===0) return {text:'today',cls:''}; if (days===1) return {text:'1 day',cls:''};
+  if (days<=7) return {text:days+' days',cls:''}; if (days<=14) return {text:days+' days',cls:'warn'};
+  return {text:days+' days',cls:'crit'};
+}
+function tb_initials(name) { var p=String(name||'').trim().split(/\s+/); return ((p[0][0]||'')+(p[1]?p[1][0]:'')).toUpperCase(); }
+function tb_trunc(s,n) { s=String(s||''); return s.length>n?s.substring(0,n)+'…':s; }
+function tb_emptyState(ico,msg,sub) { return '<div class="tb-empty"><div class="tb-empty-ico">'+ico+'</div><div class="tb-empty-msg">'+tb_esc(msg)+'</div><div class="tb-empty-sub">'+tb_esc(sub)+'</div></div>'; }
+function tb_esc(v) { var d=document.createElement('span'); d.textContent=String(v==null?'':v); return d.innerHTML; }
+function tb_escA(v) { return String(v||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+// Auto-refresh while board is active
+setInterval(function() {
+  if (document.getElementById('tbBoardView').classList.contains('active')) tb_loadData();
+}, 60000);
 
 </script>
 </body>
