@@ -1964,13 +1964,15 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
      TECH WORK BOARD — SPLASH (tech picker)
 ============================================================ -->
 <div class="view tb-scope" id="tbSplashView">
-  <div class="hdr">
-    <div class="hdr-logo">⚡</div>
-    <div style="flex:1">
+  <div class="hdr" style="position:relative">
+    <button type="button" class="back-to-dash-btn" onclick="showView('dashboardView')">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg>
+      Dashboard
+    </button>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none">
       <div class="hdr-title">CSC TECH BOARD</div>
       <div class="hdr-sub">Maintenance — Garden Grove</div>
     </div>
-    <button class="btn-switch" onclick="showView('dashboardView')">← HUB</button>
   </div>
   <div class="splash">
     <div class="splash-title">TAP YOUR NAME</div>
@@ -1989,19 +1991,21 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
      TECH WORK BOARD — BOARD (pool / my tickets)
 ============================================================ -->
 <div class="view tb-scope" id="tbBoardView">
-  <div class="hdr">
-    <div class="hdr-logo">⚡</div>
-    <div style="flex:1">
+  <div class="hdr" style="position:relative">
+    <button type="button" class="back-to-dash-btn" onclick="showView('dashboardView')">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg>
+      Dashboard
+    </button>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none">
       <div class="hdr-title">CSC TECH BOARD</div>
       <div class="hdr-sub" id="tbHdrDate"></div>
     </div>
-    <div class="hdr-tech">
+    <div class="hdr-tech" style="margin-left:auto">
       <div class="tech-chip">
         <div class="tech-chip-ini" id="tbTechIni">—</div>
         <span id="tbTechName">—</span>
       </div>
       <button class="btn-switch" onclick="tb_switchTech()">SWITCH</button>
-      <button class="btn-switch" onclick="showView('dashboardView')">← HUB</button>
     </div>
   </div>
   <div class="tab-bar">
@@ -2016,9 +2020,9 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
      TECH WORK BOARD — UPDATE TICKET
 ============================================================ -->
 <div class="view tb-scope" id="tbUpdateView" style="position:relative">
-  <div class="hdr">
+  <div class="hdr" style="position:relative">
     <button class="btn-back" onclick="tb_goBack()">← BACK</button>
-    <div style="flex:1">
+    <div style="position:absolute;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none">
       <div class="hdr-title">UPDATE TICKET</div>
       <div class="hdr-tno" id="tbHdrTno">Loading…</div>
     </div>
