@@ -1194,23 +1194,85 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 .tb-scope .tb-modal-sub{font-size:14px;color:#6b7f94;margin-bottom:20px;line-height:1.4}
 .tb-scope .tb-modal-btn{width:100%;padding:14px;background:#1e6fa8;color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:1px;cursor:pointer}
 .tb-scope .err-banner{background:rgba(214,60,60,.08);color:#d63c3c;padding:14px;border-radius:8px;margin-bottom:14px;font-size:14px;border:1px solid rgba(214,60,60,.3)}
-@media(min-width:768px){
-  .tb-scope .tech-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-  .tb-scope .tech-tile{padding:18px 14px}
-  .tb-scope .tech-tile-name{font-size:17px}
-  .tb-scope .splash-title{font-size:40px}
-  .tb-scope .tkt-equip{font-size:19px}
-}
+/* ── Phone (≤480px) ────────────────────────────────────────── */
 @media(max-width:480px){
+  .tb-scope .hdr{padding:10px 12px;gap:8px}
+  .tb-scope .hdr-title{font-size:16px}
+  .tb-scope .hdr-sub{font-size:11px}
+  .tb-scope .tech-chip{padding:5px 8px;font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tb-scope .btn-switch{padding:5px 8px;font-size:10px}
+  .tb-scope .splash{padding:20px 12px}
+  .tb-scope .splash-title{font-size:24px;letter-spacing:1px}
+  .tb-scope .splash-sub{font-size:14px;margin-bottom:20px}
+  .tb-scope .tech-search-wrap{padding:0 6px;margin-bottom:14px}
+  .tb-scope .tech-search{padding:11px 36px 11px 12px;font-size:15px}
   .tb-scope .tech-grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 6px}
-  .tb-scope .tech-tile{padding:14px 8px}
-  .tb-scope .tech-tile-ini{width:46px;height:46px;font-size:18px}
-  .tb-scope .tech-tile-name{font-size:14px}
-  .tb-scope .splash-title{font-size:26px}
-  .tb-scope .hdr{padding:12px 14px;gap:10px}
-  .tb-scope .hdr-title{font-size:17px}
-  .tb-scope .tech-chip{padding:6px 10px;font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .tb-scope .btn-switch{padding:5px 9px;font-size:11px}
+  .tb-scope .tech-tile{padding:12px 8px}
+  .tb-scope .tech-tile-ini{width:44px;height:44px;font-size:17px;margin-bottom:7px}
+  .tb-scope .tech-tile-name{font-size:13px}
+  .tb-scope .tb-body{padding:10px}
+  .tb-scope .tkt-card{padding:11px 12px}
+  .tb-scope .tkt-row{padding:10px 12px;gap:10px}
+  .tb-scope .tkt-equip{font-size:15px}
+  .tb-scope .tkt-desc{font-size:14px}
+  .tb-scope .row2{grid-template-columns:1fr}
+  .tb-scope .quick-grid{grid-template-columns:1fr 1fr}
+  .tb-scope .info-desc{font-size:18px}
+  .tb-scope .step-title{font-size:18px}
+  .tb-scope .tab{font-size:12px;padding:12px 6px;letter-spacing:.4px}
+}
+
+/* ── Tablet (768px – 1023px) ────────────────────────────────── */
+@media(min-width:768px){
+  .tb-scope .tb-body{max-width:820px;margin:0 auto;width:100%;padding:18px 24px 100px}
+  .tb-scope .tech-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;max-width:820px}
+  .tb-scope .tech-tile{padding:20px 14px}
+  .tb-scope .tech-tile-ini{width:60px;height:60px;font-size:24px}
+  .tb-scope .tech-tile-name{font-size:17px;letter-spacing:.4px}
+  .tb-scope .splash-title{font-size:42px}
+  .tb-scope .splash-sub{font-size:18px}
+  .tb-scope .tkt-card{padding:18px 20px}
+  .tb-scope .tkt-equip{font-size:19px}
+  .tb-scope .tkt-row{padding:14px 16px}
+  .tb-scope .info-equip{font-size:22px}
+  .tb-scope .info-desc{font-size:22px}
+  .tb-scope .step-title{font-size:24px}
+  .tb-scope .tab{font-size:15px;padding:16px 12px}
+  .tb-scope .field-input,.tb-scope .field-select,.tb-scope .field-textarea{font-size:17px}
+}
+
+/* ── Desktop (1024px – 1399px) ──────────────────────────────── */
+@media(min-width:1024px){
+  .tb-scope .tb-body{max-width:1140px;padding:24px 32px 120px}
+  .tb-scope .tkt-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .tb-scope .tkt-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .tb-scope .tech-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;max-width:1140px}
+  .tb-scope .tech-tile{padding:24px 16px}
+  .tb-scope .tech-tile-ini{width:68px;height:68px;font-size:28px}
+  .tb-scope .tech-tile-name{font-size:18px}
+  .tb-scope .splash-title{font-size:52px}
+  .tb-scope .splash-sub{font-size:20px}
+  .tb-scope .hdr-title{font-size:22px}
+  .tb-scope .tkt-equip{font-size:20px}
+  .tb-scope .tkt-desc{font-size:16px}
+  .tb-scope .info-equip{font-size:24px}
+  .tb-scope .info-desc{font-size:24px}
+  .tb-scope .step-title{font-size:26px}
+  .tb-scope .tab{font-size:16px;padding:16px 20px}
+  .tb-scope .quick-grid{grid-template-columns:repeat(4,1fr)}
+  .tb-scope .q-complete{grid-column:span 4;padding:20px}
+  .tb-scope .row2{gap:18px}
+  .tb-scope .tb-foot{padding:14px 32px}
+}
+
+/* ── Wide desktop (≥1400px) ─────────────────────────────────── */
+@media(min-width:1400px){
+  .tb-scope .tb-body{max-width:1340px;padding:28px 40px 120px}
+  .tb-scope .tkt-card-grid{grid-template-columns:1fr 1fr 1fr;gap:18px}
+  .tb-scope .tkt-list{grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .tb-scope .tech-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));max-width:1340px}
+  .tb-scope .splash-title{font-size:60px}
+  .tb-scope .info-desc{font-size:28px}
 }
 </style>
 </head>
@@ -3300,7 +3362,7 @@ function tb_renderBody() {
     var dept = tb_SELECTED_DEPTS.length ? tb_SELECTED_DEPTS.join(' / ') : 'your department';
     body.innerHTML = pool.length === 0
       ? tb_emptyState('📥','No tickets in ' + dept,'Nothing waiting right now')
-      : pool.map(function(t) { return tb_renderCard(t, today); }).join('');
+      : '<div class="tkt-card-grid">' + pool.map(function(t) { return tb_renderCard(t, today); }).join('') + '</div>';
   }
 }
 
