@@ -3165,9 +3165,9 @@ var tb_TICKET       = null;
 var tb_STEP         = 0;
 var tb_FORM_DATA    = { actualHours:'', fixType:'', correctiveAction:'', rootCause:'', preventativeAction:'', tempFix:false, partsNeeded:false, partsStatus:'', notes:'' };
 
-function tb_isHighPriority() {
-  var p = (tb_TICKET && tb_TICKET.priority || '').toUpperCase();
-  return p === 'CRITICAL' || p === 'HIGH';
+function tb_requiresRCA() {
+  var dt = (tb_TICKET && tb_TICKET.downtimeType || '').toUpperCase();
+  return dt === 'UNPLANNED';
 }
 
 // ── Entry point ───────────────────────────────────────────────
@@ -3421,9 +3421,9 @@ function tb_renderStep1() {
     return '<option value="' + tb_escA(v) + '"' + (v===tb_FORM_DATA.fixType?' selected':'') + '>' + (v||'—') + '</option>';
   }).join('');
   var highPri = '';
-  if (tb_isHighPriority()) {
+  if (tb_requiresRCA()) {
     highPri = '<div style="background:rgba(214,60,60,.06);border:1px solid rgba(214,60,60,.25);border-radius:10px;padding:14px;margin-bottom:14px">' +
-      '<div style="font-size:11px;font-weight:700;color:#d63c3c;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">⚠ Required for ' + tb_esc(tb_TICKET.priority) + ' priority tickets</div>' +
+      '<div style="font-size:11px;font-weight:700;color:#d63c3c;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">⚠ Required for Unplanned downtime tickets</div>' +
       '<div class="tb-field" style="margin-bottom:12px"><label class="field-lbl">Root Cause *</label>' +
         '<textarea class="field-textarea" id="tbRootCause" placeholder="Why did this happen?">' + tb_esc(tb_FORM_DATA.rootCause) + '</textarea></div>' +
       '<div class="tb-field" style="margin-bottom:0"><label class="field-lbl">Preventative Action *</label>' +
@@ -3500,13 +3500,13 @@ function tb_goStep(target) {
     tb_FORM_DATA.actualHours      = document.getElementById('tbActualHours').value.trim();
     tb_FORM_DATA.fixType          = document.getElementById('tbFixType').value;
     tb_FORM_DATA.correctiveAction = document.getElementById('tbCorrectiveAction').value.trim();
-    if (tb_isHighPriority()) {
+    if (tb_requiresRCA()) {
       tb_FORM_DATA.rootCause          = document.getElementById('tbRootCause').value.trim();
       tb_FORM_DATA.preventativeAction = document.getElementById('tbPreventativeAction').value.trim();
     }
     if (!tb_FORM_DATA.correctiveAction) { tb_alert('Corrective Action / Work Summary required', 'Please describe what was done before continuing.'); return; }
-    if (tb_isHighPriority() && !tb_FORM_DATA.rootCause) { tb_alert('Root Cause required', 'Required for ' + tb_TICKET.priority + ' priority tickets.'); return; }
-    if (tb_isHighPriority() && !tb_FORM_DATA.preventativeAction) { tb_alert('Preventative Action required', 'Required for ' + tb_TICKET.priority + ' priority tickets.'); return; }
+    if (tb_requiresRCA() && !tb_FORM_DATA.rootCause) { tb_alert('Root Cause required', 'Required for Unplanned downtime tickets.'); return; }
+    if (tb_requiresRCA() && !tb_FORM_DATA.preventativeAction) { tb_alert('Preventative Action required', 'Required for Unplanned downtime tickets.'); return; }
   } else if (tb_STEP === 2 && (target === 3 || target === 1)) {
     if (tb_FORM_DATA.partsNeeded) tb_FORM_DATA.partsStatus = document.getElementById('tbPartsStatus').value;
     tb_FORM_DATA.notes = document.getElementById('tbNotes').value.trim();
