@@ -232,8 +232,6 @@ button, .sel-btn, .dash-btn, .dept-select-btn, .coating-btn,
 #qrCanvas{display:none}
 .qr-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;pointer-events:none}
 .qr-frame{width:min(65vw,280px);aspect-ratio:1;border:3px solid rgba(255,255,255,.9);border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.5);position:relative}
-.qr-scan-line{position:absolute;left:6px;right:6px;height:2px;background:linear-gradient(90deg,transparent,#5dade2 40%,#1e6fa8 60%,transparent);border-radius:2px;animation:qr-scan 2s ease-in-out infinite}
-@keyframes qr-scan{0%,100%{top:6px}50%{top:calc(100% - 8px)}}
 .qr-hint{color:rgba(255,255,255,.8);font-family:'Barlow Condensed',sans-serif;font-size:clamp(14px,3vw,17px);letter-spacing:.5px;text-align:center;padding:0 24px}
 .qr-result-panel{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 32px rgba(0,0,0,.25);transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .qr-result-panel.visible{transform:translateY(0)}
@@ -2038,7 +2036,7 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
       <video id="qrVideo" autoplay playsinline muted></video>
       <canvas id="qrCanvas"></canvas>
       <div class="qr-overlay">
-        <div class="qr-frame"><div class="qr-scan-line"></div></div>
+        <div class="qr-frame"></div>
         <div class="qr-hint" id="qrHint">Starting camera…</div>
       </div>
       <div class="qr-result-panel" id="qrResultPanel">
@@ -3271,13 +3269,20 @@ function qr_startCamera() {
     qr_stream = stream;
     var v = document.getElementById('qrVideo');
     v.srcObject = stream;
-    v.play();
     v.onloadedmetadata = function() {
       document.getElementById('qrHint').textContent = 'Point camera at a QR code';
       qr_tick();
     };
+    v.play().catch(function(err) {
+      document.getElementById('qrHint').textContent = 'Could not start video: ' + err.message;
+    });
   }).catch(function(err) {
-    document.getElementById('qrHint').textContent = 'Camera access denied. Please allow camera permission and try again.';
+    var msg = err.name === 'NotAllowedError'
+      ? 'Camera access denied. Please allow camera permission and try again.'
+      : err.name === 'NotFoundError'
+        ? 'No camera found on this device.'
+        : 'Camera error: ' + err.message;
+    document.getElementById('qrHint').textContent = msg;
   });
 }
 
